@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+ <div class="container-fluid">
+                <div>
+                    <div class="container">
+                        <h2 style="margin-top:52px;margin-left:34px;font-family:'Open Sans', sans-serif;font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">&nbsp; Upload or Select Texts for Annotation</h2>
+                        <div class="cust_bloglistintro">
+                            <p style="margin-left:34px;color:rgba(255,255,255,0.5);font-size:14px;"></p>
+                        </div>
+                        <div class="custom-file"><input type="file" class="custom-file-input" style="padding: 1px;margin: 0px;"><label class="custom-file-label">Upload File</label></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 search-table-col">
+                <div class="form-group pull-right col-lg-4"><input type="text" class="search form-control" placeholder="Search by typing here.."></div><span class="counter pull-right"></span>
+                <div class="table-responsive table-bordered table table-hover table-bordered results">
+                    <table class="table table-bordered table-hover">
+                        <thead class="bill-header cs">
+                            <tr>
+                                <th id="trs-hd" class="col-lg-1">Texts</th>
+                                <th id="trs-hd" class="col-lg-2">Language</th>
+                                <th id="trs-hd" class="col-lg-3">Author</th>
+                                <th id="trs-hd" class="col-lg-2">Source</th>
+                                <th id="trs-hd" class="col-lg-2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="warning no-result">
+                                <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
+                            </tr>
+                            <tr>
+                                <td>SETimes.SR 1.0</td>
+                                <td>Serbian</td>
+                                <td>CLARIN.SL</td>
+                                <td><i class="fa fa-link"></i></td>
+                                <td><button class="btn btn-success" style="margin-left: 5px;" type="submit"><i class="fa fa-check" style="font-size: 15px;"></i></button><button class="btn btn-danger" style="margin-left: 5px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}

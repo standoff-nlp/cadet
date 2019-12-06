@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+                <div>
+                    <div class="container">
+                        <h2 style="margin-top:52px;margin-left:34px;font-family:'Open Sans', sans-serif;font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">Export</h2>
+                        <div class="cust_bloglistintro">
+                            <p style="margin-left:34px;color:rgba(255,255,255,0.5);font-size:14px;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Debug Data</a>
+                <div class="collapse show" id="collapse-4">
+                    <div class="card-body">
+                        <p class="m-0">t=========================== Data format validation ===========================<br>✔ Corpus is loadable<br><br>=============================== Training stats ===============================<br>Training pipeline: tagger, parser,
+                            ner<br>Starting with blank model 'en'<br>18127 training docs<br>2939 evaluation docs<br>⚠ 34 training examples also in evaluation data<br><br>============================== Vocab &amp; Vectors ==============================<br>ℹ
+                            2083156 total words in the data (56962 unique)<br>⚠ 13020 misaligned tokens in the training data<br>⚠ 2423 misaligned tokens in the dev data<br>10 most common words: 'the' (98429), ',' (91756), '.' (87073), 'to' (50058),<br>'of'
+                            (49559), 'and' (44416), 'a' (34010), 'in' (31424), 'that' (22792), 'is'<br>(18952)<br>ℹ No word vectors present in the model<br><br>========================== Named Entity Recognition ==========================<br>ℹ 18 new
+                            labels, 0 existing labels<br>528978 missing values (tokens with '-' label)<br>New: 'ORG' (23860), 'PERSON' (21395), 'GPE' (21193), 'DATE' (18080), 'CARDINAL'<br>(10490), 'NORP' (9033), 'MONEY' (5164), 'PERCENT' (3761), 'ORDINAL'
+                            (2122),<br>'LOC' (2113), 'TIME' (1616), 'WORK_OF_ART' (1229), 'QUANTITY' (1150), 'FAC'<br>(1134), 'EVENT' (974), 'PRODUCT' (935), 'LAW' (444), 'LANGUAGE' (338)<br>✔ Good amount of examples for all labels<br>✔ Examples without
+                            occurences available for all labels<br>✔ No entities consisting of or starting/ending with whitespace<br><br>=========================== Part-of-speech Tagging ===========================<br>ℹ 49 labels in data (57 labels ================================== Summary ==================================<br>✔
+                            5 checks passed<br>⚠ 8 warnings</p>
+                        
+                    </div>
+
+                </div>
+            </div>
+        
+        <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Export Current Project</a>
+                            <div class="collapse show" id="collapse-4">
+                                <div class="card-body">
+                                    <p class="m-0"></p><a class="btn btn-warning btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-chess-king"></i></span><span class="text-white text">CoNLL-U</span></a><a class="btn btn-primary btn-icon-split"
+                                        role="button"><span class="text-white-50 icon"><i class="fas fa-flag"></i></span><span class="text-white text">JSON</span></a><a class="btn btn-info btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">OTHER</span></a>
+                                    <a
+                                        class="btn btn-danger btn-icon-split" role="button"></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+{% endblock %}
