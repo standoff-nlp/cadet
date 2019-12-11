@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /**
+ * Tooltip Styles https://chrisbracco.com/a-simple-css-tooltip/
+ */
+
+/* Add this attribute to the element that needs a tooltip */
+[data-tooltip] {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Hide the tooltip content by default */
+[data-tooltip]:before,
+[data-tooltip]:after {
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Position tooltip above the element */
+[data-tooltip]:before {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-bottom: 5px;
+  margin-left: -80px;
+  padding: 7px;
+  width: 160px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+/* Triangle hack to make tooltip look like a speech bubble */
+[data-tooltip]:after {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -5px;
+  width: 0;
+  border-top: 5px solid #000;
+  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+}
+
+/* Show tooltip content on hover */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  z-index: auto;
+}
+
+.active-token {
+    outline: 2px solid #7575a3;
+    outline-offset: 0px;
+    background-color: #e7e4f3;
+    padding: 2px;
+    color: black;
+}
+</style>
+{{ project }}
+  <div class="card">
+                <div class="card-body" >
+                    <h6 class="text-muted card-subtitle mb-2">Fathers and Sons 1/300 0%</h6><hr>
+                    <p class="card-text"><em><span class="active-token">Då</span> var han elva årvar han elva år.</p></div>
+                <div class="card-body" style="background-color: #e7e4f3;">
+                    
+                        <table>
+                          <tr>
+                           
+                            <th>
+                                <p data-tooltip="Word index, integer starting at 1 for each new sentence; may be a range for multiword tokens; may be a decimal number for empty nodes (decimal numbers can be lower than 1 but must be greater than 0).">id</p>
+                            </th>
+
+                            <th>
+                                <p data-tooltip="Word form or punctuation symbol.">form </p>
+                            </th>
+
+                            <th>
+                                <p data-tooltip="Lemma or stem of word form.">lemma </p>
+                            </th>
+
+                            <th>
+                                <p data-tooltip="Universal part-of-speech tag.">upos </p>
+                            </th>
+
+                            <th>
+                                <p data-tooltip="Language-specific part-of-speech tag; underscore if not available.">xpos </p>
+                            </th>
+
+                            <th>
+                                <p data-tooltip="List of morphological features from the universal feature inventory or from a defined language-specific extension; underscore if not available.">feats </p>
+                            </th>
+
+                            <th>
+                                <p data-tooltip="Head of the current word, which is either a value of ID or zero (0).">head </p>
+                            </th>
+                            <th>
+                                <p data-tooltip="Universal dependency relation to the HEAD (root iff HEAD = 0) or a defined language-specific subtype of one.">deprel </p>
+                            </th>
+                            <th>
+                                <p data-tooltip="Enhanced dependency graph in the form of a list of head-deprel pairs.">deps </p>
+                            </th>
+                            <th>
+                                <p data-tooltip="Any other annotation.">misc </p>
+                            </th>
+                          </tr>
+                          <tr class='active-token'>
+                            <td>1</td>
+                            <td>Då</td>
+                            <td>då</td>
+                            <td>ADV</td>
+                            <td>AB</td>
+                            <td>_</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>var</td>
+                            <td>vara</td>
+                            <td>VERB</td>
+                            <td>VB.PRET.ACT </td>
+                            <td>Tense=Past|Voice=Act</td>
+                          </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>han</td>
+                            <td>han</td>
+                            <td>PRON</td>
+                            <td>PN.UTR.SIN.DEF.NOM</td>
+                            <td>Case=Nom|Definite=Def|Gender=Com|Number=Sing
+}
+}
+</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>elva</td>
+                            <td>elva</td>
+                            <td>NUM</td>
+                            <td>RG.NOM</td>
+                            <td>Case=Nom|NumType=Card</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>år</td>
+                            <td>år</td>
+                            <td>NOUN</td>
+                            <td>NN.NEU.PLU.IND.NOM</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>.</td>
+                            <td>.</td>
+                            <td>PUNCT</td>
+                            <td>DL.MAD</td>
+                            <td>_</td>
+                        </tr>
+                        </table>
+                       
+                </div>
+            </div>
+
+            <div class="mail-custom-btn"><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-chevron-left"></i></a><a class="custom-btn light-btn" href="#" role="button" style="width: 126px;"><i class="fa fa-space-shuttle"></i></a><a class="custom-btn light-btn"
+                    href="#" role="button"><i class="fa fa-undo"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-save"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-trash"></i></a><a class="custom-btn light-btn"
+                    href="#" role="button"><i class="fa fa-toggle-on"></i></a></div>
+            <hr><span class="badge badge-primary" style="background-color: rgb(162,156,226);font-size: 19px;margin: 3px;padding: 7px;">PROPN (v)</span><span class="badge badge-primary" style="background-color: rgb(169,210,150);font-size: 19px;margin: 3px;padding: 7px;">PROPN (v)</span>
+            <span
+                class="badge badge-primary" style="background-color: rgb(246,172,203);font-size: 19px;margin: 3px;padding: 7px;">PROPN (v)</span><span class="badge badge-primary" style="background-color: rgb(112,102,223);font-size: 19px;margin: 3px;padding: 7px;">PROPN (v)</span><span class="badge badge-primary" style="background-color: rgb(112,102,223);font-size: 19px;margin: 3px;padding: 7px; border-bottom: 4px dotted blue;">PROPN (v)</span><span class="badge badge-primary"
+                    style="background-color: rgb(112,102,223);font-size: 19px;margin: 3px;padding: 7px;">PROPN (v)</span><span class="badge badge-primary" style="background-color: rgb(112,102,223);font-size: 19px;margin: 3px;padding: 7px;">PROPN (v)</span>
+                <div
+                    class="dropdown"><button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">POS</button>
+                    <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="#">First Item</a><a class="dropdown-item" role="presentation" href="#">Second Item</a><a class="dropdown-item" role="presentation" href="#">Third Item</a></div>
+        </div>
+        <div class="dropdown"><button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Case&nbsp;</button>
+            <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="#">First Item</a><a class="dropdown-item" role="presentation" href="#">Second Item</a><a class="dropdown-item" role="presentation" href="#">Third Item</a></div>
+        </div>
+    </div>
+    
+{% endblock %}

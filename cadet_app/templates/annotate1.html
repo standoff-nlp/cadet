@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+                <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-dark mb-0">spaCy-sr</h3>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7 col-xl-8">
+                        <div class="card shadow mb-4" style="width: 615px;height: 517px;">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary font-weight-bold m-0">Current Text (sorted by term/label freq.)</h6>
+                                <div class="dropdown no-arrow" style="width: 0px;"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-chevron-left text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in"
+                                        role="menu">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" role="presentation" href="#">&nbsp;Action</a><a class="dropdown-item" role="presentation" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="#">&nbsp;Something else here</a></div>
+                                </div>
+                                <h6 class="text-primary font-weight-bold m-0">1/300</h6>
+                                <h6 class="text-primary font-weight-bold m-0" style="color: #f7c9c6;width: 26px;height: 19px;">0%</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-chevron-right text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in"
+                                        role="menu">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" role="presentation" href="#">&nbsp;Action</a><a class="dropdown-item" role="presentation" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="#">&nbsp;Something else here</a></div>
+                                </div>
+                            </div>
+                            <div class="card-body" style="width: 645px;"><div style="width: 580px;height: 409px;">
+                             
+                                <div id="main" class="rounded" >
+    <div id="annotatorjs">
+    <p>Никола Тесла (Смиљан, 10. јул 1856 — Њујорк, 7. јануар 1943) био је српски и амерички[1][2][3] проналазач, инжењер електротехнике и машинства и футуриста, најпознатији по свом доприносу у пројектовању модерног система напајања наизменичном струјом.
+Најзначајнији Теслини проналасци су полифазни систем, обртно магнетско поље, асинхрони мотор, синхрони мотор и Теслин трансформатор. Такође, открио је један од начина за генерисање високофреквентне струје, дао је значајан допринос у преносу и модулацији радио-сигнала, а остали су запажени и његови радови у области рендгенских зрака.
+Његов систем наизменичних струја је омогућио знатно лакши и ефикаснији пренос електричне енергије на даљину. Био је кључни човек у изградњи прве хидроцентрале на Нијагариним водопадима.
+Преминуо је у својој 87. години, сиромашан и заборављен.
+Једини је Србин по коме је названа једна међународна јединица мере, јединица мере за густину магнетног флукса или јачину магнетног поља — тесла.
+Никола Тесла је аутор више од 700 патената, регистрованих у 25 земаља, од чега у области електротехнике 112</p>
+    </div></div>
+                               
+
+                            </div></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs card-header-tabs">
+                                    <li class="nav-item"><a class="nav-link active" href="#">Part of Speech</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">Features</a><a class="nav-link" href="#">Lemmata</a></li>
+                                    <li class="nav-item"></li>
+                                </ul>
+                            </div>
+                            <div class="card-body" style="height: 418px;width: 289px;"><p class="card-text"><a href="https://universaldependencies.org/u/pos/ADJ.html">ADJ</a>: adjective<br><a href="https://universaldependencies.org/u/pos/ADP.html">ADP</a>: adposition<br><a href="https://universaldependencies.org/u/pos/ADV.html">ADV</a>: adverb<br><a href="https://universaldependencies.org/u/pos/AUX_.html">AUX</a>:
+    auxiliary<br><a href="https://universaldependencies.org/u/pos/CCONJ.html">CCONJ</a>: coordinating conjunction<br><a href="https://universaldependencies.org/u/pos/DET.html">DET</a>: determiner<br><a href="https://universaldependencies.org/u/pos/INTJ.html">INTJ</a>:
+    interjection<br><a href="https://universaldependencies.org/u/pos/NOUN.html">NOUN</a>: noun<br><a href="https://universaldependencies.org/u/pos/NUM.html">NUM</a>: numeral<br><a href="https://universaldependencies.org/u/pos/PART.html">PART</a>: particle<br><a href="https://universaldependencies.org/u/pos/PRON.html">PRON</a>:
+    pronoun<br><a href="https://universaldependencies.org/u/pos/PROPN.html">PROPN</a>: proper noun<br><a href="https://universaldependencies.org/u/pos/PUNCT.html">PUNCT</a>: punctuation<br><a href="https://universaldependencies.org/u/pos/SCONJ.html">SCONJ</a>: subordinating
+    conjunction<br><a href="https://universaldependencies.org/u/pos/SYM.html">SYM</a>: symbol<a href="https://universaldependencies.org/u/pos/VERB.html">VERB</a>: verb<br><a href="https://universaldependencies.org/u/pos/X.html">X</a>: other</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="text-primary font-weight-bold m-0">Similar Annotations</h6>
+                                <div class="mail-custom-btn"><textarea style="height: 20px;width: 271px;"></textarea><a class="custom-btn light-btn" href="#" role="button"><a class="btn btn-success btn-circle ml-1" role="button"><i class="fas fa-check text-white"></i></a></a><a class="custom-btn light-btn"
+                                        href="#" role="button"><a class="btn btn-danger btn-circle ml-1" role="button"><i class="fas fa-times text-white"></i></a></a>
+                                </div>
+                            </div>
+                            <div class="card-header py-3">
+                                <div class="mail-custom-btn"><textarea style="height: 20px;width: 271px;"></textarea><a class="custom-btn light-btn" href="#" role="button"><a class="btn btn-success btn-circle ml-1" role="button"><i class="fas fa-check text-white"></i></a></a><a class="custom-btn light-btn"
+                                        href="#" role="button"><a class="btn btn-danger btn-circle ml-1" role="button"><i class="fas fa-times text-white"></i></a></a>
+                                </div>
+                            </div>
+                            <div class="card-header py-3">
+                                <div class="mail-custom-btn"><textarea style="height: 20px;width: 271px;"></textarea><a class="custom-btn light-btn" href="#" role="button"><a class="btn btn-success btn-circle ml-1" role="button"><i class="fas fa-check text-white"></i></a></a><a class="custom-btn light-btn"
+                                        href="#" role="button"><a class="btn btn-danger btn-circle ml-1" role="button"><i class="fas fa-times text-white"></i></a></a>
+                                </div>
+                            </div>
+                            <div class="card-header py-3">
+                                <div class="mail-custom-btn"><textarea style="height: 20px;width: 271px;"></textarea><a class="custom-btn light-btn" href="#" role="button"><a class="btn btn-success btn-circle ml-1" role="button"><i class="fas fa-check text-white"></i></a></a><a class="custom-btn light-btn"
+                                        href="#" role="button"><a class="btn btn-danger btn-circle ml-1" role="button"><i class="fas fa-times text-white"></i></a></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="text-primary font-weight-bold m-0">Current Tag Count</h6>
+                            </div>
+                        </div>
+                        <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Direct&quot;,&quot;Social&quot;,&quot;Referral&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;,&quot;#36b9cc&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas></div>
+                        <div
+                            class="card shadow mb-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% block extrajs %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+<script type="text/javascript">
+var annotationCategories = new AnnotationCategories();
+annotationCategories.url = 'https://rawgit.com/anjesh/annotatorjs-hacks/master/categories.json';
+annotationCategories.fetch({reset: true});
+var annotationCollection = new AnnotationCollection();
+var annotatorjsView = new AnnotatorjsView({
+    el: "#annotatorjs",
+    availableTags: ['ADJ','ADP','ADV','AUX','CCONJ','DET','INTJ','NOUN','NUM','PRON','PROPN','PUNCT','SCONJ','SYM','X','Type=general','Degree=positive','Type=auxiliary','VForm=present','Person=third','Number=plural','Type=main','VForm=participle','Number=plural','Gender=feminine','Type=common','Gender=masculine','Number=plural','Case=genitive'],
+    collection: annotationCollection,
+    annotationCategories: annotationCategories
+}).render();
+
+
+</script>
+{% endblock %}
+{% endblock %}
