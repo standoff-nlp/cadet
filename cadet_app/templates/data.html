@@ -3,13 +3,25 @@
 {% block content %}
  <div class="container-fluid">
                 <div>
-                    <div class="container">
-                        <h2 style="margin-top:52px;margin-left:34px;font-family:'Open Sans', sans-serif;font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">&nbsp; Upload or Select Texts for Annotation</h2>
-                        <div class="cust_bloglistintro">
-                            <p style="margin-left:34px;color:rgba(255,255,255,0.5);font-size:14px;"></p>
-                        </div>
-                        <div class="custom-file"><input type="file" class="custom-file-input" style="padding: 1px;margin: 0px;"><label class="custom-file-label">Upload File</label></div>
-                    </div>
+<h2 style="margin-top:52px;margin-left:34px;font-family:'Open Sans', sans-serif;font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">&nbsp; Upload or Select Texts for Annotation</h2>                    
+
+                       <div class="form-group">
+                            <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label>File:</label> {{ form.file }}<br>
+                    <label>Title:</label>
+                    {{ form.title }}<br>
+                                        <label>Source:</label>
+                    {{ form.source }}<br>
+                                        <label>Language:</label>
+                    {{ form.language }}<br>
+                    <button type="submit">Submit</button>
+                                                    
+                    </form>
+                </div>
+
+                        
+
                 </div>
             </div>
             <div class="col-md-12 search-table-col">

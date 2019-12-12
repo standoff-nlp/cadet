@@ -3,7 +3,6 @@ def make_dict(**args):  # Used to create a dictionary of the current state
     return args
 
 def update_state(request):
-    project, text, sentence, token
     request.session['query'] = request.POST.get('query', None)
     request.session['project'] = request.POST.get('project', None)
     request.session['text'] = request.POST.get('text', None)
@@ -19,3 +18,33 @@ def get_state(request):
 
     state = make_dict(*args)
     return state
+
+def matcher(text, term, label):
+        index = 0
+        matches = []
+        while True:
+            index = text.find(term, index + 1)
+            matches.append((index, index + len(term), label))
+            if index == -1:
+                break
+
+        return matches[:-1]
+
+def handle_uploaded_file(file, language, dataset):
+
+    print(file.content_type)
+
+    #nlp = load_base_language(language)
+    if file.content_type == 'text/plain':
+        doc = nlp(file.read())
+
+    if file.content_type == 'text/csv':
+        doc = nlp(file.read())
+
+        return 'Dataset added successfully. Select datasets below or add another.'
+    if file.content_type == 'xml/tei':
+        # TODO use standoff converter to create text/sentence/tokens (same as above) and annotations. 
+        pass
+
+    if file.content_type == 'application/octet-stream': # CoNNL-U
+        pass

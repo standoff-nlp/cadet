@@ -1,0 +1,13 @@
+#User flow 
+
+index, welcome page, log in, create user
+
+editor 
+  create project 
+  add data
+  set labels
+  
+   
+annotator
+  my texts
+

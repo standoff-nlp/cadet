@@ -12,10 +12,26 @@
                     <li class="nav-item" role="presentation"></li>
                 </ul>
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="{% url 'projects' %}"><i class="fas fa-bowling-ball"></i><span>Projects</span></a><a class="nav-link active" href="{% url 'data' %}"><i class="fas fa-database"></i><span>Data</span></a><a class="nav-link active"
-                            href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Customize UD&nbsp;Labels</span></a><a class="nav-link active" href="{% url 'annotate' %}" style="background-color: #9e2387;"><i class="fas fa-laptop-code"></i><span>Annotate</span></a>
-                        <a
-                            class="nav-link active" href="{% url 'export' %}" style="background-color: transparent;"><i class="fas fa-file-download"></i><span>Export</span></a>
+                    <li class="nav-item" role="presentation">
+                        
+                        <a class="nav-link active" href="{% url 'data' %}"><i class="fas fa-database"></i><span>Data</span></a>
+
+                        <a class="nav-link active" href="{% url 'projects' %}"><i class="fas fa-globe-europe"></i>
+                            {% if project %}
+                            <span>{{ project.title }}</span>
+                            {% else %}
+                            <span>Project</span>
+                            {% endif %}
+
+                        </a>
+
+                        <a class="nav-link active"
+                            href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Customize UD&nbsp;Labels</span></a>
+
+                        <a class="nav-link active" href="{% url 'annotate0' 1 1 1 1 %}" style="background-color: #9e2387;"><i class="fas fa-laptop-code"></i><span>Annotate-AJ</span></a>
+
+                        <a class="nav-link active" href="{% url 'annotate1' %}" style="background-color: #9e2387;"><i class="fas fa-laptop-code"></i><span>Annotate-JS</span></a>
+                        <a class="nav-link active" href="{% url 'export' %}" style="background-color: transparent;"><i class="fas fa-file-download"></i><span>Export</span></a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">

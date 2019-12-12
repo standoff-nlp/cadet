@@ -15,8 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
 from django.urls import include
+from annotator_store import views as annotator_views
+from django.conf.urls.static import static
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('cadet_app.urls')),
+    path('', include('social_django.urls', namespace='social'))
 ]
+
+urlpatterns += [
+    # annotations
+    path('store/annotations/', include('annotator_store.urls', namespace='annotation-api')),
+    # annotatorjs doesn't handle trailing slash in api prefix url
+    path('store/annotations', annotator_views.AnnotationIndex.as_view(), name='annotation-api-prefix'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -18,6 +18,7 @@ var AnnotatorjsView = Backbone.View.extend({
         this.listenTo(this.annotationCategories, 'reset', this.populateCategories);
         this.content = $(this.el).annotator();
         this.content.annotator('addPlugin', 'MyTags');
+        this.content.annotator('addPlugin', 'Store');
         this.content.annotator('addPlugin', 'AnnotatorEvents');
         this.content.data('annotator').plugins.MyTags.availableTags = options.availableTags
         this.content.data('annotator').plugins.AnnotatorEvents.collection = options.collection;

@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 class Project(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
-    image = models.ImageField()
+    image = models.ImageField(blank=True)
     owners = models.ManyToManyField(User, related_name="owners")
     editors = models.ManyToManyField(User, related_name="editors")
-    annotators = models.ManyToManyField(User, related_name="annotators")
+    annotators = models.ManyToManyField(User, related_name="annotators", blank=True)
     description = models.TextField(blank=True, null=True)
     language = models.CharField(max_length=220, blank=True, null=True)
     language_object = models.CharField(max_length=220, blank=True, null=True)
@@ -33,7 +33,7 @@ class Dataset(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
     texts = models.ManyToManyField("Text")
     language = models.CharField(max_length=220, blank=True, null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     source = models.URLField(max_length=1000, blank=True)
 
     def __str__(self):

@@ -1,0 +1,56 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>{% trans "Cadet" %}</title>
+        <link rel="icon" href="{% static 'img/favicon.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
+</head>
+
+<body style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Crescent_Moon_Clouds_%28201245183%29.jpeg/800px-Crescent_Moon_Clouds_%28201245183%29.jpeg);">
+                     <div class="container-fluid">
+                        <div >
+                            <div class="container">           
+                                <div class="col-lg-6">
+                                    <div class="p-5">
+                                        <div class="text-center">
+                                            <h4 style="color:white;">Cadet</h4>
+                                        </div>
+                                        <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                            
+                                            <div class="form-group">
+
+                                            <input class="form-control" placeholder="Enter username..." name="username"></div>
+
+                                            <div class="form-group"><input class="form-control" type="password" placeholder="Password" name="password"></div>
+                                            
+
+                                            <button class="btn btn-primary btn-block text-white" type="submit">{% if message %} {{ message }} {% else %}&nbsp; Login</a>{% endif %}</button>
+
+                                            <hr><a class="btn btn-primary btn-block text-white btn-google btn-user" role="button"><i class="fab fa-google"></i>&nbsp; Login with Google</a>
+
+                                            <a href="{% url "social:begin" "google-oauth2" %}">Google+</a>
+                                            <hr>
+                                        </form>
+                                        <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
+                                        <div class="text-center"><a class="small" href="register.html">Create an Account!</a></div>
+                                    </div>
+                                </div></div></div></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="{% static 'js/script.min.js' %}"></script>
+</body>
+
+</html>
