@@ -10,6 +10,7 @@ import cadet_app.views as views
 urlpatterns = [
     path("", views.index, name="index"),
     path("login/", views.site_login, name="login"),
+    path("logout/", views.site_logout, name="logout"),
     path("projects/", views.projects, name="projects"),
     path("add_project/", views.add_project, name="add_project"),
     path("edit_project/<id>", views.edit_project, name="edit_project"),

@@ -1,12 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
-from cadet_app.utils import make_dict, update_state, get_state, matcher, handle_uploaded_file
+from cadet_app.utils import make_dict, update_state, get_state, matcher, handle_uploaded_file, update_spacy_langs
 from cadet_app.models import *
 from cadet_app.forms import ProjectForm, DatasetForm
-import spacy
+from social_django.utils import psa
 
+import spacy
+#update_spacy_langs()
     
 # Create your views here.
 @login_required(redirect_field_name='', login_url='login/')
@@ -20,11 +22,10 @@ def index(request):
     else:
         return render(request, "index.html",)
 
-
 def site_login(request):
     if request.method == "POST":
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
-        print(user or "fish")
+        print(user or "user not found")
         if user is not None:
             login(request, user)
             return redirect(index)
@@ -34,6 +35,23 @@ def site_login(request):
     else:
         return render(request, "login.html")
 
+@psa('social:complete')
+def register_by_access_token(request, backend):
+    # This view expects an access_token GET parameter, if it's needed,
+    # request.backend and request.strategy will be loaded with the current
+    # backend and strategy.
+    token = request.GET.get('access_token')
+    user = request.backend.do_auth(token)
+    if user:
+        login(request, user)
+        return redirect(index)
+    else:
+        return render(request, "login.html")
+
+def site_logout(request):
+    logout(request)
+    return redirect(site_login)
+
 def home(request):
     if request.method == "POST":
         update_state(request)
@@ -42,7 +60,7 @@ def home(request):
     else:
         return render(request, "index.html",)
 
-
+@login_required(redirect_field_name='', login_url='login/')
 def projects(request):
 
     projects = Project.objects.all()
@@ -50,7 +68,7 @@ def projects(request):
     context['projects'] = projects
     return render(request, "projects.html", context)
 
-
+@login_required(redirect_field_name='', login_url='login/')
 def add_project(request):
 
     if request.method == "POST":
@@ -67,6 +85,7 @@ def add_project(request):
 
         return render(request, "add_project.html", context)
 
+@login_required(redirect_field_name='', login_url='login/')
 def edit_project(request, id):
     
     if request.method == "POST":
