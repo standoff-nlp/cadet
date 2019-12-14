@@ -1,5 +1,6 @@
 from cadet_app.models import *
 from iso639 import languages
+import spacy
 
 
 SPACY_LANGS = [ 'af',
@@ -97,12 +98,38 @@ def matcher(text, term, label):
 
 def handle_uploaded_file(file, language, dataset):
 
-    print(dataset)
+    if dataset.spacy_language.iso:
+        lang = spacy.util.get_lang_class(dataset.spacy_language.iso)
+        nlp = lang()
+    current_text = Text()
+    current_text.save()
+    current_text.datasets.add(dataset)
+    
 
-    #nlp = load_base_language(language)
     if file.content_type == 'text/plain':
-        #doc = nlp(file.read())
-        pass
+        text = str(file.read().decode('utf-8'))
+        current_text.text = text
+        current_text.save()
+
+        doc = nlp(text)
+
+        if nlp.has_pipe('sentencizer'):
+            for sent in doc.sents:
+                new_sent = Sentence(text=sent.text, parent=current_text)
+                new_sent.save()
+
+            for token in doc:
+                start_char = token.idx 
+
+                new = Token(text=token.text, parent_text=current_text, start_char=start_char, parent_sentence=Sentence.objects.get(text=token.sent).pk)
+                new.save()
+
+        else:
+            for token in doc:
+                start_char = token.idx 
+
+                new = Token(text=token.text, parent_text=current_text, start_char=start_char)
+                new.save()
 
     if file.content_type == 'text/csv':
         #doc = nlp(file.read())

@@ -52,13 +52,6 @@ def site_logout(request):
     logout(request)
     return redirect(site_login)
 
-def home(request):
-    if request.method == "POST":
-        update_state(request)
-        return redirect("table/diaries")
-
-    else:
-        return render(request, "index.html",)
 
 @login_required(redirect_field_name='', login_url='login/')
 def projects(request):
@@ -75,8 +68,7 @@ def add_project(request):
         form = ProjectForm(request.POST)
         if form.is_valid():
             form.save()
-
-            return render(request, "projects.html")
+            return redirect(projects)
 
     else:
         form = ProjectForm()
@@ -105,10 +97,9 @@ def edit_project(request, id):
 
 def set_project(request, id):
     project = Project.objects.get(pk=id)
-    projects = Project.objects.all()
-    context = {}
-    context['projects'] = projects
-    return render(request, "projects.html", context)
+    request.session['project_id'] = project.id
+    request.session['project_title'] = project.title
+    return redirect(projects)
 
 def data(request):
     datasets = Dataset.objects.all()
@@ -117,6 +108,9 @@ def data(request):
         form = DatasetForm(request.POST, request.FILES)
         if form.is_valid():
             dataset = form.save()
+            dataset.author = request.user
+            dataset.save()
+
             context = {}
             context["form"] = form
             context["datasets"] = datasets
@@ -137,6 +131,23 @@ def data(request):
 def labels(request):
     return render(request, "labels.html",)
 
+
+def annotate(
+    request, project, text, sentence, token
+):  # Version of the annotation UI from scratch
+    project = Project.objects.get(pk=project)
+    #text = Text.objects.get(pk=text)
+    #sentence = Sentence.objects.get(text=text, pk=sentence)
+    #token = Token.objects.get(pk=token, project=project, text=text)
+
+    context = {}
+    #context["project"] = project
+    #context["text"] = text
+    #context["sentence"] = sentence
+    #context["token"] = token
+
+    # sort texts term freqency/ strategic annotation
+    return render(request, "annotate0.html", context)
 
 def annotate0(
     request, project, text, sentence, token

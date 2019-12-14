@@ -7,7 +7,7 @@
                 <div>
                     <div class="container">
                         <h2 style="margin-top:52px;margin-left:34px;font-family:'Open Sans', sans-serif;font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">&nbsp; Projects&nbsp; &nbsp; &nbsp;&nbsp;
-                            {% if perms.editor %}
+                            {% if request.user.is_staff %}
                             <a href="{% url 'add_project' %}"><i class="fa fa-plus" style="background-color: #0c81f7; color:black; padding: 6px;filter: blur(0px) hue-rotate(0deg) invert(0%) sepia(53%);"></i></a>{% endif %}
                         </h2>
                         <div class="cust_bloglistintro">

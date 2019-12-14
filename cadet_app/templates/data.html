@@ -48,13 +48,20 @@
                             <tr class="warning no-result">
                                 <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
                             </tr>
+                            {% for dataset in datasets %}
+
                             <tr>
-                                <td>SETimes.SR 1.0</td>
-                                <td>Serbian</td>
-                                <td>CLARIN.SL</td>
-                                <td><i class="fa fa-link"></i></td>
+                                <td>{{ dataset.title }}</td>
+                                <td>{{ dataset.language}}</td>
+                                <td>{{ dataset.author }}</td>
+                                {% if dataset.source%}
+                                <td><a href="{{ dataset.source}}" target="_blank"><i class="fa fa-link"></i></a></td>
+                                {% else %}
+                                <td></td>
+                                {% endif%}
                                 <td><button class="btn btn-success" style="margin-left: 5px;" type="submit"><i class="fa fa-check" style="font-size: 15px;"></i></button><button class="btn btn-danger" style="margin-left: 5px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i></button></td>
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

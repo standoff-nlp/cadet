@@ -52,15 +52,19 @@ class Dataset(models.Model):
 
 class Text(models.Model):
     text = models.TextField(blank=True, null=True)
-    datasets = models.ManyToManyField("DataSet")
+    datasets = models.ManyToManyField("DataSet", blank=True)
 
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.id}"
 
 
 class Sentence(models.Model):
     text = models.TextField(blank=True, null=True)
     parent = models.ForeignKey(Text, on_delete=models.CASCADE)
+    start_char = models.IntegerField(default=None)
+
+    def end_char(self):
+        return self.start_char + len(self.text)
 
     def __str__(self):
         return f"{self.title}"
@@ -68,12 +72,17 @@ class Sentence(models.Model):
 
 class Token(models.Model):
     parent_text = models.ForeignKey(Text, on_delete=models.CASCADE)
-    parent_sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE)
+    parent_sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE,blank=True, null=True)
     text = models.TextField(blank=True, null=True)
-    annotations = models.ManyToManyField("Annotation", related_name="token_annotations")
+    annotations = models.ManyToManyField("Annotation", related_name="token_annotations",blank=True)
+    start_char = models.IntegerField(default=None)
+    is_sent_start = models.BooleanField(default=None, null=True)
+
+    def end_char(self):
+        return self.start_char + len(self.text)
 
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.text}"
 
 
 class LabelGroup(models.Model):
