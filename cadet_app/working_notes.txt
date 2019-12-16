@@ -28,7 +28,8 @@ TODO
 load text, display existing anno (including those from spaCy)
 	click on anno, to annotate
 	diff, spaCy added tokens, ents, versus manual
-	
+
 
 add token, span, sent from highlight 
 
+new annotation model 

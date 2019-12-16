@@ -53,3 +53,6 @@ def handle_uploaded_file(request, language, text, title):
     if file.content_type == 'application/octet-stream': # CoNNL-U
         pass
     return "Have a nice day!"
+
+def handle_url_file(request, language, text, title):
+    pass

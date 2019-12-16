@@ -5,7 +5,7 @@ from django.contrib import messages
 
 
 from cadet_app.utils import make_dict, update_state, get_state, matcher, update_spacy_langs, prepare_text
-from cadet_app.handle_uploaded_file import handle_uploaded_file
+from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
 from cadet_app.forms import ProjectForm, TextForm
 from social_django.utils import psa
@@ -157,9 +157,15 @@ def data(request):
             context["project_texts"] = project_texts
             title = request.POST['title']
             language = request.POST['language']
-            context["message"] = handle_uploaded_file(request, language, text, title)
+            if request.FILES['file']:
+                context["message"] = handle_uploaded_file(request, language, text, title)
+            if request.session.get('url', None):
+                context["message"] = handle_url_file(request, language, text, title)
 
-            return render(request, "data.html", context)
+            if request.user.is_staff:
+                return render(request, "data.html", context)
+            else:
+                return render(request, "data_public.html", context)                
 
     else:
         form = TextForm()
@@ -168,7 +174,10 @@ def data(request):
         context["all_texts"] = all_texts
         context["project_texts"] = project_texts
 
-        return render(request, "data.html", context)
+        if request.user.is_staff:
+            return render(request, "data.html", context)
+        else:
+            return render(request, "data_public.html", context) 
 
 def labels(request):
     return render(request, "labels.html",)
