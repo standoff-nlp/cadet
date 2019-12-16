@@ -15,14 +15,14 @@
                         <div class="card-body">
                             <div class="row align-items-center no-gutters">
                                 <div class="col mr-2">
-                                    <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><h6> <i class="fa fa-chevron-left"></i> &nbsp;Text Title&nbsp; <i class="fa fa-chevron-right"></i></h6> <div data-tooltip="Change amount of text in view"><div class="slidecontainer"></div>
+                                    <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><h6> <i class="fa fa-chevron-left"></i> &nbsp;{{ text.title }}&nbsp; <i class="fa fa-chevron-right"></i></h6> <div data-tooltip="Change amount of text in view"><div class="slidecontainer"></div>
   <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
 </div></div>
                                     <br>
 
                                     <!-- text w/ annotation classes rendered in view  -->
 
-                                     <p class="text-dark font-weight-bold h5 mb-0"><span class="active-token">Då</span> var han elva årvar han elva år.</p>
+                                     <p class="text-dark font-weight-bold h5 mb-0"><span class="active-token">Då</span> {{ text.text }}</p>
                                 </div>
                                 
                             </div>

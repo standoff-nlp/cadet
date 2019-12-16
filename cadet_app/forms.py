@@ -4,6 +4,7 @@ from cadet_app.models import Project, Text, SpacyLanguage
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
+        exclude = ('project_slug',)
         fields = '__all__'
 
 class TextForm(ModelForm):

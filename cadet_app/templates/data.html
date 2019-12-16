@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+
+{% if request.user.is_staff %}
  <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Add New Texts</a>
                         <div class="collapse" id="collapse-4">
                             <div class="card-body">
-                                {% if message %}
-<a href="{% url 'data' %}">Click here to add another text</a>
-
-                    {% else %}
+                                
                                 <div class="form-group">
                             <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
@@ -30,8 +29,7 @@
                         </div>
                     </div>
 
-
-                    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-5" href="#collapse-5" role="button">Select Texts</a>
+                    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-5" href="#collapse-5" role="button">Select Text to Annotate</a>
                         <div class="collapse show" id="collapse-5">
                             
             <div class="earch-table-col">
@@ -47,14 +45,16 @@
                                 <th id="trs-hd" class="col-lg-2">Action</th>
                             </tr>
                         </thead>
+                        {% if request.user.is_staff %}
                         <tbody>
                             <tr class="warning no-result">
                                 <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
                             </tr>
-                            {% for text in texts %}
-
+                            
+                            {% for text in all_texts %}
+                            
                             <tr>
-                                <td>{{ text.title }}</td>
+                                <td><a href="{% url 'set_text' text.id %}" class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-chess-king"></i></span><span class="text-white text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">{{ text.title }}</span></a></td>
                                 <td>{{ text.language}}</td>
                                 <td>{{ text.author }}</td>
                                 {% if text.source%}
@@ -62,17 +62,60 @@
                                 {% else %}
                                 <td></td>
                                 {% endif%}
-                                <td><button class="btn btn-success" style="margin-left: 5px;" type="submit"><i class="fa fa-check" style="font-size: 15px;"></i></button><button class="btn btn-danger" style="margin-left: 5px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i></button></td>
+                                <td><a href="{% url 'edit_text' text.id %}" class="btn btn-success" role="button"  style="margin-left: 5px;"><i class="fas fa-edit" style="font-size: 15px;"></i></a>
+                                    <button class="btn btn-danger" value="showAlert" onclick="showAlert();" style="margin-left: 5px;"><i class="fa fa-trash" style="font-size: 15px;"></i></button></td>
+                            </tr>
+                            <div class="container" style="display:none;" id="myAlert">
+        
+        <div class="alert alert-danger alert-dismissable" id="myAlert2">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <a href="{% url 'delete_text' text.id %}">Warning, you are about to delete this text and all annotations related to it. Click to proceed.</a>
+        </div>
+
+    </div>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                        {% endif %}
+                    {% if not request.user.is_staff %}
+                    <tbody>
+                            <tr class="warning no-result">
+                                <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
+                            </tr>
+                            
+                            {% for text in all_texts %}
+                            
+                             <tr>
+                                <td><a href="{% url 'set_text' text.id %}" class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-chess-king"></i></span><span class="text-white text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">{{ text.title }}</span></a></td>
+                                <td>{{ text.language}}</td>
+                                <td>{{ text.author }}</td>
+                                {% if text.source%}
+                                <td><a href="{{ text.source}}" target="_blank"><i class="fa fa-link"></i></a></td>
+                                {% else %}
+                                <td></td>
+                                {% endif%}
+                                
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+                        {% endif %}
                 </div>
             </div>
  </div>
                         </div>
                     
-
-
             
 {% endblock %}
+
+{% block extrajs %}
+<script>
+function showAlert(){
+  if($("#myAlert").find("div#myAlert2").length==0){
+    $("#myAlert").append("<div class='alert alert-success alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> Success! message sent successfully.</div>");
+  }
+  $("#myAlert").css("display", "");
+}
+</script>
+{% endblock%}

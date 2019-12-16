@@ -94,3 +94,7 @@ def matcher(text, term, label):
                 break
 
         return matches[:-1]
+
+
+def prepare_text(text, window):
+    pass

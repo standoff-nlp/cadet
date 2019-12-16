@@ -6,7 +6,8 @@ def handle_text_file(request, nlp, current_text):
     if nlp:  # spaCy language object present
         file = request.FILES['file']
         text = str(file.read().decode('utf-8'))
-        
+        current_text.text = text 
+        current_text.save()
 
         doc = nlp(text)
 
@@ -27,10 +28,7 @@ def handle_text_file(request, nlp, current_text):
 
                 new = Annotation(author=request.user, project=Project.objects.get(id=request.session.get('project_id')), annotation_type=AnnotationType.objects.get(name='token'),annotation_text=token.text, text=current_text, start_char=start_char)
                 new.save()
-    else:
-        text = str(file.read().decode('utf-8'))
-        current_text = Text.object.get_or_create(text=text)
-        current_text.save()
+
 
 def handle_uploaded_file(request, language, text, title):
     file = request.FILES['file']

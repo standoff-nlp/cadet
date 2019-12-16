@@ -9,8 +9,10 @@ class TextAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Text, TextAdmin)
 
+
 class AnnotationAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id','annotation_type','annotation_text','text','created_at',)
+    list_filter = ('project','annotation_type','text',)
 admin.site.register(Annotation, AnnotationAdmin)
 
 class AnnotationTypeAdmin(admin.ModelAdmin):

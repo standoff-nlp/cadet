@@ -15,14 +15,15 @@ urlpatterns = [
     path("add_project/", views.add_project, name="add_project"),
     path("edit_project/<id>", views.edit_project, name="edit_project"),
     path("set_project/<id>", views.set_project, name="set_project"),
+    path("set_text/<id>", views.set_text, name="set_text"),
+	path("edit_text/<id>", views.edit_text, name="edit_text"),
+	path("delete_text/<id>", views.delete_text, name="delete_text"),
+    
     path("data/", views.data, name="data"),
     path("labels/", views.labels, name="labels"),
-	path("annotate/", views.annotate, name="annotate"),
-    path("annotate/<int:text>/<int:token>", views.annotate, name="annotate"),
-
-    path("annotate0/", views.annotate0, name="annotate0"),
-    path("annotate0/<int:project>/<int:text>/<int:sentence>/<int:token>", views.annotate0, name="annotate0"),
-    path("annotate1/", views.annotate1, name="annotate1"),
+    path("annotate/", views.annotate, name="annotate"),
+    path("annotate/<project>/", views.annotate, name="annotate"),
+    path("annotate/<project>/<text>", views.annotate, name="annotate"),
     path("export/", views.export, name="export"),
     
 ]

@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 
-from cadet_app.utils import make_dict, update_state, get_state, matcher, update_spacy_langs
+from cadet_app.utils import make_dict, update_state, get_state, matcher, update_spacy_langs, prepare_text
 from cadet_app.handle_uploaded_file import handle_uploaded_file
 from cadet_app.models import *
 from cadet_app.forms import ProjectForm, TextForm
@@ -102,10 +102,45 @@ def set_project(request, id):
     project = Project.objects.get(pk=id)
     request.session['project_id'] = project.id
     request.session['project_title'] = project.title
+    request.session['project_slug'] = project.project_slug
     return redirect(projects)
 
+def set_text(request, id):
+    text = Text.objects.get(pk=id)
+    request.session['text_id'] = text.id
+    request.session['text_title'] = text.title
+    request.session['text_slug'] = text.text_slug
+    return redirect(annotate, request.session.get('project_slug'), text.text_slug)
+
+def delete_text(request, id):
+    text = Text.objects.get(pk=id)
+    text.delete()
+    return redirect(data)
+
+@login_required(redirect_field_name='', login_url='login/')
+def edit_text(request, id):
+    
+    if request.method == "POST":
+        project = get_object_or_404(Project, pk=id)
+        form = TextForm(request.POST or None, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect(data)
+
+    else:
+        text = get_object_or_404(Text, pk=id)
+        form = TextForm(request.POST or None, instance=text)
+        context = {}
+        context["form"] = form
+
+        return render(request, "add_project.html", context)
+
 def data(request):
-    texts = Text.objects.all()
+
+    # TODO auto-select texts already associated with current project
+
+    all_texts = Text.objects.all()
+    project_texts = Text.objects.filter(projects__id=request.session.get('project_id'))
     if request.method == "POST":
 
         form = TextForm(request.POST, request.FILES)
@@ -118,7 +153,8 @@ def data(request):
 
             context = {}
             context["form"] = form
-            context["texts"] = texts
+            context["all_texts"] = all_texts
+            context["project_texts"] = project_texts
             title = request.POST['title']
             language = request.POST['language']
             context["message"] = handle_uploaded_file(request, language, text, title)
@@ -129,7 +165,8 @@ def data(request):
         form = TextForm()
         context = {}
         context["form"] = form
-        context["texts"] = texts
+        context["all_texts"] = all_texts
+        context["project_texts"] = project_texts
 
         return render(request, "data.html", context)
 
@@ -138,14 +175,13 @@ def labels(request):
 
 
 def annotate(
-    request, text, token
-):  # Version of the annotation UI from scratch
+    request, project, text
+):  
     try:
         project = request.session.get('project_id')
 
     except AttributeError:
         messages.info(request, "Please select a project before proceeding")
-        #messages.add_message(request, messages.INFO, "Please select a project before proceeding")
         return redirect(projects)
 
     context = {}
@@ -153,51 +189,27 @@ def annotate(
         context["project"] = Project.objects.get(id=request.session.get('project_id'))
     except Exception as e:
         messages.info(request, "Please select a project before proceeding")
-        #messages.add_message(request, messages.INFO, "Please select a project before proceeding")
         return redirect(projects)
-
-    # TODO function to query project texts, return text for annotation 
-    # send text
-    # send tokens
-    # send spans 
-    # send sentences 
-
-    #text = Text.objects.get(pk=text)
-    #sentence = Sentence.objects.get(text=text, pk=sentence)
-    #token = Token.objects.get(pk=token, project=project, text=text)
-
     
-    #context["project"] = project
-    #context["text"] = text
-    #context["sentence"] = sentence
-    #context["token"] = token
+    # Need default text window size 2 sents=50, user can zoom in and out within range 100
+    #100 = len(text), 
+    # split the text into parts, forward and back links for parts 
+    # need to mark existing annotation in the text html
+    text = Text.objects.get(text_slug=text)
+    print(request.__dict__)
+    annotations = Annotation.objects.filter(text=text)
+    window = None
+    text_ooo = prepare_text(text, window)
+    # adjust text to fit within viewframe 
+    context["text"] = text
 
-    # sort texts term freqency/ strategic annotation
+    if text.strategic_anno is True:
+        messages.info(request, "Strategic annotations is set to True")
+
+    if text.strategic_anno is False or None:
+        messages.info(request, "Strategic annotations is set to False")
+    
     return render(request, "annotate.html", context)
-
-def annotate0(
-    request, project, text, sentence, token
-):  # Version of the annotation UI from scratch
-    project = Project.objects.get(pk=project)
-    #text = Text.objects.get(pk=text)
-    #sentence = Sentence.objects.get(text=text, pk=sentence)
-    #token = Token.objects.get(pk=token, project=project, text=text)
-
-    context = {}
-    #context["project"] = project
-    #context["text"] = text
-    #context["sentence"] = sentence
-    #context["token"] = token
-
-    # sort texts term freqency/ strategic annotation
-    return render(request, "annotate0.html", context)
-
-
-def annotate1(request):  # Version of the annotation UI using annotator.js
-
-    # sort texts term freqency/ strategic annotation
-    return render(request, "annotate1.html",)
-
 
 def export(request):
     return render(request, "export.html",)
