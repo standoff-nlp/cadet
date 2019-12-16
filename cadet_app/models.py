@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
+
+
 
 
 class SpacyLanguage(models.Model):
@@ -61,6 +64,13 @@ class Text(models.Model):
     def __str__(self):
         return f"{self.id}"
 
+class LabelSet(models.Model):
+    title = models.CharField(max_length=220, blank=True, null=True)
+    groups = models.ManyToManyField("LabelGroup")
+    group_order = ArrayField(models.CharField(max_length=200), blank=True)
+
+    def __str__(self):
+        return f"{self.title}"
 
 class LabelGroup(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)

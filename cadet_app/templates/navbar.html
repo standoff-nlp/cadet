@@ -15,7 +15,7 @@
                     <li class="nav-item" role="presentation">
                         
                         
-                        <a class="nav-link active" href="{% url 'projects' %}"><i class="fas fa-globe-europe"></i>
+                        <a class="nav-link active" {% if request.resolver_match.url_name == 'projects' %}style="background-color: #9e2387;"{% endif %}  href="{% url 'projects' %}"><i class="fas fa-globe-europe"></i>
                             {% if request.session.project_title %}
                             <span>Project ~ {{ request.session.project_title }}</span>
                             {% else %}
@@ -24,20 +24,18 @@
 
                         </a>
                         {% if request.user.is_staff %}
-                        <a class="nav-link active" href="{% url 'data' %}"><i class="fas fa-database"></i><span>Data</span></a>
+                        <a class="nav-link active" {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Data</span></a>
                         {% endif %}
                          {% if request.user.is_staff %}
-                        <a class="nav-link active"
-                            href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Customize UD&nbsp;Labels</span></a>
+                        <a class="nav-link active" {% if request.resolver_match.url_name == 'labels' %}style="background-color: #9e2387;"{% endif %}
+                            href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span></a>
                             {% endif %}
 
-                        <a class="nav-link active" href="{% url 'annotate' 2 1 %}" style="background-color: #9e2387;"><i class="fas fa-laptop-code"></i><span>annotate-dev</span></a>
+                        <a class="nav-link active" href="{% url 'annotate' 2 1 %}" {% if request.resolver_match.url_name == 'annotate' %}style="background-color: #9e2387;"{% endif %}><i class="fas fa-laptop-code"></i><span>Annotate</span></a>
 
-                        <a class="nav-link active" href="{% url 'annotate0' 2 1 1 1 %}" style="background-color: #9e2387;"><i class="fas fa-laptop-code"></i><span>cursor-style</span></a>
-
-                        <a class="nav-link active" href="{% url 'annotate1' %}" style="background-color: #9e2387;"><i class="fas fa-laptop-code"></i><span>fully-manual</span></a>
+                        
                        {% if request.user.is_staff %}
-                        <a class="nav-link active" href="{% url 'export' %}" style="background-color: transparent;"><i class="fas fa-file-download"></i><span>Export</span></a>{% endif %}
+                        <a class="nav-link active" {% if request.resolver_match.url_name == 'export' %}style="background-color: #9e2387;"{% endif %} href="{% url 'export' %}" style="background-color: transparent;"><i class="fas fa-file-download"></i><span>Export</span></a>{% endif %}
                     </li>
                 </ul>
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
