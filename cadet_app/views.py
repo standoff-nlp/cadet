@@ -103,7 +103,7 @@ def set_project(request, id):
     request.session['project_id'] = project.id
     request.session['project_title'] = project.title
     request.session['project_slug'] = project.project_slug
-    return redirect(projects)
+    return redirect(data)
 
 def set_text(request, id):
     text = Text.objects.get(pk=id)
