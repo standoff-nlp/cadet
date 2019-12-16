@@ -1,6 +1,6 @@
 cadet/settings.py 
 cadet_app/media
-
+cadet_app/migrations
 .venv
 __pycache__
 *.pyc

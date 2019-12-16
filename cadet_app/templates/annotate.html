@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+
+
   <div>
         <div class="container">
          
@@ -9,12 +11,17 @@
 
             <div class="row">
                 <div class="col">
-                    <div class="card shadow border-left-primary py-2">
+                    <div class="card shadow py-2">
                         <div class="card-body">
                             <div class="row align-items-center no-gutters">
                                 <div class="col mr-2">
-                                    <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><h6> <i class="fa fa-chevron-left"></i> &nbsp;Text Title 1/300 0%&nbsp; <i class="fa fa-chevron-right"></i></h6></div>
+                                    <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><h6> <i class="fa fa-chevron-left"></i> &nbsp;Text Title&nbsp; <i class="fa fa-chevron-right"></i></h6> <div data-tooltip="Change amount of text in view"><div class="slidecontainer"></div>
+  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+</div></div>
                                     <br>
+
+                                    <!-- text w/ annotation classes rendered in view  -->
+
                                      <p class="text-dark font-weight-bold h5 mb-0"><span class="active-token">Då</span> var han elva årvar han elva år.</p>
                                 </div>
                                 
@@ -26,12 +33,16 @@
 
              <div class="mail-custom-btn"><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-chevron-left"></i></a><a class="custom-btn light-btn" href="#" role="button" style="width: 126px;"><i class="fa fa-space-shuttle"></i></a><a class="custom-btn light-btn"
                     href="#" role="button"><i class="fa fa-undo"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-save"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-trash"></i></a><a class="custom-btn light-btn"
-                    href="#" role="button"><i class="fa fa-toggle-on"></i></a></div>
+                    href="#" role="button"><i class="fa fa-toggle-on"></i></a>
 
+ 
+                </div>
+
+                                    <!-- sents, spans, tokens and labelgroups in a table-->
 
             <div class="row">
                 <div class="col">
-                    <div class="card shadow border-left-primary py-2">
+                    <div class="card shadow py-2">
                         <div class="card-body">
                             <div class="row align-items-center no-gutters">
                                 <div class="col mr-2">
@@ -135,10 +146,22 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Collapsible Card Example</a>
-                        <div class="collapse show" id="collapse-4">
+                    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Label and Annotation Reference</a>
+                        <div class="collapse" id="collapse-4">
                             <div class="card-body">
-                                <p class="m-0">This is a collapsable card example using Bootstrap's built in collapse functionality.&nbsp;<strong>Click on the card header</strong>&nbsp;to see the card body collapse and expand!</p>
+                                
+                                 <div class="card-header">
+                                <ul class="nav nav-tabs card-header-tabs">
+                                    <li class="nav-item"><a class="nav-link active" href="#">Part of Speech</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">Features</a><a class="nav-link" href="#">Lemmata</a></li>
+                                    <li class="nav-item"></li>
+                                </ul>
+                            </div>
+                            <div class="card-body" style="height: 418px;width: 289px;"><p class="card-text"><a href="https://universaldependencies.org/u/pos/ADJ.html">ADJ</a>: adjective<br><a href="https://universaldependencies.org/u/pos/ADP.html">ADP</a>: adposition<br><a href="https://universaldependencies.org/u/pos/ADV.html">ADV</a>: adverb<br><a href="https://universaldependencies.org/u/pos/AUX_.html">AUX</a>:
+    auxiliary<br><a href="https://universaldependencies.org/u/pos/CCONJ.html">CCONJ</a>: coordinating conjunction<br><a href="https://universaldependencies.org/u/pos/DET.html">DET</a>: determiner<br><a href="https://universaldependencies.org/u/pos/INTJ.html">INTJ</a>:
+    interjection<br><a href="https://universaldependencies.org/u/pos/NOUN.html">NOUN</a>: noun<br><a href="https://universaldependencies.org/u/pos/NUM.html">NUM</a>: numeral<br><a href="https://universaldependencies.org/u/pos/PART.html">PART</a>: particle<br><a href="https://universaldependencies.org/u/pos/PRON.html">PRON</a>:
+    pronoun<br><a href="https://universaldependencies.org/u/pos/PROPN.html">PROPN</a>: proper noun<br><a href="https://universaldependencies.org/u/pos/PUNCT.html">PUNCT</a>: punctuation<br><a href="https://universaldependencies.org/u/pos/SCONJ.html">SCONJ</a>: subordinating
+    conjunction<br><a href="https://universaldependencies.org/u/pos/SYM.html">SYM</a>: symbol<a href="https://universaldependencies.org/u/pos/VERB.html">VERB</a>: verb<br><a href="https://universaldependencies.org/u/pos/X.html">X</a>: other</p></div>
                             </div>
                         </div>
                     </div>
@@ -147,4 +170,16 @@
             </div>
         </div>
     </div>
+
+
+
+<script>
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+</script>
 {% endblock %}

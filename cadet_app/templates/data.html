@@ -1,37 +1,40 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
- <div class="container-fluid">
-                <div>
-{% if message %}
+ <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Add New Texts</a>
+                        <div class="collapse" id="collapse-4">
+                            <div class="card-body">
+                                {% if message %}
 <a href="{% url 'data' %}">Click here to add another dataset</a>
 
                     {% else %}
-<h2 style="margin-top:52px;margin-left:34px;font-family:'Open Sans', sans-serif;font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">&nbsp; Upload or Select Texts for Annotation</h2>                    
-
-                       <div class="form-group">
+                                <div class="form-group">
                             <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <label>File:</label> {{ form.file }}<br>
+                            {{ form.file }}<br>
+                            <label>or enter URL:</label>
+                    {{ form.source }}<br>
                     <label>Title:</label>
                     {{ form.title }}<br>
-                                        <label>Source:</label>
-                    {{ form.source }}<br>
                                         <label>Language:</label>
                     {{ form.language }}<br>
-                    <label>spaCy language:</label>
+                    <label data-tooltip="If selected, the text will be automatically tokenized.  If a sentensizer is available for your language, sentences will also be generated.">spaCy language:</label>
                     {{ form.spacy_language }}<br>
-                    spacy_model
+                    <label data-tooltip="If selected, the sentences in the document will be sorted by word count, which allows strategic annotation.">Strategic annotation:</label>{{ form.strategic_anno }}<br>
                     <button type="submit">Submit</button>
                                                     
                     </form>
                 </div>
-{% endif %}
-                        
+                {% endif %}
+                            </div>
+                        </div>
+                    </div>
 
-                </div>
-            </div>
-            <div class="col-md-12 search-table-col">
+
+                    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-5" href="#collapse-5" role="button">Select Texts</a>
+                        <div class="collapse" id="collapse-5">
+                            
+            <div class="earch-table-col">
                 <div class="form-group pull-right col-lg-4"><input type="text" class="search form-control" placeholder="Search by typing here.."></div><span class="counter pull-right"></span>
                 <div class="table-responsive table-bordered table table-hover table-bordered results">
                     <table class="table table-bordered table-hover">
@@ -66,5 +69,22 @@
                     </table>
                 </div>
             </div>
-        </div>
+ </div>
+                        </div>
+                    
+
+
+            <div class="container-fluid">
+                <div>
+
+
+                                
+
+                       
+
+                        
+
+                </div>
+            </div>
+ 
 {% endblock %}

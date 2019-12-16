@@ -4,7 +4,95 @@
 {% block content %}
 
 
-Hi!
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="text-primary m-0 font-weight-bold">Welcome!</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="m-0">You're here because you know something. What you know you can't explain, but you feel it. You've felt it your entire life, that there's something wrong with the world. You don't know what it is, but it's there, like a splinter in your mind, driving you mad. It is this feeling that has brought you to me. Do you know what I'm talking about? </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card shadow border-left-primary py-2">
+                        <div class="card-body"><div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>step 1</span></div><a href="{% url 'projects' %}" class="btn btn-primary btn-circle ml-1" role="button"><i class="fas fa-globe-europe text-white"></i></a>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    {% if request.user.is_staff %}
+                        <div class="text-dark font-weight-bold h5 mb-0"><span>Select or create a project</span></div>
+                        {% else %}
+                        <div class="text-dark font-weight-bold h5 mb-0"><span>Select a project</span></div>
+                        {% endif %}
+                                    
+                                </div>
+                                <div class="col-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 {% if request.user.is_staff %}
+                <div class="col-md-3">
+                    <div class="card shadow border-left-success py-2">
+                        <div class="card-body"><div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>step 2</span></div><a href="{% url 'data' %}" class="btn btn-success btn-circle ml-1" role="button"><i class="fas fa-database text-white"></i></a>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    <div class="text-dark font-weight-bold h5 mb-0"><span>Add texts and corpora</span></div>
+                                </div>
+                                <div class="col-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 {% endif %}
+                <div class="col-md-3">
+                    <div class="card shadow border-left-warning py-2">
+                        <div class="card-body"> <div class="text-uppercase text-warning font-weight-bold text-xs mb-1"><span>step 3</span></div><a href="{% url 'annotate' %}"class="btn btn-warning btn-circle ml-1" role="button"><i class="fas fa-laptop-code text-white"></i></a>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">
+                                    <div class="text-dark font-weight-bold h5 mb-0"><span>Annotate</span></div>
+                                </div>
+                                <div class="col-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow border-left-info py-2">
+                        <div class="card-body"><div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>step 4</span></div>
+<a href="{% url 'export' %}" class="btn btn-info btn-circle ml-1" role="button"><i class="fas fa-file-download text-white"></i></a>
+                            <div class="row align-items-center no-gutters">
+                                <div class="col mr-2">                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                            <div class="text-dark font-weight-bold h5 mb-0 mr-3"><span>Export</span></div>
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                                <div class="col-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Collapsible Card Example</a>
+                        <div class="collapse show" id="collapse-4">
+                            <div class="card-body">
+                                <p class="m-0">This is a collapsable card example using Bootstrap's built in collapse functionality.&nbsp;<strong>Click on the card header</strong>&nbsp;to see the card body collapse and expand!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 {% endblock %}

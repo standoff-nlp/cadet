@@ -11,3 +11,24 @@ editor
 annotator
   my texts
 
+Annotation UI
+
+- text, no anno
+	create token, span, sent with highlight
+
+- text, tokens
+	create, spans, sents with highlight
+
+- text with anno
+	display anno in text
+	edit token, span, sents
+	add token, span, sents
+
+TODO
+load text, display existing anno (including those from spaCy)
+	click on anno, to annotate
+	diff, spaCy added tokens, ents, versus manual
+	
+
+add token, span, sent from highlight 
+

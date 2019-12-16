@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
 
 from cadet_app.utils import make_dict, update_state, get_state, matcher, handle_uploaded_file, update_spacy_langs
 from cadet_app.models import *
@@ -53,7 +55,7 @@ def site_logout(request):
     return redirect(site_login)
 
 
-@login_required(redirect_field_name='', login_url='login/')
+@login_required(login_url='login')
 def projects(request):
 
     projects = Project.objects.all()
@@ -133,21 +135,42 @@ def labels(request):
 
 
 def annotate(
-    request, project, text, sentence, token
+    request, text, token
 ):  # Version of the annotation UI from scratch
-    project = Project.objects.get(pk=project)
+    try:
+        project = request.session.get('project_id')
+
+    except AttributeError:
+        messages.info(request, "Please select a project before proceeding")
+        #messages.add_message(request, messages.INFO, "Please select a project before proceeding")
+        return redirect(projects)
+
+    context = {}
+    try:
+        context["project"] = Project.objects.get(id=request.session.get('project_id'))
+    except Exception as e:
+        messages.info(request, "Please select a project before proceeding")
+        #messages.add_message(request, messages.INFO, "Please select a project before proceeding")
+        return redirect(projects)
+
+    # TODO function to query project texts, return text for annotation 
+    # send text
+    # send tokens
+    # send spans 
+    # send sentences 
+
     #text = Text.objects.get(pk=text)
     #sentence = Sentence.objects.get(text=text, pk=sentence)
     #token = Token.objects.get(pk=token, project=project, text=text)
 
-    context = {}
+    
     #context["project"] = project
     #context["text"] = text
     #context["sentence"] = sentence
     #context["token"] = token
 
     # sort texts term freqency/ strategic annotation
-    return render(request, "annotate0.html", context)
+    return render(request, "annotate.html", context)
 
 def annotate0(
     request, project, text, sentence, token

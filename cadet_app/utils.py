@@ -101,34 +101,34 @@ def handle_uploaded_file(file, language, dataset):
     if dataset.spacy_language.iso:
         lang = spacy.util.get_lang_class(dataset.spacy_language.iso)
         nlp = lang()
-    current_text = Text()
-    current_text.save()
-    current_text.datasets.add(dataset)
+    
     
 
     if file.content_type == 'text/plain':
         text = str(file.read().decode('utf-8'))
-        current_text.text = text
+        current_text = Text.object.get_or_create(text=text)
+        current_text.save()
+        current_text.datasets.add(dataset)
         current_text.save()
 
         doc = nlp(text)
 
         if nlp.has_pipe('sentencizer'):
             for sent in doc.sents:
-                new_sent = Sentence(text=sent.text, parent=current_text)
+                new_sent = Annotation(type='sent',text=sent.text, parent=current_text)
                 new_sent.save()
 
             for token in doc:
                 start_char = token.idx 
 
-                new = Token(text=token.text, parent_text=current_text, start_char=start_char, parent_sentence=Sentence.objects.get(text=token.sent).pk)
+                new = Annotation(type='token',text=token.text, parent_text=current_text, start_char=start_char, parent_sentence=Sentence.objects.get(text=token.sent).pk)
                 new.save()
 
         else:
             for token in doc:
                 start_char = token.idx 
 
-                new = Token(text=token.text, parent_text=current_text, start_char=start_char)
+                new = Annotation(type='token',text=token.text, parent_text=current_text, start_char=start_char)
                 new.save()
 
     if file.content_type == 'text/csv':

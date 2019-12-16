@@ -11,4 +11,4 @@ class DatasetForm(ModelForm):
     spacy_language = ModelChoiceField(queryset=SpacyLanguage.objects.all().order_by('iso'), empty_label="(none)")
     class Meta:
         model = Dataset
-        fields = ['file','title', 'language','source', 'spacy_language']
+        fields = ['file','title', 'language','source', 'spacy_language','strategic_anno']

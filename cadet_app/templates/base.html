@@ -20,6 +20,7 @@
 	    <link rel='stylesheet' href="{% static 'css/annotator.css' %}">
 	    <link rel='stylesheet' href="{% static 'css/select2.min.css' %}">
 	    <link rel='stylesheet' href="{% static 'css/select2.custom.css' %}">
+	    <link rel='stylesheet' href="{% static 'css/custom.css' %}">
 		
 		
 
@@ -28,6 +29,16 @@
     <body id="page-top">
 	    <div id="wrapper">
 			{% include 'navbar.html' %}
+			{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <div class="alert alert-info" role="alert"
+  {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
+</div>
+        {% endfor %}
+    </ul>
+    
+{% endif %}
 			{% block content %}{% endblock %}
 			{% include 'footer.html' %}
         </div>

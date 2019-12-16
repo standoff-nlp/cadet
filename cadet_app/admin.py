@@ -13,10 +13,11 @@ class TextAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Text, TextAdmin)
 
-class SentenceAdmin(admin.ModelAdmin):
+class AnnotationAdmin(admin.ModelAdmin):
     pass
-admin.site.register(Sentence, SentenceAdmin)
+admin.site.register(Annotation, AnnotationAdmin)
 
-class TokenAdmin(admin.ModelAdmin):
+class AnnotationTypeAdmin(admin.ModelAdmin):
     pass
-admin.site.register(Token, TokenAdmin)
+admin.site.register(AnnotationType, AnnotationTypeAdmin)
+
