@@ -26,10 +26,11 @@
                         
                         {% if not request.session.project_title %}
                         {% endif %} 
-                        {% if request.session.project_title %}
-                        <a class="nav-link active" {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Data</span></a>
-                        {% elif request.session.text_slug %}
+                        {% if request.session.text_id %}
                         <a class="nav-link active" {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Data ~ {{ request.session.text_title }}</span></a>
+                        {% elif request.session.project_title %}
+                        <a class="nav-link active" {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Data</span></a>
+                        
                         {% endif %} 
 
                          {% if request.user.is_staff %}
