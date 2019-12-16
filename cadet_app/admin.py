@@ -5,10 +5,6 @@ class ProjectAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Project, ProjectAdmin)
 
-class DatasetAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Dataset, DatasetAdmin)
-
 class TextAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Text, TextAdmin)

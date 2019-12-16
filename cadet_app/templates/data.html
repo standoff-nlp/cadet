@@ -5,7 +5,7 @@
                         <div class="collapse" id="collapse-4">
                             <div class="card-body">
                                 {% if message %}
-<a href="{% url 'data' %}">Click here to add another dataset</a>
+<a href="{% url 'data' %}">Click here to add another text</a>
 
                     {% else %}
                                 <div class="form-group">
@@ -32,7 +32,7 @@
 
 
                     <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-5" href="#collapse-5" role="button">Select Texts</a>
-                        <div class="collapse" id="collapse-5">
+                        <div class="collapse show" id="collapse-5">
                             
             <div class="earch-table-col">
                 <div class="form-group pull-right col-lg-4"><input type="text" class="search form-control" placeholder="Search by typing here.."></div><span class="counter pull-right"></span>
@@ -51,14 +51,14 @@
                             <tr class="warning no-result">
                                 <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
                             </tr>
-                            {% for dataset in datasets %}
+                            {% for text in texts %}
 
                             <tr>
-                                <td>{{ dataset.title }}</td>
-                                <td>{{ dataset.language}}</td>
-                                <td>{{ dataset.author }}</td>
-                                {% if dataset.source%}
-                                <td><a href="{{ dataset.source}}" target="_blank"><i class="fa fa-link"></i></a></td>
+                                <td>{{ text.title }}</td>
+                                <td>{{ text.language}}</td>
+                                <td>{{ text.author }}</td>
+                                {% if text.source%}
+                                <td><a href="{{ text.source}}" target="_blank"><i class="fa fa-link"></i></a></td>
                                 {% else %}
                                 <td></td>
                                 {% endif%}
@@ -74,17 +74,5 @@
                     
 
 
-            <div class="container-fluid">
-                <div>
-
-
-                                
-
-                       
-
-                        
-
-                </div>
-            </div>
- 
+            
 {% endblock %}

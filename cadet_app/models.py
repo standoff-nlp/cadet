@@ -25,7 +25,6 @@ class Project(models.Model):
     annotators = models.ManyToManyField(User, related_name="annotators", blank=True)
     description = models.TextField(blank=True, null=True)
     language = models.CharField(max_length=220, blank=True, null=True)
-    datasets = models.ManyToManyField("DataSet", blank=True, default=None)
 
     NO_REVIEW = "NR"
     SINGLE = "SR"
@@ -42,9 +41,10 @@ class Project(models.Model):
         return f"{self.title}"
 
 
-class Dataset(models.Model):  # TODO Remove, redundant with Project
+class Text(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
-    texts = models.ManyToManyField("Text")
+    text = models.TextField(blank=True, null=True)
+    projects = models.ManyToManyField("Project", blank=True, related_name="text_project")
     language = models.CharField(max_length=220, blank=True, null=True)
     spacy_language = models.ForeignKey(
         SpacyLanguage, on_delete=models.CASCADE, blank=True, null=True
@@ -55,14 +55,6 @@ class Dataset(models.Model):  # TODO Remove, redundant with Project
 
     def __str__(self):
         return f"{self.title}"
-
-
-class Text(models.Model):
-    text = models.TextField(blank=True, null=True)
-    datasets = models.ManyToManyField("DataSet", blank=True)
-
-    def __str__(self):
-        return f"{self.id}"
 
 class LabelSet(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
@@ -116,7 +108,6 @@ class Annotation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    dataset = models.ForeignKey("DataSet", on_delete=models.CASCADE, default=None)
     text = models.ForeignKey(
         Text, on_delete=models.CASCADE, related_name="annotation_text"
     )
@@ -128,8 +119,8 @@ class Annotation(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="annotation_author"
     )
-    approved = models.BooleanField(default=None)
-    auto_generated = models.BooleanField(default=None)
+    approved = models.BooleanField(default=None, null=True)
+    auto_generated = models.BooleanField(default=None, null=True)
 
     def end_char(self):
         return self.start_char + len(self.annotation_text)

@@ -4,9 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 
-from cadet_app.utils import make_dict, update_state, get_state, matcher, handle_uploaded_file, update_spacy_langs
+from cadet_app.utils import make_dict, update_state, get_state, matcher, update_spacy_langs
+from cadet_app.handle_uploaded_file import handle_uploaded_file
 from cadet_app.models import *
-from cadet_app.forms import ProjectForm, DatasetForm
+from cadet_app.forms import ProjectForm, TextForm
 from social_django.utils import psa
 
 import spacy
@@ -104,29 +105,31 @@ def set_project(request, id):
     return redirect(projects)
 
 def data(request):
-    datasets = Dataset.objects.all()
+    texts = Text.objects.all()
     if request.method == "POST":
 
-        form = DatasetForm(request.POST, request.FILES)
+        form = TextForm(request.POST, request.FILES)
         if form.is_valid():
-            dataset = form.save()
-            dataset.author = request.user
-            dataset.save()
+            text = form.save()
+            text.author = request.user
+            text.projects.add(request.session.get('project_id'))
+            text.save()
+
 
             context = {}
             context["form"] = form
-            context["datasets"] = datasets
+            context["texts"] = texts
             title = request.POST['title']
             language = request.POST['language']
-            context["message"] = handle_uploaded_file(request.FILES['file'], language, dataset)
+            context["message"] = handle_uploaded_file(request, language, text, title)
 
             return render(request, "data.html", context)
 
     else:
-        form = DatasetForm()
+        form = TextForm()
         context = {}
         context["form"] = form
-        context["datasets"] = datasets
+        context["texts"] = texts
 
         return render(request, "data.html", context)
 
