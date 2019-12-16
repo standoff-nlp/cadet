@@ -54,7 +54,7 @@
                             {% for text in all_texts %}
                             
                             <tr>
-                                <td><a href="{% url 'set_text' text.id %}" class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-chess-king"></i></span><span class="text-white text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">{{ text.title }}</span></a></td>
+                                <td><a href="{% url 'set_text' text.id %}" class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-book"></i></span><span class="text-white text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">{{ text.title }}</span></a></td>
                                 <td>{{ text.language}}</td>
                                 <td>{{ text.author }}</td>
                                 {% if text.source%}
