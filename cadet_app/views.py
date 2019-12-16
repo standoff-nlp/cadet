@@ -58,6 +58,7 @@ def site_logout(request):
 
 @login_required(login_url='login')
 def projects(request):
+    # TODO limit visible projects based on user permissions
 
     projects = Project.objects.all()
     context = {}
