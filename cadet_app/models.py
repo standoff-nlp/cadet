@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
 
-
-
 class SpacyLanguage(models.Model):
     language = models.TextField(blank=True, null=True)
     iso = models.CharField(max_length=2, blank=True, null=True)
@@ -52,7 +50,9 @@ class Text(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
     text_slug = models.SlugField(max_length=140, default=None)
     text = models.TextField(blank=True, null=True)
-    projects = models.ManyToManyField("Project", blank=True, related_name="text_project")
+    projects = models.ManyToManyField(
+        "Project", blank=True, related_name="text_project"
+    )
     language = models.CharField(max_length=220, blank=True, null=True)
     spacy_language = models.ForeignKey(
         SpacyLanguage, on_delete=models.CASCADE, blank=True, null=True
@@ -60,15 +60,19 @@ class Text(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     source = models.URLField(max_length=1000, blank=True)
     strategic_anno = models.NullBooleanField(blank=True)
-    window_default = models.IntegerField(default=200, help_text="Default number of charachters displayed in the annotation window")
+    window_default = models.IntegerField(
+        default=200,
+        help_text="Default number of charachters displayed in the annotation window",
+    )
 
     def __str__(self):
         return f"{self.title}"
- 
+
     def save(self, *args, **kwargs):
         if not self.text_slug:
             self.text_slug = slugify(self.title)
         super().save(*args, **kwargs)
+
 
 class LabelSet(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
@@ -77,6 +81,7 @@ class LabelSet(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+
 
 class LabelGroup(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
@@ -88,7 +93,12 @@ class LabelGroup(models.Model):
 
 class Label(models.Model):
     name = models.CharField(max_length=220, blank=True, null=True)
-    doc = models.CharField(max_length=220, blank=True, null=True, help_text="Explaination of the label and its use")
+    doc = models.CharField(
+        max_length=220,
+        blank=True,
+        null=True,
+        help_text="Explaination of the label and its use",
+    )
     attributes = models.ManyToManyField("Attribute")
     shortcut_key = models.CharField(max_length=220, blank=True, null=True)
     color = models.CharField(max_length=220, blank=True, null=True)
@@ -116,8 +126,14 @@ class AnnotationType(models.Model):
 
 
 class Annotation(models.Model):
+    def get_token_id():
+        try:
+            return AnnotationType.objects.get(name="token").pk
+        except:
+            return None
+
     annotation_type = models.ForeignKey(
-        AnnotationType, on_delete=models.CASCADE, default=None
+        AnnotationType, on_delete=models.CASCADE, default=get_token_id
     )
     annotation_text = models.TextField(blank=True, null=True)
     labels = models.ManyToManyField(Label)
