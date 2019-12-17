@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    {% block extracss %}
+        <style type="text/css">
+        
+        div.modal-content{
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        -o-box-shadow: none;
+        box-shadow: none;
+        }
+        </style>
+    {% endblock %}
     <div>
         <div class="container">
             
@@ -10,15 +21,34 @@
                         <div class="card-body">
                             <div class="row align-items-center no-gutters">
                                 <div class="col mr-2">
-                                   
-
+                                    
                                     <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><h6> <i class="fa fa-chevron-left"></i> &nbsp;{{ text.title }}&nbsp; <i class="fa fa-chevron-right"></i></h6> <div data-tooltip="Change amount of text in view"><div class="slidecontainer"></div>
                                     <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
                                 </div></div>
                                 <br>
-
-                        
- 
+                                
+                                
+                                <!-- The Modal (https://www.bootply.com/112308) -->
+                                <div class="modal" id="myModal" style="width: 250px; height: 100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+                                    <div class="modal-sm ">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="myModalLabel">Add Annotation</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p id="sel-start"></p>
+                                                <p id="sel-end"></p>
+                                            </div>
+                                            
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <!-- text w/ annotation classes rendered in view  -->
                                 <p id="annotation-area" onclick="alertSelection()" class="text-dark font-weight-bold h5 mb-0"><span class="active-token">Då</span> {{ text.text }}</p>
                             </div>
@@ -155,52 +185,51 @@
 </div>
 </div>
 </div>
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">
+</button>
 {% block extrajs %}
 <script>
-
-
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
 output.innerHTML = slider.value;
 slider.oninput = function() {
 output.innerHTML = this.value;
 }
-
 // source http://jsfiddle.net/UuDpL/2/
 // https://stackoverflow.com/questions/7991474/calculate-position-of-selected-text-javascript-jquery
 function getSelectionCharOffsetsWithin(element) {
-    var start = 0, end = 0;
-    var sel, range, priorRange;
-    if (typeof window.getSelection != "undefined") {
-        range = window.getSelection().getRangeAt(0);
-        priorRange = range.cloneRange();
-        priorRange.selectNodeContents(element);
-        priorRange.setEnd(range.startContainer, range.startOffset);
-        start = priorRange.toString().length;
-        end = start + range.toString().length;
-    } else if (typeof document.selection != "undefined" &&
-            (sel = document.selection).type != "Control") {
-        range = sel.createRange();
-        priorRange = document.body.createTextRange();
-        priorRange.moveToElementText(element);
-        priorRange.setEndPoint("EndToStart", range);
-        start = priorRange.text.length;
-        end = start + range.text.length;
-    }
-    return {
-        start: start,
-        end: end
-    };
+var start = 0, end = 0;
+var sel, range, priorRange;
+if (typeof window.getSelection != "undefined") {
+range = window.getSelection().getRangeAt(0);
+priorRange = range.cloneRange();
+priorRange.selectNodeContents(element);
+priorRange.setEnd(range.startContainer, range.startOffset);
+start = priorRange.toString().length;
+end = start + range.toString().length;
+} else if (typeof document.selection != "undefined" &&
+(sel = document.selection).type != "Control") {
+range = sel.createRange();
+priorRange = document.body.createTextRange();
+priorRange.moveToElementText(element);
+priorRange.setEndPoint("EndToStart", range);
+start = priorRange.text.length;
+end = start + range.text.length;
 }
-
+return {
+start: start,
+end: end
+};
+}
 function alertSelection() {
-    var mainDiv = document.getElementById("annotation-area");
-    var sel = getSelectionCharOffsetsWithin(mainDiv);
-    alert(sel.start + ": " + sel.end);
-    
+var mainDiv = document.getElementById("annotation-area");
+var sel = getSelectionCharOffsetsWithin(mainDiv);
+//alert(sel.start + ": " + sel.end);
+$("#myModal").modal();
+$("#sel-start").html(sel.start );
+$("#sel-end").html(sel.end);
 }
-
-
 </script>
 {% endblock%}
 {% endblock %}
