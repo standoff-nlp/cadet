@@ -29,7 +29,7 @@
                                 
                                 
                                 <!-- The Modal (https://www.bootply.com/112308) -->
-                                <div class="modal" id="myModal" style="width: 250px; height: 100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+                                <div class="modal" id="myModal" style="width: 50%; height: 100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
                                     <div class="modal-sm ">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -37,6 +37,7 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                             </div>
                                             <div class="modal-body">
+                                                <p id="sel-text"></p>
                                                 <p id="sel-start"></p>
                                                 <p id="sel-end"></p>
                                             </div>
@@ -202,7 +203,9 @@ function getSelectionCharOffsetsWithin(element) {
 var start = 0, end = 0;
 var sel, range, priorRange;
 if (typeof window.getSelection != "undefined") {
-range = window.getSelection().getRangeAt(0);
+selection = window.getSelection();
+text = selection.toString();
+range = selection.getRangeAt(0);
 priorRange = range.cloneRange();
 priorRange.selectNodeContents(element);
 priorRange.setEnd(range.startContainer, range.startOffset);
@@ -211,6 +214,7 @@ end = start + range.toString().length;
 } else if (typeof document.selection != "undefined" &&
 (sel = document.selection).type != "Control") {
 range = sel.createRange();
+text = range.text;
 priorRange = document.body.createTextRange();
 priorRange.moveToElementText(element);
 priorRange.setEndPoint("EndToStart", range);
@@ -218,6 +222,7 @@ start = priorRange.text.length;
 end = start + range.text.length;
 }
 return {
+text: text,
 start: start,
 end: end
 };
@@ -227,6 +232,7 @@ var mainDiv = document.getElementById("annotation-area");
 var sel = getSelectionCharOffsetsWithin(mainDiv);
 //alert(sel.start + ": " + sel.end);
 $("#myModal").modal();
+$("#sel-text").html(sel.text);
 $("#sel-start").html(sel.start );
 $("#sel-end").html(sel.end);
 }
