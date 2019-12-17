@@ -1,41 +1,36 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
-
- <div class="container-fluid">
-                <div>
-                    <div class="container">
-                        <h2 style="margin-top:52px;margin-left:34px;font-family:'Open Sans', sans-serif;font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">&nbsp; Projects&nbsp; &nbsp; &nbsp;&nbsp;
-                            {% if request.user.is_staff %}
-                            <a href="{% url 'add_project' %}"><i class="fa fa-plus" style="background-color: #0c81f7; color:black; padding: 6px;filter: blur(0px) hue-rotate(0deg) invert(0%) sepia(53%);"></i></a>{% endif %}
-                        </h2>
-                        <div class="cust_bloglistintro">
-                            <p style="margin-left:34px;color:rgba(255,255,255,0.5);font-size:14px;"></p>
-                        </div>
-                        <div class="row">
-                            
-                                {% for project in projects %}
-                            <div class="col-md-4 cust_blogteaser" style="padding-bottom:20px;margin-bottom:32px;"><a href="#">
-                               
-                                <img class="img-fluid" style="height:auto;" src="{% static 'img/image_03.png' %}"></a>
-                               
-                                <h3 style="text-align:left;margin-top:20px;font-family:'Open Sans', sans-serif;font-size:18px;margin-right:0;margin-left:24px;line-height:34px;letter-spacing:0px;font-style:normal;font-weight:bold;">{{ project.title }}</h3>
-                                <p class="text-secondary" style="text-align:left;font-size:14px;font-family:'Open Sans', sans-serif;line-height:22px;color:rgb(9,9,10);margin-left:24px;">{{ project.description }}<br></p>
-
-                                <a href="{% url 'set_project' project.id %}" class="btn btn-light btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-globe-americas"></i></span><span class="text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">Select</span></a>
-
-                                {% if perms.editor %}
-                                <a href="{% url 'edit_project' project.id %}" class="btn btn-light btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fa fa-edit"></i></span><span class="text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">Edit</span></a>
-                               
-                                {% endif %}
-                                    </div>
-                                
-                                {% endfor %}
-                        </div>
+    <div class="container-fluid">
+        <div>
+            <div class="container">
+                <h2 style="margin-top:52px;margin-left:34px;font-family:'Open Sans', sans-serif;font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">&nbsp; Projects&nbsp; &nbsp; &nbsp;&nbsp;
+                {% if request.user.is_staff %}
+                    <a href="{% url 'add_project' %}"><i class="fa fa-plus" style="background-color: #0c81f7; color:black; padding: 6px;filter: blur(0px) hue-rotate(0deg) invert(0%) sepia(53%);"></i></a>{% endif %}
+                    </h2>
+                    <div class="cust_bloglistintro">
+                        <p style="margin-left:34px;color:rgba(255,255,255,0.5);font-size:14px;"></p>
                     </div>
+                    <div class="row">
+                        
+                        {% for project in projects %}
+                            <div class="col-md-4 cust_blogteaser" style="padding-bottom:20px;margin-bottom:32px;"><a href="#">
+                                
+                            <img class="img-fluid" style="height:auto;" src="{% static 'img/image_03.png' %}"></a>
+                            
+                            <h3 style="text-align:left;margin-top:20px;font-family:'Open Sans', sans-serif;font-size:18px;margin-right:0;margin-left:24px;line-height:34px;letter-spacing:0px;font-style:normal;font-weight:bold;">{{ project.title }}</h3>
+                            <p class="text-secondary" style="text-align:left;font-size:14px;font-family:'Open Sans', sans-serif;line-height:22px;color:rgb(9,9,10);margin-left:24px;">{{ project.description }}<br></p>
+                            <a href="{% url 'set_project' project.id %}" class="btn btn-light btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-globe-americas"></i></span><span class="text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">Select</span></a>
+                            {% if perms.editor %}
+                                <a href="{% url 'edit_project' project.id %}" class="btn btn-light btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fa fa-edit"></i></span><span class="text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">Edit</span></a>
+                                
+                            {% endif %}
+                        </div>
+                        
+                    {% endfor %}
                 </div>
             </div>
         </div>
-
+    </div>
+</div>
 {% endblock %}

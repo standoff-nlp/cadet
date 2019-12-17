@@ -1,66 +1,58 @@
 {% load static %}
 {% load i18n %}
-
 <!DOCTYPE html>
-
 <html>
-
-    <head>
-        <meta charset="utf-8">
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-	    <title>{% trans "Cadet" %}</title>
-	    <link rel="icon" href="{% static 'img/favicon.png' %}">
-	    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-	    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-	    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
-	    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	    <link rel="stylesheet" href="{% static 'fonts/fontawesome5-overrides.min.css' %}">
-	    <link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
-	    <link rel='stylesheet' href="{% static 'css/annotator.css' %}">
-	    <link rel='stylesheet' href="{% static 'css/select2.min.css' %}">
-	    <link rel='stylesheet' href="{% static 'css/select2.custom.css' %}">
-	    <link rel='stylesheet' href="{% static 'css/custom.css' %}">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+		<title>{% trans "Cadet" %}</title>
+		<link rel="icon" href="{% static 'img/favicon.png' %}">
+		<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{% static 'fonts/fontawesome5-overrides.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
+		<link rel='stylesheet' href="{% static 'css/annotator.css' %}">
+		<link rel='stylesheet' href="{% static 'css/select2.min.css' %}">
+		<link rel='stylesheet' href="{% static 'css/select2.custom.css' %}">
+		<link rel='stylesheet' href="{% static 'css/custom.css' %}">
 		
 		
-
-    </head>
-
-    <body id="page-top">
-	    <div id="wrapper">
+	</head>
+	<body id="page-top">
+		<div id="wrapper">
 			{% include 'navbar.html' %}
 			{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <div class="alert alert-info" role="alert"
-  {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
-</div>
-        {% endfor %}
-    </ul>
-    
-{% endif %}
+				<ul class="messages">
+					{% for message in messages %}
+						<div class="alert alert-info" role="alert"
+							{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
+						</div>
+					{% endfor %}
+				</ul>
+				
+			{% endif %}
 			{% block content %}{% endblock %}
 			{% include 'footer.html' %}
-        </div>
-
-     {% csrf_token%}
-    </body>
-    	    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
-
-        <script type="text/javascript" src="{% static 'js/underscore.js' %}"></script>
-		<script type="text/javascript" src="{% static 'js/backbone.js' %}"></script>
-		<script type="text/javascript" src="{% static 'js/select2.min.js' %}" ></script>
-		<script type="text/javascript" src="{% static 'js/utils.js' %}" ></script>
-		<script type="text/javascript" src="{% static 'js/annotator-full.min.js' %}" ></script>
-		<script type="text/javascript" src="{% static 'js/annotator.plugin.tags.js' %}" ></script>
-		<script type="text/javascript" src="{% static 'js/annotator.plugin.categories.js' %}" ></script>
-		<script type="text/javascript" src="{% static 'js/annotator.plugin.events.js' %}" ></script>
-		<script type="text/javascript" src="{% static 'js/app.js' %}" ></script>
- 		
-    	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-   		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-	    <script src="{% static 'js/script.min.js' %}"></script>
-	    {% block extrajs %}{% endblock %}
-
+		</div>
+		{% csrf_token%}
+	</body>
+	<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/underscore.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/backbone.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/select2.min.js' %}" ></script>
+	<script type="text/javascript" src="{% static 'js/utils.js' %}" ></script>
+	<script type="text/javascript" src="{% static 'js/annotator-full.min.js' %}" ></script>
+	<script type="text/javascript" src="{% static 'js/annotator.plugin.tags.js' %}" ></script>
+	<script type="text/javascript" src="{% static 'js/annotator.plugin.categories.js' %}" ></script>
+	<script type="text/javascript" src="{% static 'js/annotator.plugin.events.js' %}" ></script>
+	<script type="text/javascript" src="{% static 'js/app.js' %}" ></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+	<script src="{% static 'js/script.min.js' %}"></script>
+	{% block extrajs %}{% endblock %}
 </html>

@@ -1,5 +1,5 @@
 from django.forms import ModelForm, FileField, ModelChoiceField
-from cadet_app.models import Project, Text, SpacyLanguage
+from cadet_app.models import Project, Text, SpacyLanguage, AnnotationType
 
 class ProjectForm(ModelForm):
     class Meta:
@@ -13,3 +13,9 @@ class TextForm(ModelForm):
     class Meta:
         model = Text
         fields = ['file','title', 'language','source', 'spacy_language','strategic_anno']
+
+
+class AnnotationTypeForm(ModelForm):
+    class Meta:
+        model = AnnotationType
+        fields = '__all__'

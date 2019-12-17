@@ -18,6 +18,8 @@ urlpatterns = [
     path("set_text/<id>", views.set_text, name="set_text"),
 	path("edit_text/<id>", views.edit_text, name="edit_text"),
 	path("delete_text/<id>", views.delete_text, name="delete_text"),
+	path("edit_annotation_type/<id>", views.edit_annotation_type, name="edit_annotation_type"),
+	path("add_annotation_type/", views.add_annotation_type, name="add_annotation_type"),
     
     path("data/", views.data, name="data"),
     path("labels/", views.labels, name="labels"),

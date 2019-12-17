@@ -1,57 +1,50 @@
- {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
-               
-               
-                    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-5" href="#collapse-5" role="button">Select Text to Annotate</a>
-                        <div class="collapse show" id="collapse-5">
+    
+    
+    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-5" href="#collapse-5" role="button">Select Text to Annotate</a>
+    <div class="collapse show" id="collapse-5">
+        
+        <div class="earch-table-col">
+            <div class="form-group pull-right col-lg-4"><input type="text" class="search form-control" placeholder="Search by typing here.."></div><span class="counter pull-right"></span>
+            <div class="table-responsive table-bordered table table-hover table-bordered results">
+                <table class="table table-bordered table-hover">
+                    <thead class="bill-header cs">
+                        <tr>
+                            <th id="trs-hd" class="col-lg-1">Texts</th>
+                            <th id="trs-hd" class="col-lg-2">Language</th>
+                            <th id="trs-hd" class="col-lg-3">Author</th>
+                            <th id="trs-hd" class="col-lg-2">Source</th>
                             
-            <div class="earch-table-col">
-                <div class="form-group pull-right col-lg-4"><input type="text" class="search form-control" placeholder="Search by typing here.."></div><span class="counter pull-right"></span>
-                <div class="table-responsive table-bordered table table-hover table-bordered results">
-                    <table class="table table-bordered table-hover">
-                        <thead class="bill-header cs">
-                            <tr>
-                                <th id="trs-hd" class="col-lg-1">Texts</th>
-                                <th id="trs-hd" class="col-lg-2">Language</th>
-                                <th id="trs-hd" class="col-lg-3">Author</th>
-                                <th id="trs-hd" class="col-lg-2">Source</th>
-                                
-                            </tr>
-                        </thead>
-               
-                        <tbody>
-                            <tr class="warning no-result">
-                                <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
-                            </tr>
-                            
-                            {% for text in project_texts %}
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr class="warning no-result">
+                            <td colspan="12"><i class="fa fa-warning"></i>&nbsp; No Result !!!</td>
+                        </tr>
+                        
+                        {% for text in project_texts %}
                             
                             <tr>
                                 <td><a href="{% url 'set_text' text.id %}" class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-book"></i></span><span class="text-white text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">{{ text.title }}</span></a></td>
                                 <td>{{ text.language}}</td>
                                 <td>{{ text.author }}</td>
                                 {% if text.source%}
-                                <td><a href="{{ text.source}}" target="_blank"><i class="fa fa-link"></i></a></td>
+                                    <td><a href="{{ text.source}}" target="_blank"><i class="fa fa-link"></i></a></td>
                                 {% else %}
-                                <td></td>
+                                    <td></td>
                                 {% endif%}
                                 
                             </tr>
-                           
-        </div>
-
-    </div>
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
-               
-
-
-                   
-                    
-
-                        {% endblock %}
- 
+                            
+                        </div>
+                    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        
+        
+    {% endblock %}

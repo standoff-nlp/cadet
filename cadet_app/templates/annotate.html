@@ -1,185 +1,206 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
-
-
-  <div>
+    <div>
         <div class="container">
-         
-
-
+            
             <div class="row">
                 <div class="col">
                     <div class="card shadow py-2">
                         <div class="card-body">
                             <div class="row align-items-center no-gutters">
                                 <div class="col mr-2">
+                                   
+
                                     <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><h6> <i class="fa fa-chevron-left"></i> &nbsp;{{ text.title }}&nbsp; <i class="fa fa-chevron-right"></i></h6> <div data-tooltip="Change amount of text in view"><div class="slidecontainer"></div>
-  <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-</div></div>
-                                    <br>
+                                    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+                                </div></div>
+                                <br>
 
-                                    <!-- text w/ annotation classes rendered in view  -->
-
-                                     <p class="text-dark font-weight-bold h5 mb-0"><span class="active-token">Då</span> {{ text.text }}</p>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-             <div class="mail-custom-btn"><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-chevron-left"></i></a><a class="custom-btn light-btn" href="#" role="button" style="width: 126px;"><i class="fa fa-space-shuttle"></i></a><a class="custom-btn light-btn"
-                    href="#" role="button"><i class="fa fa-undo"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-save"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-trash"></i></a><a class="custom-btn light-btn"
-                    href="#" role="button"><i class="fa fa-toggle-on"></i></a>
-
+                        
  
-                </div>
-
-                                    <!-- sents, spans, tokens and labelgroups in a table-->
-
-            <div class="row">
-                <div class="col">
-                    <div class="card shadow py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col mr-2">
-                                   <table class="table-responsive">
-                          <tr>
-                           
-                            <th>
-                                <p data-tooltip="Word index, integer starting at 1 for each new sentence; may be a range for multiword tokens; may be a decimal number for empty nodes (decimal numbers can be lower than 1 but must be greater than 0).">id</p>
-                            </th>
-
-                            <th>
-                                <p data-tooltip="Word form or punctuation symbol.">form </p>
-                            </th>
-
-                            <th>
-                                <p data-tooltip="Lemma or stem of word form.">lemma </p>
-                            </th>
-
-                            <th>
-                                <p data-tooltip="Universal part-of-speech tag.">upos </p>
-                            </th>
-
-                            <th>
-                                <p data-tooltip="Language-specific part-of-speech tag; underscore if not available.">xpos </p>
-                            </th>
-
-                            <th>
-                                <p data-tooltip="List of morphological features from the universal feature inventory or from a defined language-specific extension; underscore if not available.">feats </p>
-                            </th>
-
-                            <th>
-                                <p data-tooltip="Head of the current word, which is either a value of ID or zero (0).">head </p>
-                            </th>
-                            <th>
-                                <p data-tooltip="Universal dependency relation to the HEAD (root iff HEAD = 0) or a defined language-specific subtype of one.">deprel </p>
-                            </th>
-                            <th>
-                                <p data-tooltip="Enhanced dependency graph in the form of a list of head-deprel pairs.">deps </p>
-                            </th>
-                            <th>
-                                <p data-tooltip="Any other annotation.">misc </p>
-                            </th>
-                          </tr>
-                          <tr class='active-token'>
-                            <td>1</td>
-                            <td>Då</td>
-                            <td>då</td>
-                            <td>ADV</td>
-                            <td>AB</td>
-                            <td>_</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>var</td>
-                            <td>vara</td>
-                            <td>VERB</td>
-                            <td>VB.PRET.ACT </td>
-                            <td>Tense=Past|Voice=Act</td>
-                          </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>han</td>
-                            <td>han</td>
-                            <td>PRON</td>
-                            <td>PN.UTR.SIN.DEF.NOM</td>
-                            <td>Case=Nom|Definite=Def|Gender=Com|Number=Sing
-
-</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>elva</td>
-                            <td>elva</td>
-                            <td>NUM</td>
-                            <td>RG.NOM</td>
-                            <td>Case=Nom|NumType=Card</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>år</td>
-                            <td>år</td>
-                            <td>NOUN</td>
-                            <td>NN.NEU.PLU.IND.NOM</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>.</td>
-                            <td>.</td>
-                            <td>PUNCT</td>
-                            <td>DL.MAD</td>
-                            <td>_</td>
-                        </tr>
-                        </table>
-                                </div>
-                                
+                                <!-- text w/ annotation classes rendered in view  -->
+                                <p id="annotation-area" onclick="alertSelection()" class="text-dark font-weight-bold h5 mb-0"><span class="active-token">Då</span> {{ text.text }}</p>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Label and Annotation Reference</a>
-                        <div class="collapse" id="collapse-4">
-                            <div class="card-body">
+        </div>
+        <div class="mail-custom-btn"><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-chevron-left"></i></a><a class="custom-btn light-btn" href="#" role="button" style="width: 126px;"><i class="fa fa-space-shuttle"></i></a><a class="custom-btn light-btn"
+        href="#" role="button"><i class="fa fa-undo"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-save"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-trash"></i></a><a class="custom-btn light-btn"
+    href="#" role="button"><i class="fa fa-toggle-on"></i></a>
+    
+</div>
+<!-- sents, spans, tokens and labelgroups in a table-->
+<div class="row">
+    <div class="col">
+        <div class="card shadow py-2">
+            <div class="card-body">
+                <div class="row align-items-center no-gutters">
+                    <div class="col mr-2">
+                        <table class="table-responsive">
+                            <tr>
                                 
-                                 <div class="card-header">
-                                <ul class="nav nav-tabs card-header-tabs">
-                                    <li class="nav-item"><a class="nav-link active" href="#">Part of Speech</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#">Features</a><a class="nav-link" href="#">Lemmata</a></li>
-                                    <li class="nav-item"></li>
-                                </ul>
-                            </div>
-                            <div class="card-body" style="height: 418px;width: 289px;"><p class="card-text"><a href="https://universaldependencies.org/u/pos/ADJ.html">ADJ</a>: adjective<br><a href="https://universaldependencies.org/u/pos/ADP.html">ADP</a>: adposition<br><a href="https://universaldependencies.org/u/pos/ADV.html">ADV</a>: adverb<br><a href="https://universaldependencies.org/u/pos/AUX_.html">AUX</a>:
-    auxiliary<br><a href="https://universaldependencies.org/u/pos/CCONJ.html">CCONJ</a>: coordinating conjunction<br><a href="https://universaldependencies.org/u/pos/DET.html">DET</a>: determiner<br><a href="https://universaldependencies.org/u/pos/INTJ.html">INTJ</a>:
-    interjection<br><a href="https://universaldependencies.org/u/pos/NOUN.html">NOUN</a>: noun<br><a href="https://universaldependencies.org/u/pos/NUM.html">NUM</a>: numeral<br><a href="https://universaldependencies.org/u/pos/PART.html">PART</a>: particle<br><a href="https://universaldependencies.org/u/pos/PRON.html">PRON</a>:
-    pronoun<br><a href="https://universaldependencies.org/u/pos/PROPN.html">PROPN</a>: proper noun<br><a href="https://universaldependencies.org/u/pos/PUNCT.html">PUNCT</a>: punctuation<br><a href="https://universaldependencies.org/u/pos/SCONJ.html">SCONJ</a>: subordinating
-    conjunction<br><a href="https://universaldependencies.org/u/pos/SYM.html">SYM</a>: symbol<a href="https://universaldependencies.org/u/pos/VERB.html">VERB</a>: verb<br><a href="https://universaldependencies.org/u/pos/X.html">X</a>: other</p></div>
-                            </div>
-                        </div>
+                                <th>
+                                    <p data-tooltip="Word index, integer starting at 1 for each new sentence; may be a range for multiword tokens; may be a decimal number for empty nodes (decimal numbers can be lower than 1 but must be greater than 0).">id</p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="Word form or punctuation symbol.">form </p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="Lemma or stem of word form.">lemma </p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="Universal part-of-speech tag.">upos </p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="Language-specific part-of-speech tag; underscore if not available.">xpos </p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="List of morphological features from the universal feature inventory or from a defined language-specific extension; underscore if not available.">feats </p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="Head of the current word, which is either a value of ID or zero (0).">head </p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="Universal dependency relation to the HEAD (root iff HEAD = 0) or a defined language-specific subtype of one.">deprel </p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="Enhanced dependency graph in the form of a list of head-deprel pairs.">deps </p>
+                                </th>
+                                <th>
+                                    <p data-tooltip="Any other annotation.">misc </p>
+                                </th>
+                            </tr>
+                            <tr class='active-token'>
+                                <td>1</td>
+                                <td>Då</td>
+                                <td>då</td>
+                                <td>ADV</td>
+                                <td>AB</td>
+                                <td>_</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>var</td>
+                                <td>vara</td>
+                                <td>VERB</td>
+                                <td>VB.PRET.ACT </td>
+                                <td>Tense=Past|Voice=Act</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>han</td>
+                                <td>han</td>
+                                <td>PRON</td>
+                                <td>PN.UTR.SIN.DEF.NOM</td>
+                                <td>Case=Nom|Definite=Def|Gender=Com|Number=Sing
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>elva</td>
+                                <td>elva</td>
+                                <td>NUM</td>
+                                <td>RG.NOM</td>
+                                <td>Case=Nom|NumType=Card</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>år</td>
+                                <td>år</td>
+                                <td>NOUN</td>
+                                <td>NN.NEU.PLU.IND.NOM</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>.</td>
+                                <td>.</td>
+                                <td>PUNCT</td>
+                                <td>DL.MAD</td>
+                                <td>_</td>
+                            </tr>
+                        </table>
                     </div>
+                    
                 </div>
-          
             </div>
         </div>
     </div>
-
-
-
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Label and Annotation Reference</a>
+        <div class="collapse" id="collapse-4">
+            <div class="card-body">
+                
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item"><a class="nav-link active" href="#">Part of Speech</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Features</a><a class="nav-link" href="#">Lemmata</a></li>
+                        <li class="nav-item"></li>
+                    </ul>
+                </div>
+                <div class="card-body" style="height: 418px;width: 289px;"><p class="card-text"><a href="https://universaldependencies.org/u/pos/ADJ.html">ADJ</a>: adjective<br><a href="https://universaldependencies.org/u/pos/ADP.html">ADP</a>: adposition<br><a href="https://universaldependencies.org/u/pos/ADV.html">ADV</a>: adverb<br><a href="https://universaldependencies.org/u/pos/AUX_.html">AUX</a>:
+                auxiliary<br><a href="https://universaldependencies.org/u/pos/CCONJ.html">CCONJ</a>: coordinating conjunction<br><a href="https://universaldependencies.org/u/pos/DET.html">DET</a>: determiner<br><a href="https://universaldependencies.org/u/pos/INTJ.html">INTJ</a>:
+                interjection<br><a href="https://universaldependencies.org/u/pos/NOUN.html">NOUN</a>: noun<br><a href="https://universaldependencies.org/u/pos/NUM.html">NUM</a>: numeral<br><a href="https://universaldependencies.org/u/pos/PART.html">PART</a>: particle<br><a href="https://universaldependencies.org/u/pos/PRON.html">PRON</a>:
+                pronoun<br><a href="https://universaldependencies.org/u/pos/PROPN.html">PROPN</a>: proper noun<br><a href="https://universaldependencies.org/u/pos/PUNCT.html">PUNCT</a>: punctuation<br><a href="https://universaldependencies.org/u/pos/SCONJ.html">SCONJ</a>: subordinating
+                conjunction<br><a href="https://universaldependencies.org/u/pos/SYM.html">SYM</a>: symbol<a href="https://universaldependencies.org/u/pos/VERB.html">VERB</a>: verb<br><a href="https://universaldependencies.org/u/pos/X.html">X</a>: other</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+{% block extrajs %}
 <script>
+
+
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
 output.innerHTML = slider.value;
-
 slider.oninput = function() {
-  output.innerHTML = this.value;
+output.innerHTML = this.value;
 }
+
+// source http://jsfiddle.net/UuDpL/2/
+// https://stackoverflow.com/questions/7991474/calculate-position-of-selected-text-javascript-jquery
+function getSelectionCharOffsetsWithin(element) {
+    var start = 0, end = 0;
+    var sel, range, priorRange;
+    if (typeof window.getSelection != "undefined") {
+        range = window.getSelection().getRangeAt(0);
+        priorRange = range.cloneRange();
+        priorRange.selectNodeContents(element);
+        priorRange.setEnd(range.startContainer, range.startOffset);
+        start = priorRange.toString().length;
+        end = start + range.toString().length;
+    } else if (typeof document.selection != "undefined" &&
+            (sel = document.selection).type != "Control") {
+        range = sel.createRange();
+        priorRange = document.body.createTextRange();
+        priorRange.moveToElementText(element);
+        priorRange.setEndPoint("EndToStart", range);
+        start = priorRange.text.length;
+        end = start + range.text.length;
+    }
+    return {
+        start: start,
+        end: end
+    };
+}
+
+function alertSelection() {
+    var mainDiv = document.getElementById("annotation-area");
+    var sel = getSelectionCharOffsetsWithin(mainDiv);
+    alert(sel.start + ": " + sel.end);
+    
+}
+
+
 </script>
+{% endblock%}
 {% endblock %}

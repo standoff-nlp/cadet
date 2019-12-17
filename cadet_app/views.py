@@ -2,12 +2,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 
 from cadet_app.utils import make_dict, update_state, get_state, matcher, update_spacy_langs, prepare_text
 from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
-from cadet_app.forms import ProjectForm, TextForm
+from cadet_app.forms import ProjectForm, TextForm, AnnotationTypeForm
 from social_django.utils import psa
 
 import spacy
@@ -122,8 +124,8 @@ def delete_text(request, id):
 def edit_text(request, id):
     
     if request.method == "POST":
-        project = get_object_or_404(Project, pk=id)
-        form = TextForm(request.POST or None, instance=project)
+        text = get_object_or_404(Text, pk=id)
+        form = TextForm(request.POST or None, instance=text)
         if form.is_valid():
             form.save()
             return redirect(data)
@@ -135,6 +137,41 @@ def edit_text(request, id):
         context["form"] = form
 
         return render(request, "add_project.html", context)
+
+@staff_member_required
+def edit_annotation_type(request, id):
+    
+    if request.method == "POST":
+        anno_type = get_object_or_404(AnnotationType, pk=id)
+        form = AnnotationTypeForm(request.POST or None, instance=anno_type)
+        if form.is_valid():
+            form.save()
+            return redirect(labels)
+
+    else:
+        anno_type = get_object_or_404(AnnotationType, pk=id)
+        form = AnnotationTypeForm(request.POST or None, instance=anno_type)
+        context = {}
+        context["form"] = form
+
+        return render(request, "add_project.html", context)
+
+@login_required(redirect_field_name='', login_url='login/')
+def add_annotation_type(request):
+
+    if request.method == "POST":
+        form = AnnotationTypeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(projects)
+
+    else:
+        form = AnnotationTypeForm()
+        context = {}
+        context["form"] = form
+
+        return render(request, "add_project.html", context)
+
 
 def data(request):
 
@@ -181,7 +218,12 @@ def data(request):
             return render(request, "data_public.html", context) 
 
 def labels(request):
-    return render(request, "labels.html",)
+
+    anno_types = AnnotationType.objects.all()
+    context = {}
+    context['anno_types'] = anno_types
+
+    return render(request, "labels.html", context)
 
 
 def annotate(
