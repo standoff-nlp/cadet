@@ -128,18 +128,15 @@ class Annotation(models.Model):
         Text, on_delete=models.CASCADE, related_name="annotation_text"
     )
 
-    start_char = models.IntegerField(default=None)
+    start_char = models.IntegerField(default=None, null=True)
 
-    end_char = models.IntegerField(default=None)
+    end_char = models.IntegerField(default=None, null=True)
 
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="annotation_author"
     )
     approved = models.BooleanField(default=None, null=True)
     auto_generated = models.BooleanField(default=None, null=True)
-
-    def end_char(self):
-        return self.start_char + len(self.annotation_text)
 
     def __str__(self):
         return f"{self.id}-{self.annotation_type}"

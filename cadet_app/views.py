@@ -9,7 +9,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from cadet_app.utils import make_dict, update_state, get_state, matcher, update_spacy_langs, prepare_text
 from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
-from cadet_app.forms import ProjectForm, TextForm, AnnotationTypeForm
+from cadet_app.forms import ProjectForm, TextForm, AnnotationForm, AnnotationTypeForm
 from social_django.utils import psa
 
 import spacy
@@ -261,7 +261,31 @@ def annotate(
     if text.strategic_anno is False or None:
         messages.info(request, "Strategic annotations is set to False")
     
-    return render(request, "annotate.html", context)
+    if request.method == "POST":
+
+        modal_form = AnnotationForm(request.POST)
+        context["modal_form"] = modal_form
+        if modal_form.is_valid():
+            modal_form = modal_form.save(commit=False)
+            modal_form.start_char = request.POST.get('sel-start-value', None)
+            modal_form.end_char = request.POST.get('sel-end-value', None)
+            
+            modal_form.annotation_text = request.POST.get('sel-text-value', None)
+            modal_form.author = request.user
+            modal_form.auto_generated = False
+            modal_form.text = Text.objects.get(id=request.session.get('text_id'))
+            modal_form.project = Project.objects.get(id=request.session.get('project_id'))
+            modal_form.save()
+            
+            
+            messages.success(request, "Annotation added successfully")
+            return render(request, "annotate.html", context)
+
+    else:
+        modal_form = AnnotationForm()
+        context["modal_form"] = modal_form
+        return render(request, "annotate.html", context)
+
 
 def export(request):
     return render(request, "export.html",)
