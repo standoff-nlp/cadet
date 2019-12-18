@@ -20,11 +20,7 @@
 				<div class="card-body"><div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>step 1</span></div><a href="{% url 'projects' %}" class="btn btn-primary btn-circle ml-1" role="button"><i class="fas fa-globe-europe text-white"></i></a>
 				<div class="row align-items-center no-gutters">
 					<div class="col mr-2">
-						{% if request.user.is_staff %}
-							<div class="text-dark font-weight-bold h5 mb-0"><span>Select or create a project</span></div>
-						{% else %}
-							<div class="text-dark font-weight-bold h5 mb-0"><span>Select a project</span></div>
-						{% endif %}
+							<br><div class="text-dark font-weight-bold h5 mb-0"><span>Select a project</span></div>
 						
 					</div>
 					<div class="col-auto"></div>
@@ -38,7 +34,7 @@
 			<div class="card-body"><div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>step 2</span></div><a  class="btn btn-success btn-circle ml-1" role="button"><i class="fas fa-database text-white"></i></a>
 			<div class="row align-items-center no-gutters">
 				<div class="col mr-2">
-					<div class="text-dark font-weight-bold h5 mb-0"><span>Add texts and corpora</span></div>
+ 					<br><div class="text-dark font-weight-bold h5 mb-0"><span>Add texts</span></div>
 				</div>
 				<div class="col-auto"></div>
 			</div>
@@ -51,7 +47,7 @@
 		<div class="card-body"> <div class="text-uppercase text-warning font-weight-bold text-xs mb-1"><span>step 3</span></div><a class="btn btn-warning btn-circle ml-1" role="button"><i class="fas fa-laptop-code text-white"></i></a>
 		<div class="row align-items-center no-gutters">
 			<div class="col mr-2">
-				<div class="text-dark font-weight-bold h5 mb-0"><span>Annotate</span></div>
+				<br><div class="text-dark font-weight-bold h5 mb-0"><span>Annotate</span></div>
 			</div>
 			<div class="col-auto"></div>
 		</div>
@@ -65,7 +61,7 @@
 	<div class="row align-items-center no-gutters">
 		<div class="col mr-2">                                    <div class="row no-gutters align-items-center">
 			<div class="col-auto">
-				<div class="text-dark font-weight-bold h5 mb-0 mr-3"><span>Export</span></div>
+				<br><div class="text-dark font-weight-bold h5 mb-0 mr-3"><span>Export</span></div>
 			</div>
 			
 		</div>
