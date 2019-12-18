@@ -46,6 +46,7 @@ class AnnotationForm(ModelForm):
                queryset=label_group.labels.all(),
                 widget=Select2Widget,
             )
+            # TODO add check if the labels have attributes, don't add field unless they do
             self.fields[label_group.title + "_attrib"] = ModelMultipleChoiceField(
                queryset=Attribute.objects.all(), # TODO write query to limit for labels in label_group and just their attrib
                 widget=Select2MultipleWidget,
