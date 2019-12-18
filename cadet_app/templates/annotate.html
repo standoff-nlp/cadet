@@ -11,6 +11,7 @@
         box-shadow: none;
         }
         </style>
+    {{ modal_form.media.css }}
     {% endblock %}
     <div>
         <div class="container">
@@ -202,6 +203,8 @@
 <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">
 </button>
 {% block extrajs %}
+{{ modal_form.media.js }}
+
 <script>
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");

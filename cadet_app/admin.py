@@ -39,3 +39,9 @@ class AnnotationTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(AnnotationType, AnnotationTypeAdmin)
+
+class LabelAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Label, LabelAdmin)

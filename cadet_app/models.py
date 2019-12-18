@@ -99,15 +99,12 @@ class Label(models.Model):
         null=True,
         help_text="Explaination of the label and its use",
     )
-    attributes = models.ManyToManyField("Attribute")
+    attributes = models.ManyToManyField("Attribute", blank=True, )
     shortcut_key = models.CharField(max_length=220, blank=True, null=True)
     color = models.CharField(max_length=220, blank=True, null=True)
 
     def __str__(self):
-        if self.value:
-            return f"{self.label}:{self.value}"
-        else:
-            return f"{self.label}"
+        return f"{self.name}"
 
 
 class Attribute(models.Model):

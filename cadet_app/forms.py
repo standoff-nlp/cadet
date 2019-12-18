@@ -1,5 +1,6 @@
-from django.forms import ModelForm, FileField, ModelChoiceField
-from cadet_app.models import Project, Text, SpacyLanguage, AnnotationType, Annotation
+from django.forms import ModelForm, FileField, ModelChoiceField, ModelMultipleChoiceField
+from cadet_app.models import Project, Text, SpacyLanguage, AnnotationType, Annotation, Label
+from django_select2.forms import Select2Widget, Select2MultipleWidget
 
 
 class ProjectForm(ModelForm):
@@ -36,4 +37,5 @@ class AnnotationTypeForm(ModelForm):
 class AnnotationForm(ModelForm):
     class Meta:
         model = Annotation
-        fields = ["annotation_type"]
+        fields = ["annotation_type","labels",]
+        widgets = { 'labels': Select2MultipleWidget }
