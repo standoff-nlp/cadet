@@ -25,6 +25,7 @@ class Project(models.Model):
     annotators = models.ManyToManyField(User, related_name="annotators", blank=True)
     description = models.TextField(blank=True, null=True)
     language = models.CharField(max_length=220, blank=True, null=True)
+    label_set = models.ForeignKey("LabelSet", on_delete=models.CASCADE, blank=True, null=True)
 
     NO_REVIEW = "NR"
     SINGLE = "SR"
@@ -77,7 +78,7 @@ class Text(models.Model):
 class LabelSet(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
     groups = models.ManyToManyField("LabelGroup")
-    group_order = ArrayField(models.CharField(max_length=200), blank=True)
+    group_order = ArrayField(models.CharField(max_length=200), blank=True, null=True)
 
     def __str__(self):
         return f"{self.title}"
@@ -93,7 +94,7 @@ class LabelGroup(models.Model):
 
 class Label(models.Model):
     name = models.CharField(max_length=220, blank=True, null=True)
-    doc = models.CharField(
+    explain = models.CharField(
         max_length=220,
         blank=True,
         null=True,
@@ -110,7 +111,8 @@ class Label(models.Model):
 class Attribute(models.Model):
     key = models.CharField(max_length=220, blank=True, null=True)
     value = models.CharField(max_length=220, blank=True, null=True)
-
+    key_shortcut_key = models.CharField(max_length=220, blank=True, null=True)
+    value_shortcut_key = models.CharField(max_length=220, blank=True, null=True)
     def __str__(self):
         return f"{self.key}"
 

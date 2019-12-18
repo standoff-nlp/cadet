@@ -1,5 +1,5 @@
 from django.forms import ModelForm, FileField, ModelChoiceField, ModelMultipleChoiceField
-from cadet_app.models import Project, Text, SpacyLanguage, AnnotationType, Annotation, Label
+from cadet_app.models import Project, Text, SpacyLanguage, AnnotationType, Annotation, Label, Attribute
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
 
@@ -35,7 +35,26 @@ class AnnotationTypeForm(ModelForm):
 
 
 class AnnotationForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        
+        self.project = kwargs.pop("project")
+        super(AnnotationForm, self).__init__(*args, **kwargs)
+        project_obj = Project.objects.get(id=self.project)
+    
+        for label_group in project_obj.label_set.groups.all():
+            self.fields[label_group.title + "_label"] = ModelChoiceField(
+               queryset=label_group.labels.all(),
+                widget=Select2Widget,
+            )
+            self.fields[label_group.title + "_attrib"] = ModelMultipleChoiceField(
+               queryset=Attribute.objects.all(), # TODO write query to limit for labels in label_group and just their attrib
+                widget=Select2MultipleWidget,
+            )
+        
+        #self.fields['location'].widget = RelatedFieldWidgetWrapper(self.fields['location'].widget, rel, self.admin_site)
+    
     class Meta:
         model = Annotation
-        fields = ["annotation_type","labels",]
-        widgets = { 'labels': Select2MultipleWidget }
+        fields = "__all__"
+        exclude = ('author','annotation_text','labels', 'project', 'text',"start_char","end_char","approved","auto_generated",)
+

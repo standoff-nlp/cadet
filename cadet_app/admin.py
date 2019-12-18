@@ -45,3 +45,15 @@ class LabelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Label, LabelAdmin)
+
+class LabelSetAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(LabelSet, LabelSetAdmin)
+
+class LabelGroupAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(LabelGroup, LabelGroupAdmin)

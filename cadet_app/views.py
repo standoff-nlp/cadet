@@ -284,7 +284,7 @@ def annotate(request, project, text):
 
     if request.method == "POST":
 
-        modal_form = AnnotationForm(request.POST)
+        modal_form = AnnotationForm(request.POST,project=project)
         context["modal_form"] = modal_form
         if modal_form.is_valid():
             modal_form = modal_form.save(commit=False)
@@ -304,7 +304,7 @@ def annotate(request, project, text):
             return render(request, "annotate.html", context)
 
     else:
-        modal_form = AnnotationForm()
+        modal_form = AnnotationForm(project=project)
         context["modal_form"] = modal_form
         return render(request, "annotate.html", context)
 
