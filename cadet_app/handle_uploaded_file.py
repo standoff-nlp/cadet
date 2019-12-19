@@ -4,11 +4,12 @@ import spacy
 
 
 def handle_text_file(request, nlp, current_text):
+    file = request.FILES["file"]
+    text = str(file.read().decode("utf-8"))
+    current_text.text = text
+    current_text.save()
     if nlp:  # spaCy language object present
-        file = request.FILES["file"]
-        text = str(file.read().decode("utf-8"))
-        current_text.text = text
-        current_text.save()
+        
 
         doc = nlp(text)
 
@@ -49,29 +50,36 @@ def handle_text_file(request, nlp, current_text):
                     start_char=start_char,
                 )
                 new.save()
-
+    
 
 def handle_uploaded_file(request, language, text, title):
     file = request.FILES["file"]
-    nlp = False
-    if text.spacy_language.iso:
-        lang = spacy.util.get_lang_class(text.spacy_language.iso)
-        nlp = lang()
+    
+    try:
+        if text.spacy_language.iso:
+            lang = spacy.util.get_lang_class(text.spacy_language.iso)
+            nlp = lang()
 
-    if file.content_type == "text/plain":
-        handle_text_file(request, nlp, text)
+        if file.content_type == "text/plain":
+            handle_text_file(request, nlp, text)
 
-    if file.content_type == "text/csv":
-        # doc = nlp(file.read())
-        return "Dataset added successfully. Select datasets below or add another."
+        if file.content_type == "text/csv":
+            # doc = nlp(file.read())
+            return "Dataset added successfully. Select datasets below or add another."
 
-    if file.content_type == "xml/tei":
-        # TODO use standoff converter to create text/sentence/tokens (same as above) and annotations.
-        pass
+        if file.content_type == "xml/tei":
+            # TODO use standoff converter to create text/sentence/tokens (same as above) and annotations.
+            pass
 
-    if file.content_type == "application/octet-stream":  # CoNNL-U
-        pass
-    return "Have a nice day!"
+        if file.content_type == "application/octet-stream":  # CoNNL-U
+            pass
+        return "Have a nice day!"
+
+    except Exception as e: 
+        print(e)
+        nlp = None
+        if file.content_type == "text/plain":
+            handle_text_file(request, nlp, text)
 
 
 def handle_url_file(request, language, text, title):

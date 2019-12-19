@@ -12,7 +12,7 @@ class ProjectForm(ModelForm):
 class TextForm(ModelForm):
     file = FileField()
     spacy_language = ModelChoiceField(
-        queryset=SpacyLanguage.objects.all().order_by("iso"), empty_label="(none)"
+        queryset=SpacyLanguage.objects.all().order_by("iso"), empty_label="(none)", required=False
     )
 
     class Meta:

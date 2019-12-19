@@ -120,7 +120,7 @@ def add_annotations(text, project):
         else:
             end_char = a.end_char            
 
-        cadet.add_annotation(a.start_char,end_char, 'a', 0, {'id':str(a.pk), 'class':a.annotation_type.name})
+        cadet.add_annotation(a.start_char,end_char, 'a', 0, {'id':str(a.pk), 'class':a.annotation_type.name, 'onclick':'select_annotation(this)'})
 
     result = etree.tostring(cadet.tree)
     return result.decode("utf-8") 

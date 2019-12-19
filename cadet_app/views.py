@@ -274,8 +274,8 @@ def annotate(request, project, text):
     print(request.__dict__)
     annotations = Annotation.objects.filter(text=text)
     window = None
-    text_html = add_annotations(text, project)
-    context["text_html"] = text_html
+    
+    
     # adjust text to fit within viewframe
     context["text"] = text
 
@@ -286,10 +286,11 @@ def annotate(request, project, text):
         messages.info(request, "Strategic annotations is set to False")
 
     if request.method == "POST":
-
+        context["text_html"] = add_annotations(text, project)
         modal_form = AnnotationForm(request.POST,project=project)
-        context["modal_form"] = modal_form
+        
         if modal_form.is_valid():
+            context["modal_form"] = modal_form
             modal_form = modal_form.save(commit=False)
             modal_form.start_char = request.POST.get("sel-start-value", None)
             modal_form.end_char = request.POST.get("sel-end-value", None)
@@ -307,6 +308,7 @@ def annotate(request, project, text):
             return render(request, "annotate.html", context)
 
     else:
+        context["text_html"] = add_annotations(text, project)
         modal_form = AnnotationForm(project=project)
         context["modal_form"] = modal_form
         return render(request, "annotate.html", context)

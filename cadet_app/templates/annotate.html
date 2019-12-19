@@ -56,6 +56,7 @@
                         <input type="hidden" id="sel-text-value" name="sel-text-value">
                         <input type="hidden" id="sel-start-value" name="sel-start-value">
                         <input type="hidden" id="sel-end-value" name="sel-end-value">
+                        <input type="hidden" id="current-token" name="current-token">
                         
                    
                                                 
@@ -70,7 +71,7 @@
                                 </div>
                                 
                                 <!-- text w/ annotation classes rendered in view  -->
-                                <div id="annotation-area" onclick="alertSelection()" class="text-dark font-weight-bold h5 mb-0">{{ text_html|safe }}</div>
+                                <div id="annotation-area" onclick="alertSelection(event)" class="text-dark font-weight-bold h5 mb-0">{{ text_html|safe }}</div>
                             </div>
                             
                         </div>
@@ -248,17 +249,31 @@ start: start,
 end: end
 };
 }
-function alertSelection() {
-var mainDiv = document.getElementById("annotation-area");
-var sel = getSelectionCharOffsetsWithin(mainDiv);
-//alert(sel.start + ": " + sel.end);
-$("#myModal").modal();
-$("#sel-text").html(sel.text);
-$("#sel-start").html(sel.start );
-$("#sel-end").html(sel.end);
-$("#sel-text-value").val(sel.text);
-$("#sel-start-value").val(sel.start);
-$("#sel-end-value").val(sel.end);
+
+
+function select_annotation(sender) {
+    sender.classList.add('active-token');
+    $("#current-token").val(sender.id);
+    // $("#myModal").modal();
+}
+
+function alertSelection(event) {
+  if (event.shiftKey) {   // this toggles between text selection and annotation selection by pressing shift.  Could also add a toggle button or key pair
+    var mainDiv = document.getElementById("annotation-area");
+    var sel = getSelectionCharOffsetsWithin(mainDiv);  
+    //alert(sel.start + ": " + sel.end);
+    $("#myModal").modal();
+    $("#sel-text").html(sel.text);
+    $("#sel-start").html(sel.start );
+    $("#sel-end").html(sel.end);
+    $("#sel-text-value").val(sel.text);
+    $("#sel-start-value").val(sel.start);
+    $("#sel-end-value").val(sel.end);
+
+  } else {
+    //pass
+  }
+
 }
 </script>
 {% endblock%}
