@@ -114,8 +114,10 @@ class Attribute(models.Model):
     key_shortcut_key = models.CharField(max_length=220, blank=True, null=True)
     value_shortcut_key = models.CharField(max_length=220, blank=True, null=True)
     def __str__(self):
-        return f"{self.key}"
-
+        try:
+            return f"{self.key}: {self.value}"
+        except:
+            return f"{self.key}"
 
 class AnnotationType(models.Model):
     name = models.CharField(max_length=220, blank=True, null=True)
