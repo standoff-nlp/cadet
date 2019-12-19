@@ -24,6 +24,7 @@ urlpatterns = [
         name="edit_annotation_type",
     ),
     path("add_annotation_type/", views.add_annotation_type, name="add_annotation_type"),
+    path("edit_annotation/<id>", views.edit_annotation, name="edit_annotation"),
     path("data/", views.data, name="data"),
     path("labels/", views.labels, name="labels"),
     path("annotate/", views.annotate, name="annotate"),

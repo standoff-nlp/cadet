@@ -248,6 +248,9 @@ def labels(request):
 
     return render(request, "labels.html", context)
 
+def edit_annotation(request, id):
+    """A view that renders a modelform for an existing annotation.  The form's html is retrieved by ajax.  jquery updates the edit_annotation div"""
+    pass
 
 def annotate(request, project, text):
     try:
@@ -271,8 +274,8 @@ def annotate(request, project, text):
     # split the text into parts, forward and back links for parts
     # need to mark existing annotation in the text html
     text = Text.objects.get(text_slug=text)
-    print(request.__dict__)
-    annotations = Annotation.objects.filter(text=text)
+    
+    #context["annotations"] = Annotation.objects.filter(project=project, text=text) # TODO delete this if not needed
     window = None
     
     
