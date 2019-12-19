@@ -10,11 +10,13 @@
         -o-box-shadow: none;
         box-shadow: none;
         }
-        .token:hover {
-    border-bottom: 1px dotted #7575a3;
+        {% for annotation_type in annotation_types %}
+        .{{ annotation_type }}:hover {
+    border-bottom: 1px dotted {{ annotation_type.color }};
     outline-offset: -1px;
     color: black;
 }
+     {% endfor %}
         </style>
     {{ modal_form.media.css }}
     {% endblock %}
