@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
-
+from colorful.fields import RGBColorField
 
 class SpacyLanguage(models.Model):
     language = models.TextField(blank=True, null=True)
@@ -86,7 +86,7 @@ class LabelSet(models.Model):
 
 class LabelGroup(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
-    labels = models.ManyToManyField("Label")
+    labels = models.ManyToManyField("Label", blank=True,)
 
     def __str__(self):
         return f"{self.title}"
@@ -121,6 +121,7 @@ class Attribute(models.Model):
 
 class AnnotationType(models.Model):
     name = models.CharField(max_length=220)
+    color = RGBColorField(default='#FF0000')
 
     def __str__(self):
         return f"{self.name}"
@@ -137,7 +138,7 @@ class Annotation(models.Model):
         AnnotationType, on_delete=models.CASCADE, default=get_token_id
     )
     annotation_text = models.TextField(blank=True, null=True)
-    labels = models.ManyToManyField(Label)
+    labels = models.ManyToManyField(Label, blank=True,)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)

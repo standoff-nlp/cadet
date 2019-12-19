@@ -264,6 +264,8 @@ def annotate(request, project, text):
         messages.info(request, "Please select a project before proceeding")
         return redirect(projects)
 
+    context['annotation_types'] = AnnotationType.objects.all()
+
     # Need default text window size 2 sents=50, user can zoom in and out within range 100
     # 100 = len(text),
     # split the text into parts, forward and back links for parts

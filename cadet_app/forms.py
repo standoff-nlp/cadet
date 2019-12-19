@@ -1,8 +1,7 @@
 from django.forms import ModelForm, FileField, ModelChoiceField, ModelMultipleChoiceField
 from cadet_app.models import Project, Text, SpacyLanguage, AnnotationType, Annotation, Label, Attribute
 from django_select2.forms import Select2Widget, Select2MultipleWidget
-
-
+from colorful.widgets import ColorFieldWidget
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
@@ -32,6 +31,10 @@ class AnnotationTypeForm(ModelForm):
     class Meta:
         model = AnnotationType
         fields = "__all__"
+        widgets = {
+            'color': ColorFieldWidget,
+        }
+        
 
 
 class AnnotationForm(ModelForm):
