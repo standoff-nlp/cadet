@@ -54,7 +54,10 @@ class AnnotationForm(ModelForm):
                queryset=Attribute.objects.all(), # TODO write query to limit for labels in label_group and just their attrib
                 widget=Select2MultipleWidget,
             )
-        
+            self.fields['annotation_type'] = ModelChoiceField(
+               queryset= AnnotationType.objects.all(),
+                widget=Select2Widget,
+            )
         #self.fields['location'].widget = RelatedFieldWidgetWrapper(self.fields['location'].widget, rel, self.admin_site)
     
     class Meta:

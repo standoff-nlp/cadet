@@ -118,8 +118,8 @@ class Attribute(models.Model):
 
 
 class AnnotationType(models.Model):
-    name = models.CharField(max_length=220)
-    color = RGBColorField(default='#FF0000')
+    name = models.CharField(max_length=220, blank=True, null=True)
+    color = RGBColorField(default='#FF0000', blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}"
