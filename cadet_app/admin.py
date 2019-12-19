@@ -2,6 +2,12 @@ from django.contrib import admin
 from cadet_app.models import *
 
 
+class AttributeAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Attribute, AttributeAdmin)
+
 class ProjectAdmin(admin.ModelAdmin):
     pass
 
