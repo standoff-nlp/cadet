@@ -75,6 +75,7 @@
     color: black;
 }
 
+
 .card-header .fa {
   transition: .3s transform ease-in-out;
 }
@@ -131,3 +132,10 @@
   background: #7575a3;
   cursor: pointer;
 }
+
+div.modal-content{
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        -o-box-shadow: none;
+        box-shadow: none;
+        }

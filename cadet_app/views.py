@@ -272,7 +272,8 @@ def annotate(request, project, text):
     print(request.__dict__)
     annotations = Annotation.objects.filter(text=text)
     window = None
-    text_ooo = add_annotations(text, project)
+    text_html = add_annotations(text, project)
+    context["text_html"] = text_html
     # adjust text to fit within viewframe
     context["text"] = text
 

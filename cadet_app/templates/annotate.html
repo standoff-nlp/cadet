@@ -10,6 +10,11 @@
         -o-box-shadow: none;
         box-shadow: none;
         }
+        .token:hover {
+    border-bottom: 1px dotted #7575a3;
+    outline-offset: -1px;
+    color: black;
+}
         </style>
     {{ modal_form.media.css }}
     {% endblock %}
@@ -63,7 +68,7 @@
                                 </div>
                                 
                                 <!-- text w/ annotation classes rendered in view  -->
-                                <p id="annotation-area" onclick="alertSelection()" class="text-dark font-weight-bold h5 mb-0"><span class="active-token">Då</span> {{ text.text }}</p>
+                                <div id="annotation-area" onclick="alertSelection()" class="text-dark font-weight-bold h5 mb-0">{{ text_html|safe }}</div>
                             </div>
                             
                         </div>
