@@ -80,8 +80,15 @@
                     </div>
                 </div>
             </div>
-            <div class="mail-custom-btn"><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-chevron-left"></i></a><a class="custom-btn light-btn" href="#" role="button" style="width: 126px;"><i class="fa fa-space-shuttle"></i></a><a class="custom-btn light-btn"
-            href="#" role="button"><i class="fa fa-undo"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-save"></i></a><a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-trash"></i></a><a class="custom-btn light-btn"
+            <div class="mail-custom-btn"><a onclick="previous_annotation()" class="custom-btn light-btn" href="#" role="button"><i class="fa fa-chevron-left"></i></a>
+
+                <a onclick="next_annotation()" class="custom-btn light-btn" href="#" role="button" style="width: 126px;"><i class="fa fa-space-shuttle"></i>
+
+                </a><a class="custom-btn light-btn"
+            href="#" role="button"><i class="fa fa-undo"></i></a>
+
+            <a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-save"></i></a>
+            <a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-trash"></i></a><a class="custom-btn light-btn"
         href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-toggle-on"></i></a>
 
         <button class="custom-btn light-btn" href="#" role="button" data-tooltip="Highlight sections of text to add annotations">Text</button>{% for annotation_type in annotation_types %}
@@ -253,7 +260,21 @@ start: start,
 end: end
 };
 }
+
+function next_annotation() {
+    var current = $('.active-token');
+    var next = $(current.classList).val(current.id + 1);
+    select_annotation(next);
+}
+
+function previous_annotation() {
+    var current = $('.active-token');
+    var previous = $(current.classList).val(current.id - 1);
+    select_annotation(previous);
+}
+
 function select_annotation(sender) {
+// deselect other token 
 $('.active-token').removeClass('active-token');
 sender.classList.add('active-token');
 $("#current-token").val(sender.id);
