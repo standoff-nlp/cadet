@@ -281,7 +281,7 @@ function previous_annotation() {
     var current = $('.active-token');
     current.removeClass('active-token');
     var current_class = current.attr("class");
-    var next_id = parseInt(current.attr('id')) 1 1;
+    var next_id = parseInt(current.attr('id')) - 1;
     next_id.toString();
     var element_name = 'a#'+next_id +'.' + current_class;
     var next_element = $(element_name);
