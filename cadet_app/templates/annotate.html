@@ -17,6 +17,10 @@
             color: black;
             }
         {% endfor %}
+        .btn:focus, .btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
         </style>
         {{ modal_form.media.css }}
     {% endblock %}
