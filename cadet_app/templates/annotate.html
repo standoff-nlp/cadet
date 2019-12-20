@@ -263,14 +263,22 @@ end: end
 
 function next_annotation() {
     var current = $('.active-token');
-    var next = $(current.classList).val(current.id + 1);
-    select_annotation(next);
+    current.removeClass('active-token');
+    var current_class = current.attr("class");
+    var next_id = parseInt(current.attr('id')) + 1;
+    next_id.toString();
+    $('a#'+next_id +'.' + current_class).classList.add('active-token');
+    $("#current-token").val(next_id);
 }
 
 function previous_annotation() {
     var current = $('.active-token');
-    var previous = $(current.classList).val(current.id - 1);
-    select_annotation(previous);
+    current.removeClass('active-token');
+    var current_class = current.attr("class");
+    var prev_id = parseInt(current.attr('id')) - 1;
+    next_id.toString();
+    $('a#'+prev_id +'.' + current_class).classList.add('active-token');
+    $("#current-token").val(prev_id);
 }
 
 function select_annotation(sender) {
