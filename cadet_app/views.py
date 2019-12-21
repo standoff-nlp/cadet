@@ -268,13 +268,14 @@ def annotate(request, project, text):
         return redirect(projects)
 
     context['annotation_types'] = AnnotationType.objects.all()
-
+    context['table_columns'] = Project.objects.get(id=project).label_set.groups.all()
     # Need default text window size 2 sents=50, user can zoom in and out within range 100
     # 100 = len(text),
     # split the text into parts, forward and back links for parts
     # need to mark existing annotation in the text html
     text = Text.objects.get(text_slug=text)
-    
+    context['annotations'] = Annotation.objects.filter(project=Project.objects.get(id=project), text=text).order_by('start_char') 
+
     #context["annotations"] = Annotation.objects.filter(project=project, text=text) # TODO delete this if not needed
     window = None
     
