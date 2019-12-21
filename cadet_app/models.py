@@ -51,6 +51,7 @@ class Text(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
     text_slug = models.SlugField(max_length=140, default=None)
     text = models.TextField(blank=True, null=True)
+    standoff = models.TextField(blank=True, null=True)
     projects = models.ManyToManyField(
         "Project", blank=True, related_name="text_project"
     )

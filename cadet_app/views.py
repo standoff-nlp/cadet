@@ -292,7 +292,8 @@ def annotate(request, project, text):
         messages.info(request, "Strategic annotations is set to False")
 
     if request.method == "POST":
-        context["text_html"] = add_annotations(text, project)
+        #context["text_html"] = add_annotations(text, project)
+        context["text_html"] = text.standoff
         modal_form = AnnotationForm(request.POST,project=project)
         
         if modal_form.is_valid():
