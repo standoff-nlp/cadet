@@ -125,3 +125,23 @@ def add_annotations(text, project):
     result = etree.tostring(cadet.tree)
     return result.decode("utf-8") 
 
+def export_tei(text, project):
+    
+    annotations = Annotation.objects.filter(project=project, text=text).order_by('start_char') 
+
+    init_tree = etree.Element("p")
+    init_tree.text = text.text
+
+    cadet = Converter.from_tree(init_tree)
+
+    for a in annotations:
+        
+        if not a.end_char:
+            end_char = a.start_char + len(a.annotation_text)
+        else:
+            end_char = a.end_char            
+
+        cadet.add_annotation(a.start_char,end_char, a.annotation_type.name, 0, {'id':str(a.pk),})
+
+    result = etree.tostring(cadet.tree)
+    return result.decode("utf-8") 

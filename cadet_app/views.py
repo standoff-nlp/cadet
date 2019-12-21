@@ -13,6 +13,7 @@ from cadet_app.utils import (
     matcher,
     update_spacy_langs,
     add_annotations,
+    export_tei,
 )
 from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
@@ -329,7 +330,7 @@ def export(request):
         export_type = request.POST.get("export_type", None)
 
         if export_type == "TEI":
-            content = add_annotations(text, project) #TODO new function that returns TEI not HTML
+            content = export_tei(text, project) #TODO new function that returns TEI not HTML
             filename = slugify(f"{ project.title}{text.title}") + '.xml'
             response = HttpResponse(content, content_type='xml/tei')
             response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
