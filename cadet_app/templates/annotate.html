@@ -21,6 +21,14 @@
         outline: none !important;
         box-shadow: none !important;
         }
+
+        .active-table-token {
+    outline: 2px solid #7575a3;
+    outline-offset: 0px;
+    background-color: #e7e4f3;
+    padding: 2px;
+    color: black;
+}
         </style>
         {{ modal_form.media.css }}
     {% endblock %}
@@ -108,8 +116,8 @@ href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-
                             
                         </tr>
                         {% for annotation in annotations %}
-                            <tr class=''>
-                                <td>{{ forloop.counter }}</td>
+                            <tr class="table-token" id="{{ annotation.id }}">
+                                <td >{{ forloop.counter }}</td>
                                 
                                 <td>{{ annotation.annotation_type }}</td>
                                 <td>
@@ -197,6 +205,8 @@ end: end
 function next_annotation() {
 var current = $('.active-token');
 current.removeClass('active-token');
+$('.active-table-token').removeClass('active-table-token');
+
 var current_class = current.attr("class");
 var next_id = parseInt(current.attr('id')) + 1;
 next_id.toString();
@@ -204,22 +214,36 @@ var element_name = 'a#'+next_id +'.' + current_class;
 var next_element = $(element_name);
 next_element.addClass('active-token');
 $("#current-token").val(next_id);
+
+$('#' + next_id + ".table-token").addClass("active-table-token");
+
 }
 function previous_annotation() {
 var current = $('.active-token');
 current.removeClass('active-token');
+$('.active-table-token').removeClass('active-table-token');
+
 var current_class = current.attr("class");
-var next_id = parseInt(current.attr('id')) - 1;
-next_id.toString();
-var element_name = 'a#'+next_id +'.' + current_class;
+var prev_id = parseInt(current.attr('id')) - 1;
+prev_id.toString();
+var element_name = 'a#'+prev_id +'.' + current_class;
 var next_element = $(element_name);
 next_element.addClass('active-token');
-$("#current-token").val(next_id);
+$('#' + prev_id + ".table-token").addClass("active-table-token");
+
+$("#current-token").val(prev_id);
 }
 function select_annotation(sender) {
 // deselect other token
 $('.active-token').removeClass('active-token');
+$('.active-table-token').removeClass('active-table-token');
 sender.classList.add('active-token');
+
+// set active annotation in the table
+table_id = sender.id.toString();
+$('#' + table_id + ".table-token").addClass("active-table-token");
+
+
 $("#current-token").val(sender.id);
 event.preventDefault();
 // $("#myModal" + sender.id).modal();
@@ -253,9 +277,7 @@ function update_annotation_form(sender) {
 Mousetrap.bind('right', function() { next_annotation(); });
 Mousetrap.bind('left', function() { previous_annotation(); });
 
-
 </script>
-<script type="text/javascript" src="https://craig.global.ssl.fastly.net/js/mousetrap/mousetrap.min.js?a4098" ></script>
 
 
 {% endblock%}
