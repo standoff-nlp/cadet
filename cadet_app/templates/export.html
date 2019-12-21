@@ -27,10 +27,21 @@
     </div>
 </div>
 
-<div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Export Current Project</a>
+<div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Export: {{request.session.project_title}} ~ {{ request.session.text_title }}</a>
 <div class="collapsed" id="collapse-4">
     <div class="card-body">
-        <p class="m-0"></p><a class="btn btn-warning btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-chess-king"></i></span><span class="text-white text">CoNLL-U</span></a><a class="btn btn-primary btn-icon-split"
+        <p class="m-0"></p>
+        <form method="post">
+            {% csrf_token %}
+    <button type="submit" value="TEI"><i class="fas fa-chess-king"></i></span><span class="text-white text">TEI/XML</span></button>
+                                                        <input type="hidden" name="export_type" value='TEI'>
+   
+</form>
+       
+
+
+        <a class="btn btn-warning btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-chess-king"></i></span><span class="text-white text">CoNLL-U</span></a>
+        <a class="btn btn-primary btn-icon-split"
         role="button"><span class="text-white-50 icon"><i class="fas fa-flag"></i></span><span class="text-white text">JSON</span></a><a class="btn btn-info btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">OTHER</span></a>
         <a
         class="btn btn-danger btn-icon-split" role="button"></a>

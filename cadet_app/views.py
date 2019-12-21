@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponse
 
 
 from cadet_app.utils import (
@@ -319,4 +320,20 @@ def annotate(request, project, text):
 
 
 def export(request):
-    return render(request, "export.html",)
+
+    project = Project.objects.get(id=request.session.get("project_id"))
+    text = Text.objects.get(id=request.session.get("text_id"))
+
+    if request.method == "POST":
+
+        export_type = request.POST.get("export_type", None)
+
+        if export_type == "TEI":
+            content = add_annotations(text, project) #TODO new function that returns TEI not HTML
+            filename = slugify(f"{ project.title}{text.title}") + '.xml'
+            response = HttpResponse(content, content_type='xml/tei')
+            response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+            return response
+
+    else:
+        return render(request, "export.html",)
