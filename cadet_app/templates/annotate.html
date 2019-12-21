@@ -116,7 +116,7 @@ href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-
                             
                         </tr>
                         {% for annotation in annotations %}
-                            <tr class="table-token" id="{{ annotation.id }}">
+                            <tr class="table-token" id="{{ annotation.id }}" onclick="select_annotation_from_table(this)">
                                 <td >{{ forloop.counter }}</td>
                                 
                                 <td>{{ annotation.annotation_type }}</td>
@@ -249,6 +249,25 @@ event.preventDefault();
 // $("#myModal" + sender.id).modal();
 // https://realpython.com/django-and-ajax-form-submissions/
 }
+
+
+function select_annotation_from_table(sender) {
+// deselect other token
+$('.active-token').removeClass('active-token');
+$('.active-table-token').removeClass('active-table-token');
+sender.classList.add('active-table-token');
+
+// set active annotation in the table
+token_id = sender.id.toString();
+$('#' + token_id + ".token").addClass("active-token");
+
+
+$("#current-token").val(sender.id);
+event.preventDefault();
+// $("#myModal" + sender.id).modal();
+// https://realpython.com/django-and-ajax-form-submissions/
+}
+
 function alertSelection(event) {
 if (event.shiftKey) {   // this toggles between text selection and annotation selection by pressing shift.  Could also add a toggle button or key pair
 var mainDiv = document.getElementById("annotation-area");
