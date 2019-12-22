@@ -8,6 +8,7 @@ class AttributeAdmin(admin.ModelAdmin):
 
 admin.site.register(Attribute, AttributeAdmin)
 
+
 class ProjectAdmin(admin.ModelAdmin):
     pass
 
@@ -46,17 +47,20 @@ class AnnotationTypeAdmin(admin.ModelAdmin):
 
 admin.site.register(AnnotationType, AnnotationTypeAdmin)
 
+
 class LabelAdmin(admin.ModelAdmin):
     pass
 
 
 admin.site.register(Label, LabelAdmin)
 
+
 class LabelSetAdmin(admin.ModelAdmin):
     pass
 
 
 admin.site.register(LabelSet, LabelSetAdmin)
+
 
 class LabelGroupAdmin(admin.ModelAdmin):
     pass

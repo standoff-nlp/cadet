@@ -1,9 +1,7 @@
 from cadet_app.models import *
 from iso639 import languages
 import spacy
-from cadet_app.utils import (
-    add_annotations,
-)
+from cadet_app.utils import add_annotations
 
 
 def handle_text_file(request, nlp, current_text):
@@ -12,7 +10,6 @@ def handle_text_file(request, nlp, current_text):
     current_text.text = text  #
     current_text.save()
     if nlp:  # spaCy language object present
-        
 
         doc = nlp(text)
 
@@ -53,13 +50,15 @@ def handle_text_file(request, nlp, current_text):
                     start_char=start_char,
                 )
                 new.save()
-    current_text.standoff = add_annotations(current_text, Project.objects.get(id=request.session.get("project_id")))
+    current_text.standoff = add_annotations(
+        current_text, Project.objects.get(id=request.session.get("project_id"))
+    )
     current_text.save()
-    
+
 
 def handle_uploaded_file(request, language, text, title):
     file = request.FILES["file"]
-    
+
     try:
         if text.spacy_language.iso:
             lang = spacy.util.get_lang_class(text.spacy_language.iso)
@@ -80,7 +79,7 @@ def handle_uploaded_file(request, language, text, title):
             pass
         return "Have a nice day!"
 
-    except Exception as e: 
+    except Exception as e:
         print(e)
         nlp = None
         if file.content_type == "text/plain":

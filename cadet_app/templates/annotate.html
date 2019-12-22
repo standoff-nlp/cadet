@@ -21,14 +21,13 @@
         outline: none !important;
         box-shadow: none !important;
         }
-
         .active-table-token {
-    outline: 2px solid #7575a3;
-    outline-offset: 0px;
-    background-color: #e7e4f3;
-    padding: 2px;
-    color: black;
-}
+        outline: 2px solid #7575a3;
+        outline-offset: 0px;
+        background-color: #e7e4f3;
+        padding: 2px;
+        color: black;
+        }
         </style>
         {{ modal_form.media.css }}
     {% endblock %}
@@ -202,75 +201,10 @@ start: start,
 end: end
 };
 }
-function next_annotation() {
-var current = $('.active-token');
-current.removeClass('active-token');
-$('.active-table-token').removeClass('active-table-token');
-
-var current_class = current.attr("class");
-var next_id = parseInt(current.attr('id')) + 1;
-next_id.toString();
-var element_name = 'a#'+next_id +'.' + current_class;
-var next_element = $(element_name);
-next_element.addClass('active-token');
-$("#current-token").val(next_id);
-
-$('#' + next_id + ".table-token").addClass("active-table-token");
-
-}
-function previous_annotation() {
-var current = $('.active-token');
-current.removeClass('active-token');
-$('.active-table-token').removeClass('active-table-token');
-
-var current_class = current.attr("class");
-var prev_id = parseInt(current.attr('id')) - 1;
-prev_id.toString();
-var element_name = 'a#'+prev_id +'.' + current_class;
-var next_element = $(element_name);
-next_element.addClass('active-token');
-$('#' + prev_id + ".table-token").addClass("active-table-token");
-
-$("#current-token").val(prev_id);
-}
-function select_annotation(sender) {
-// deselect other token
-$('.active-token').removeClass('active-token');
-$('.active-table-token').removeClass('active-table-token');
-sender.classList.add('active-token');
-
-// set active annotation in the table
-table_id = sender.id.toString();
-$('#' + table_id + ".table-token").addClass("active-table-token");
-
-
-$("#current-token").val(sender.id);
-event.preventDefault();
-// $("#myModal" + sender.id).modal();
-// https://realpython.com/django-and-ajax-form-submissions/
-}
-
-
-function select_annotation_from_table(sender) {
-// deselect other token
-$('.active-token').removeClass('active-token');
-$('.active-table-token').removeClass('active-table-token');
-sender.classList.add('active-table-token');
-
-// set active annotation in the table
-token_id = sender.id.toString();
-$('#' + token_id + ".token").addClass("active-token");
-
-
-$("#current-token").val(sender.id);
-event.preventDefault();
-// $("#myModal" + sender.id).modal();
-// https://realpython.com/django-and-ajax-form-submissions/
-}
-
 function alertSelection(event) {
 if (event.shiftKey) {   // this toggles between text selection and annotation selection by pressing shift.  Could also add a toggle button or key pair
 var mainDiv = document.getElementById("annotation-area");
+// var mainDiv = $(".annotation-area");
 var sel = getSelectionCharOffsetsWithin(mainDiv);
 //alert(sel.start + ": " + sel.end);
 $("#myModal").modal();
@@ -288,16 +222,76 @@ function update_annotation_form(sender) {
 // ajax get form from view
 //$( "div.update_modal" ).replaceWith( "<h2>New heading</h2>" );
 }
+function next_annotation() {
+var current = $('.active-token');
+current.removeClass('active-token');
+$('.active-table-token').removeClass('active-table-token');
+var current_class = current.attr("class");
+var next_id = parseInt(current.attr('id')) + 1;
+next_id.toString();
+var element_name = 'a#'+next_id +'.' + current_class;
+var next_element = $(element_name);
+next_element.addClass('active-token');
+$("#current-token").val(next_id);
+$('#' + next_id + ".table-token").addClass("active-table-token");
+}
+function previous_annotation() {
+var current = $('.active-token');
+current.removeClass('active-token');
+$('.active-table-token').removeClass('active-table-token');
+var current_class = current.attr("class");
+var prev_id = parseInt(current.attr('id')) - 1;
+prev_id.toString();
+var element_name = 'a#'+prev_id +'.' + current_class;
+var next_element = $(element_name);
+next_element.addClass('active-token');
+$('#' + prev_id + ".table-token").addClass("active-table-token");
+$("#current-token").val(prev_id);
+}
+function select_annotation(sender) {
+// deselect other token
+$('.active-token').removeClass('active-token');
+$('.active-table-token').removeClass('active-table-token');
+sender.classList.add('active-token');
+// set active annotation in the table
+table_id = sender.id.toString();
+$('#' + table_id + ".table-token").addClass("active-table-token");
+$("#current-token").val(sender.id);
+event.preventDefault();
+// $("#myModal" + sender.id).modal();
+// https://realpython.com/django-and-ajax-form-submissions/
+}
+function select_annotation_from_table(sender) {
+// deselect other token
+$('.active-token').removeClass('active-token');
+$('.active-table-token').removeClass('active-table-token');
+sender.classList.add('active-table-token');
+// set active annotation in the table
+token_id = sender.id.toString();
+$('#' + token_id + ".token").addClass("active-token");
+$("#current-token").val(sender.id);
+event.preventDefault();
+// $("#myModal" + sender.id).modal();
+// https://realpython.com/django-and-ajax-form-submissions/
+}
 </script>
-
 <script>
 // https://craig.is/killing/mice
-
 Mousetrap.bind('right', function() { next_annotation(); });
 Mousetrap.bind('left', function() { previous_annotation(); });
+// edit exiting annotation
+Mousetrap.bind('/', function() {
+    if ( $( ".active-token" ).length ) {  // if an active token exists
+        current_id = $('.active-token').attr('id');
+        console.log(current_id);
+        // Get form html from view with id
+        $("#myModal").modal();
+    }
 
+    else{
+        console.log('no active token')
+    }
+});
 </script>
-
-
 {% endblock%}
 {% endblock %}

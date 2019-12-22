@@ -17,7 +17,13 @@ from cadet_app.utils import (
 )
 from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
-from cadet_app.forms import ProjectForm, TextForm, AnnotationForm, AnnotationTypeForm
+from cadet_app.forms import (
+    ProjectForm,
+    TextForm,
+    AnnotationForm,
+    EditAnnotationForm,
+    AnnotationTypeForm,
+)
 from social_django.utils import psa
 
 import spacy
@@ -250,9 +256,6 @@ def labels(request):
 
     return render(request, "labels.html", context)
 
-def edit_annotation(request, id):
-    """A view that renders a modelform for an existing annotation.  The form's html is retrieved by ajax.  jquery updates the edit_annotation div"""
-    pass
 
 def annotate(request, project, text):
     try:
@@ -269,19 +272,20 @@ def annotate(request, project, text):
         messages.info(request, "Please select a project before proceeding")
         return redirect(projects)
 
-    context['annotation_types'] = AnnotationType.objects.all()
-    context['table_columns'] = Project.objects.get(id=project).label_set.groups.all()
+    context["annotation_types"] = AnnotationType.objects.all()
+    context["table_columns"] = Project.objects.get(id=project).label_set.groups.all()
     # Need default text window size 2 sents=50, user can zoom in and out within range 100
     # 100 = len(text),
     # split the text into parts, forward and back links for parts
     # need to mark existing annotation in the text html
     text = Text.objects.get(text_slug=text)
-    context['annotations'] = Annotation.objects.filter(project=Project.objects.get(id=project), text=text).order_by('start_char') 
+    context["annotations"] = Annotation.objects.filter(
+        project=Project.objects.get(id=project), text=text
+    ).order_by("start_char")
 
-    #context["annotations"] = Annotation.objects.filter(project=project, text=text) # TODO delete this if not needed
+    # context["annotations"] = Annotation.objects.filter(project=project, text=text) # TODO delete this if not needed
     window = None
-    
-    
+
     # adjust text to fit within viewframe
     context["text"] = text
 
@@ -292,10 +296,10 @@ def annotate(request, project, text):
         messages.info(request, "Strategic annotations is set to False")
 
     if request.method == "POST":
-        #context["text_html"] = add_annotations(text, project)
+        # context["text_html"] = add_annotations(text, project)
         context["text_html"] = text.standoff
-        modal_form = AnnotationForm(request.POST,project=project)
-        
+        modal_form = AnnotationForm(request.POST, project=project)
+
         if modal_form.is_valid():
             context["modal_form"] = modal_form
             modal_form = modal_form.save(commit=False)
@@ -321,6 +325,22 @@ def annotate(request, project, text):
         return render(request, "annotate.html", context)
 
 
+def add_annotation_form(request, id):
+    pass
+
+
+def edit_annotation(request, id):
+    """A view that renders a modelform for an existing annotation.  The form's html is retrieved by ajax.  jquery updates the edit_annotation div"""
+    instance = get_object_or_404(Annotation, id=id)
+    project = Project.objects.get(id=request.session.get("project_id"))
+    context = {}
+    context["edit_annotation_form"] = EditAnnotationForm(
+        project=project.id, instance=instance
+    )
+
+    return render(request, "edit_annotation_form.html", context)
+
+
 def export(request):
 
     project = Project.objects.get(id=request.session.get("project_id"))
@@ -331,10 +351,14 @@ def export(request):
         export_type = request.POST.get("export_type", None)
 
         if export_type == "TEI":
-            content = export_tei(text, project) #TODO new function that returns TEI not HTML
-            filename = slugify(f"{ project.title}{text.title}") + '.xml'
-            response = HttpResponse(content, content_type='xml/tei')
-            response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+            content = export_tei(
+                text, project
+            )  # TODO new function that returns TEI not HTML
+            filename = slugify(f"{ project.title}{text.title}") + ".xml"
+            response = HttpResponse(content, content_type="xml/tei")
+            response["Content-Disposition"] = "attachment; filename={0}".format(
+                filename
+            )
             return response
 
     else:

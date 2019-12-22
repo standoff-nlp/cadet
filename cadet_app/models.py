@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from colorful.fields import RGBColorField
 
+
 class SpacyLanguage(models.Model):
     language = models.TextField(blank=True, null=True)
     iso = models.CharField(max_length=2, blank=True, null=True)
@@ -25,7 +26,9 @@ class Project(models.Model):
     annotators = models.ManyToManyField(User, related_name="annotators", blank=True)
     description = models.TextField(blank=True, null=True)
     language = models.CharField(max_length=220, blank=True, null=True)
-    label_set = models.ForeignKey("LabelSet", on_delete=models.CASCADE, blank=True, null=True)
+    label_set = models.ForeignKey(
+        "LabelSet", on_delete=models.CASCADE, blank=True, null=True
+    )
 
     NO_REVIEW = "NR"
     SINGLE = "SR"
@@ -101,7 +104,7 @@ class Label(models.Model):
         null=True,
         help_text="Explaination of the label and its use",
     )
-    attributes = models.ManyToManyField("Attribute", blank=True, )
+    attributes = models.ManyToManyField("Attribute", blank=True,)
     shortcut_key = models.CharField(max_length=220, blank=True, null=True)
     color = models.CharField(max_length=220, blank=True, null=True)
 
@@ -114,15 +117,17 @@ class Attribute(models.Model):
     value = models.CharField(max_length=220, blank=True, null=True)
     key_shortcut_key = models.CharField(max_length=220, blank=True, null=True)
     value_shortcut_key = models.CharField(max_length=220, blank=True, null=True)
+
     def __str__(self):
         try:
             return f"{self.key}: {self.value}"
         except:
             return f"{self.key}"
 
+
 class AnnotationType(models.Model):
     name = models.CharField(max_length=220, blank=True, null=True)
-    color = RGBColorField(default='#FF0000', blank=True, null=True)
+    color = RGBColorField(default="#FF0000", blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}"
