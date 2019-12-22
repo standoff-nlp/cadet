@@ -92,9 +92,12 @@
             </div>
         </div>
         <div class="mail-custom-btn"><a onclick="previous_annotation()" class="custom-btn light-btn" href="#" role="button"><i class="fa fa-chevron-left"></i></a>
-        <a onclick="next_annotation();" class="custom-btn light-btn" role="button" style="width: 126px;"><i style="color:black;" class="fa fa-space-shuttle"></i>
+        <a onclick="next_annotation();" class="custom-btn light-btn" role="button" style="width: 126px;"><i style="color:#3a3b45;" class="fa fa-space-shuttle"></i>
         </a><a class="custom-btn light-btn"
     href="#" role="button"><i class="fa fa-undo"></i></a>
+
+    <a onclick="edit_annotation();" class="custom-btn light-btn" role="button"><i style="color:#3a3b45;" class="fas fa-edit"></i>
+
     </a><a class="custom-btn light-btn"
 href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-toggle-on"></i></a>
 <button class="custom-btn light-btn" href="#" role="button" data-tooltip="Highlight sections of text to add annotations">Text</button>{% for annotation_type in annotation_types %}
@@ -273,8 +276,14 @@ event.preventDefault();
 // $("#myModal" + sender.id).modal();
 // https://realpython.com/django-and-ajax-form-submissions/
 }
-
-
+function edit_annotation(){
+    if ( $( ".active-token" ).length ) {  // if an active token exists
+        current_id = $('.active-token').attr('id');
+        
+            $( "#edit_annotation_modal" ).load({% url 'edit_annotation' %} + current_id);
+            $("#edit_annotation_modal").modal();
+}
+}
 // Toggle button 
 $("#fa-toggle-on").toggle(
     function(){$("p").css({"color": "red"});},

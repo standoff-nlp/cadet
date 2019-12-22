@@ -96,20 +96,42 @@ class EditAnnotationForm(ModelForm):
     def __init__(self, *args, **kwargs):
 
         self.project = kwargs.pop("project")
+        self.user = kwargs.pop('user', None)
         super(EditAnnotationForm, self).__init__(*args, **kwargs)
         project_obj = Project.objects.get(id=self.project)
+        
+
+        for label_group in project_obj.label_set.groups.all():
+            self.fields[label_group.title + "_label"] = ModelChoiceField(
+                queryset=label_group.labels.all(), widget=Select2Widget,
+            )
+            # TODO add check if the labels have attributes, don't add field unless they do
+            self.fields[label_group.title + "_attrib"] = ModelMultipleChoiceField(
+                queryset=Attribute.objects.all(),  # TODO write query to limit for labels in label_group and just their attrib
+                widget=Select2MultipleWidget,
+            )
+            self.fields["annotation_type"] = ModelChoiceField(
+                queryset=AnnotationType.objects.all(), widget=Select2Widget,)
 
 
     class Meta:
         model = Annotation
         fields = "__all__"
-        exclude = ('text',)
+        exclude = (
+            "author",
+            "labels",
+            "project",
+            "text",
+            "start_char",
+            "end_char",
+            "approved",
+            "auto_generated",
+        )
+
         widgets = {
-            "author": Select2Widget,
-            "labels": Select2MultipleWidget,
-            "approved": CheckboxInput,
             "auto_generated": CheckboxInput,
             "annotation_type": Select2Widget,
             "project": Select2Widget,
             'annotation_text': Textarea(attrs={'rows':1, 'cols':27}),
         }
+        

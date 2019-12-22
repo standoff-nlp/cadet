@@ -330,17 +330,30 @@ def add_annotation_form(request, id):
 
 
 def edit_annotation(request, id):
-    
+    if request.method == "POST":
+        project = Project.objects.get(id=request.session.get("project_id"))
+        form = EditAnnotationForm(request.POST, request.FILES, project=project.id, user=request.user)
+        if form.is_valid():
+            form.save()
+            instance = get_object_or_404(Annotation, id=id)
+            project = Project.objects.get(id=request.session.get("project_id"))
+            context = {}
+            context["edit_annotation_form"] = EditAnnotationForm(
+                project=project.id, instance=instance
+            )
 
-    """A view that renders a modelform for an existing annotation.  The form's html is retrieved by ajax.  jquery updates the edit_annotation div"""
-    instance = get_object_or_404(Annotation, id=id)
-    project = Project.objects.get(id=request.session.get("project_id"))
-    context = {}
-    context["edit_annotation_form"] = EditAnnotationForm(
-        project=project.id, instance=instance
-    )
+            return render(request, "edit_annotation_form.html", context)
+    else:
 
-    return render(request, "edit_annotation_form.html", context)
+        """A view that renders a modelform for an existing annotation.  The form's html is retrieved by ajax.  jquery updates the edit_annotation div"""
+        instance = get_object_or_404(Annotation, id=id)
+        project = Project.objects.get(id=request.session.get("project_id"))
+        context = {}
+        context["edit_annotation_form"] = EditAnnotationForm(
+            project=project.id, instance=instance, user=request.user,
+        )
+
+        return render(request, "edit_annotation_form.html", context)
 
 def edit_annotation_no_id(request):
     pass

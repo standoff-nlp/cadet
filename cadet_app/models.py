@@ -149,7 +149,7 @@ class Annotation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     text = models.ForeignKey(
-        Text, on_delete=models.CASCADE, related_name="annotation_text"
+        Text, on_delete=models.CASCADE, related_name="annotation_text", blank=True, null=True
     )
 
     start_char = models.IntegerField(default=None, null=True)
