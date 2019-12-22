@@ -319,7 +319,7 @@ def annotate(request, project, text):
             return render(request, "annotate.html", context)
 
     else:
-        context["text_html"] = add_annotations(text, project)
+        context["text_html"] = text.standoff
         modal_form = AnnotationForm(project=project)
         context["modal_form"] = modal_form
         return render(request, "annotate.html", context)

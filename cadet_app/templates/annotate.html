@@ -81,7 +81,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="modal" id="edit_annotation_modal" style="width: 50%; height: 100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false"></div>
+                                <div class="modal" id="edit_annotation_modal" style="width: 100%; height: 100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false"></div>
                                 <!-- text w/ annotation classes rendered in view  -->
                                 <div id="annotation-area log" accesskey="n" onclick="alertSelection(event)" class="text-dark font-weight-bold h5 mb-0">{{ text_html|safe }}</div>
                             </div>
@@ -95,8 +95,7 @@
         <a onclick="next_annotation();" class="custom-btn light-btn" role="button" style="width: 126px;"><i style="color:black;" class="fa fa-space-shuttle"></i>
         </a><a class="custom-btn light-btn"
     href="#" role="button"><i class="fa fa-undo"></i></a>
-    <a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-save"></i></a>
-    <a class="custom-btn light-btn" href="#" role="button"><i class="fa fa-trash"></i></a><a class="custom-btn light-btn"
+    </a><a class="custom-btn light-btn"
 href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-toggle-on"></i></a>
 <button class="custom-btn light-btn" href="#" role="button" data-tooltip="Highlight sections of text to add annotations">Text</button>{% for annotation_type in annotation_types %}
     <button class="custom-btn light-btn" href="#" role="button" data-tooltip="Select and edit {{ annotation_type }} annotations">{{ annotation_type }}</button>
@@ -274,6 +273,14 @@ event.preventDefault();
 // $("#myModal" + sender.id).modal();
 // https://realpython.com/django-and-ajax-form-submissions/
 }
+
+
+// Toggle button 
+$("#fa-toggle-on").toggle(
+    function(){$("p").css({"color": "red"});},
+    function(){$("p").css({"color": "blue"});},
+    function(){$("p").css({"color": "green"});
+  });
 </script>
 <script>
 // https://craig.is/killing/mice

@@ -3,6 +3,8 @@ from django.forms import (
     FileField,
     ModelChoiceField,
     ModelMultipleChoiceField,
+    Textarea,
+    CheckboxInput,
 )
 from cadet_app.models import (
     Project,
@@ -101,10 +103,13 @@ class EditAnnotationForm(ModelForm):
     class Meta:
         model = Annotation
         fields = "__all__"
-        # exclude = ('author','annotation_text','labels', 'project', 'text',"start_char","end_char","approved","auto_generated",)
+        exclude = ('text',)
         widgets = {
             "author": Select2Widget,
             "labels": Select2MultipleWidget,
-            "approved": Select2Widget,
-            "auto_generated": Select2Widget,
+            "approved": CheckboxInput,
+            "auto_generated": CheckboxInput,
+            "annotation_type": Select2Widget,
+            "project": Select2Widget,
+            'annotation_text': Textarea(attrs={'rows':1, 'cols':27}),
         }
