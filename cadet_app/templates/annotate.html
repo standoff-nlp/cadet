@@ -100,8 +100,8 @@
 
     </a><a class="custom-btn light-btn"
 href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-toggle-on"></i></a>
-<button class="custom-btn light-btn" href="#" role="button" data-tooltip="Highlight sections of text to add annotations">Text</button>{% for annotation_type in annotation_types %}
-    <button class="custom-btn light-btn" href="#" role="button" data-tooltip="Select and edit {{ annotation_type }} annotations">{{ annotation_type }}</button>
+<button id="text" onclick="set_annotation_type(event)" class="custom-btn light-btn" href="#" role="button" data-tooltip="Highlight sections of text to add annotations">Text</button>{% for annotation_type in annotation_types %}
+    <button id="{{ annotation_type }}" onclick="set_annotation_type(event)" class="custom-btn light-btn" href="#" role="button" data-tooltip="Select and edit {{ annotation_type }} annotations">{{ annotation_type }}</button>
 {% endfor %}
 </div>
 <!-- sents, spans, tokens and labelgroups in a table-->
@@ -203,7 +203,11 @@ start: start,
 end: end
 };
 }
+
+// Mousetrap.bind('left', function() { previous_annotation(); });
+
 function alertSelection(event) {
+    if (event.shiftKey) {
 //var mainDiv = document.getElementById("annotation-area");
 var mainDiv = document.querySelector("#annotation-area p"); // div class annotation-area
 // var mainDiv = $(".annotation-area");
@@ -217,7 +221,7 @@ $("#sel-end").html(sel.end);
 $("#sel-text-value").val(sel.text);
 $("#sel-start-value").val(sel.start);
 $("#sel-end-value").val(sel.end);
-}
+}};
 
 function update_annotation_form(sender) {
 // ajax get form from view
@@ -303,6 +307,8 @@ Mousetrap.bind('/', function() {
             $("#edit_annotation_modal").modal();
 
     }});
+
+
 </script>
 {% endblock%}
 {% endblock %}
