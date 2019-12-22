@@ -330,6 +330,8 @@ def add_annotation_form(request, id):
 
 
 def edit_annotation(request, id):
+    
+
     """A view that renders a modelform for an existing annotation.  The form's html is retrieved by ajax.  jquery updates the edit_annotation div"""
     instance = get_object_or_404(Annotation, id=id)
     project = Project.objects.get(id=request.session.get("project_id"))
@@ -340,6 +342,8 @@ def edit_annotation(request, id):
 
     return render(request, "edit_annotation_form.html", context)
 
+def edit_annotation_no_id(request):
+    pass
 
 def export(request):
 

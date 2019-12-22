@@ -81,7 +81,7 @@
                                     </div>
                                 </div>
                                 
-                                
+                                <div class="modal" id="edit_annotation_modal" style="width: 50%; height: 100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false"></div>
                                 <!-- text w/ annotation classes rendered in view  -->
                                 <div id="annotation-area log" accesskey="n" onclick="alertSelection(event)" class="text-dark font-weight-bold h5 mb-0">{{ text_html|safe }}</div>
                             </div>
@@ -283,15 +283,11 @@ Mousetrap.bind('left', function() { previous_annotation(); });
 Mousetrap.bind('/', function() {
     if ( $( ".active-token" ).length ) {  // if an active token exists
         current_id = $('.active-token').attr('id');
-        console.log(current_id);
-        // Get form html from view with id
-        $("#myModal").modal();
-    }
+        
+            $( "#edit_annotation_modal" ).load({% url 'edit_annotation' %} + current_id);
+            $("#edit_annotation_modal").modal();
 
-    else{
-        console.log('no active token')
-    }
-});
+    }});
 </script>
 {% endblock%}
 {% endblock %}

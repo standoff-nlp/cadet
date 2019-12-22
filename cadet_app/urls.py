@@ -30,6 +30,7 @@ urlpatterns = [
         name="add_annotation_form",
     ),
     path("edit_annotation/<id>", views.edit_annotation, name="edit_annotation"),
+    path("edit_annotation/", views.edit_annotation_no_id, name="edit_annotation"),
     path("data/", views.data, name="data"),
     path("labels/", views.labels, name="labels"),
     path("annotate/", views.annotate, name="annotate"),
