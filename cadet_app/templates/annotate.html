@@ -83,7 +83,7 @@
                                 
                                 <div class="modal" id="edit_annotation_modal" style="width: 100%; height: 100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false"></div>
                                 <!-- text w/ annotation classes rendered in view  -->
-                                <div id="annotation-area log" accesskey="n" onclick="alertSelection(event)" class="text-dark font-weight-bold h5 mb-0">{{ text_html|safe }}</div>
+                                <div id="annotation-area" accesskey="n" onclick="alertSelection(event)" class="text-dark font-weight-bold h5 mb-0">{{ text_html|safe }}</div>
                             </div>
                             
                         </div>
@@ -204,10 +204,11 @@ end: end
 };
 }
 function alertSelection(event) {
-if (event.shiftKey) {   // this toggles between text selection and annotation selection by pressing shift.  Could also add a toggle button or key pair
-var mainDiv = document.getElementById("annotation-area");
+//var mainDiv = document.getElementById("annotation-area");
+var mainDiv = document.querySelector("#annotation-area p"); // div class annotation-area
 // var mainDiv = $(".annotation-area");
 var sel = getSelectionCharOffsetsWithin(mainDiv);
+console.log(sel.text,sel.start,sel.end)
 //alert(sel.start + ": " + sel.end);
 $("#myModal").modal();
 $("#sel-text").html(sel.text);
@@ -216,10 +217,8 @@ $("#sel-end").html(sel.end);
 $("#sel-text-value").val(sel.text);
 $("#sel-start-value").val(sel.start);
 $("#sel-end-value").val(sel.end);
-} else {
-//pass
 }
-}
+
 function update_annotation_form(sender) {
 // ajax get form from view
 //$( "div.update_modal" ).replaceWith( "<h2>New heading</h2>" );
