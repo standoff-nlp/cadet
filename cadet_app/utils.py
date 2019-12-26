@@ -163,3 +163,20 @@ def export_tei(text, project):
 
     result = etree.tostring(cadet.tree)
     return result.decode("utf-8")
+
+def get_previous_and_next_text(project_id, text):
+    project_texts = list(Text.objects.filter(projects__id=project_id).values_list('text_slug', flat=True))
+    
+    for item in project_texts:
+        if item == text:
+            current = item
+            print('current is', current)
+
+    # find index in list for current
+    index_current = project_texts.index(current)
+    previous_text = project_texts[index_current - 1]
+    try:
+        next_text = project_texts[index_current + 1]
+    except:
+        next_text = project_texts[0]
+    return previous_text, next_text

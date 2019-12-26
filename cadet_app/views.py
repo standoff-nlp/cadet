@@ -14,6 +14,7 @@ from cadet_app.utils import (
     update_spacy_langs,
     add_annotations,
     export_tei,
+    get_previous_and_next_text,
 )
 from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
@@ -28,9 +29,7 @@ from social_django.utils import psa
 
 import spacy
 
-# update_spacy_langs()
 
-# Create your views here.
 @login_required(redirect_field_name="", login_url="login/")
 def index(request):
 
@@ -257,6 +256,8 @@ def labels(request):
     return render(request, "labels.html", context)
 
 
+
+
 def annotate(request, project, text):
     try:
         project = request.session.get("project_id")
@@ -274,6 +275,7 @@ def annotate(request, project, text):
 
     context["annotation_types"] = AnnotationType.objects.all()
     context["table_columns"] = Project.objects.get(id=project).label_set.groups.all()
+    context["previous_text"], context["next_text"] = get_previous_and_next_text(project, text)
     # Need default text window size 2 sents=50, user can zoom in and out within range 100
     # 100 = len(text),
     # split the text into parts, forward and back links for parts
