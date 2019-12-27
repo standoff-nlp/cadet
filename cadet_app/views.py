@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 
 
 from cadet_app.utils import (
@@ -297,9 +298,15 @@ def annotate(request, project, text):
     if text.strategic_anno is False or None:
         messages.info(request, "Strategic annotations is set to False")
 
+    # Django paginator, so split the text into segments https://docs.djangoproject.com/en/3.0/topics/pagination/
+    # TODO
+    
+    context["text_html"] = text.standoff
+
+
     if request.method == "POST":
         # context["text_html"] = add_annotations(text, project)
-        context["text_html"] = text.standoff
+        
         modal_form = AnnotationForm(request.POST, project=project)
 
         if modal_form.is_valid():
@@ -321,7 +328,6 @@ def annotate(request, project, text):
             return render(request, "annotate.html", context)
 
     else:
-        context["text_html"] = text.standoff
         modal_form = AnnotationForm(project=project)
         context["modal_form"] = modal_form
         return render(request, "annotate.html", context)
