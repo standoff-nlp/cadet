@@ -23,7 +23,13 @@
     </ul>
     <ul class="nav navbar-nav text-light" id="accordionSidebar">
         <li class="nav-item" role="presentation">
-            
+            {% if request.user.is_staff %}
+            {% if not request.session.project_title %}
+            {% endif %}
+            {% if request.session.project_title %}
+                <a class="nav-link active" {% if request.resolver_match.url_name == 'labels' %}style="background-color: #9e2387;"{% endif %}
+                href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span></a>
+            {% endif %}{% endif %}    
             
             <a class="nav-link active" {% if request.resolver_match.url_name == 'projects' %}style="background-color: #9e2387;"{% endif %}  href="{% url 'projects' %}"><i class="fas fa-globe-europe"></i>
             {% if request.session.project_title %}
@@ -41,13 +47,7 @@
             <a class="nav-link active" {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Data</span></a>
             
         {% endif %}
-        {% if request.user.is_staff %}
-            {% if not request.session.project_title %}
-            {% endif %}
-            {% if request.session.project_title %}
-                <a class="nav-link active" {% if request.resolver_match.url_name == 'labels' %}style="background-color: #9e2387;"{% endif %}
-                href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span></a>
-            {% endif %}{% endif %}
+        
             {% if request.session.project_title and request.session.text_slug %}
                 <a class="nav-link active" href="{% url 'annotate' request.session.project_slug request.session.text_slug %}" {% if request.resolver_match.url_name == 'annotate' %}style="background-color: #9e2387;"{% endif %}><i class="fas fa-laptop-code"></i><span>Annotate</span></a>
             {% endif %}

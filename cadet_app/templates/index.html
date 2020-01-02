@@ -20,10 +20,16 @@
 				<div class="card-body"><div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>step 1</span></div><a href="{% url 'projects' %}" class="btn btn-primary btn-circle ml-1" role="button"><i class="fas fa-globe-europe text-white"></i></a>
 				<div class="row align-items-center no-gutters">
 					<div class="col mr-2">
-							<br><div class="text-dark font-weight-bold h5 mb-0"><span>Select a project</span></div>
+						{% if request.user.is_staff %}
+							<br><div class="text-dark font-weight-bold h5 mb-0"><span>Create a project</span></div>
 						
 					</div>
+					<div class="col-auto"> <ul><li>Choose language</li><li>Choose label set</li></ul></div>
+					{% else %}
+					<br><div class="text-dark font-weight-bold h5 mb-0"><span>Select a project</span></div>
+					</div>
 					<div class="col-auto"></div>
+					{% endif %}
 				</div>
 			</div>
 		</div>

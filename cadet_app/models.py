@@ -1,13 +1,52 @@
+import os
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from colorful.fields import RGBColorField
+from django.conf import settings
+
 
 
 class SpacyLanguage(models.Model):
-    language = models.TextField(blank=True, null=True)
+    language = models.TextField(unique=True)
     iso = models.CharField(max_length=2, blank=True, null=True)
+    import_from_spacy_core = models.NullBooleanField(blank=True) # Each project has a new language object, it can be a cloned version of core, but it is custom
+
+    def get_lang_dir(self):
+        path = settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + self.language
+        if not os.path.exists(path):
+            os.makedirs(path)
+    stop_words = models.FilePathField(path=get_lang_dir, match ="stop_words.py",  
+              recursive = False)
+
+
+
+    def get_lookups_dir(self):
+        path = settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/' + self.language
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+    lemma_exc = models.FilePathField(path=get_lookups_dir, match ="*_lemma_exc.json",  
+              recursive = False)
+    lemma_index = models.FilePathField(path=get_lookups_dir, match ="*_lemma_index.json",  
+              recursive = False)
+    lemma_lookup = models.FilePathField(path=get_lookups_dir, match ="*_lemma_lookup.json",  
+              recursive = False)
+    lemma_rules = models.FilePathField(path=get_lookups_dir, match ="*_lemma_rules.json",  
+              recursive = False)
+
+    def __init__(self):
+        if self.import_from_spacy_core:
+            # TODO import data from core lookups-data and lang
+            self.import_from_spacy_core = None
+            self.save()
+        # TODO check if custom lang paths exist, if not create
+        # TODO check if symbolic link to spacy/lang, if not create
+
+    def auto_suggest_lemma():
+        # Method used in annotation UI, given token text, will find and suggest closest lemma in the dict
+        pass
 
     def __str__(self):
         if self.language:
@@ -16,7 +55,7 @@ class SpacyLanguage(models.Model):
             return f"{self.iso} - Multilingual"
         else:
             return f"{self.iso}"
-
+    
 
 class Project(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
@@ -24,6 +63,9 @@ class Project(models.Model):
     owners = models.ManyToManyField(User, related_name="owners")
     editors = models.ManyToManyField(User, related_name="editors")
     annotators = models.ManyToManyField(User, related_name="annotators", blank=True)
+    spacy_language = models.ForeignKey(
+        SpacyLanguage, on_delete=models.CASCADE, blank=True, null=True
+    )
     description = models.TextField(blank=True, null=True)
     language = models.CharField(max_length=220, blank=True, null=True)
     label_set = models.ForeignKey(
@@ -49,6 +91,9 @@ class Project(models.Model):
             self.project_slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+        if not self.spacy_language:
+            pass
+            # TODO create self.spacy_language = create_spacy_language(self.language)
 
 class Text(models.Model):
     title = models.CharField(max_length=220, blank=True, null=True)
@@ -59,9 +104,7 @@ class Text(models.Model):
         "Project", blank=True, related_name="text_project"
     )
     language = models.CharField(max_length=220, blank=True, null=True)
-    spacy_language = models.ForeignKey(
-        SpacyLanguage, on_delete=models.CASCADE, blank=True, null=True
-    )
+    
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     source = models.URLField(max_length=1000, blank=True)
     strategic_anno = models.NullBooleanField(blank=True)
@@ -94,6 +137,7 @@ class LabelGroup(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+
 
 
 class Label(models.Model):
