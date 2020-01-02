@@ -22,8 +22,25 @@ from colorful.widgets import ColorFieldWidget
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        exclude = ("project_slug",)
+        exclude = ("project_slug","spacy_language","label_set","language")
         fields = "__all__"
+
+        widgets = {
+            "owners": Select2Widget,
+            "editors": Select2MultipleWidget,
+            "annotators": Select2MultipleWidget,
+        }
+
+class ProjectLanguageForm(ModelForm):
+    class Meta:
+        model = Project
+        exclude = ("project_slug","label_set","language")
+        fields = "__all__"
+
+        widgets = {
+            "spacy_language": Select2TagWidget,
+            
+        }
 
 
 class TextForm(ModelForm):
@@ -134,4 +151,4 @@ class EditAnnotationForm(ModelForm):
             "project": Select2Widget,
             'annotation_text': Textarea(attrs={'rows':1, 'cols':27}),
         }
-        
+      

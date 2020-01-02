@@ -21,6 +21,7 @@ from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
 from cadet_app.forms import (
     ProjectForm,
+    ProjectLanguageForm,
     TextForm,
     AnnotationForm,
     EditAnnotationForm,
@@ -96,7 +97,7 @@ def add_project(request):
         form = ProjectForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(projects)
+            return redirect(language)
 
     else:
         form = ProjectForm()
@@ -108,7 +109,7 @@ def add_project(request):
 
 @login_required(redirect_field_name="", login_url="login/")
 def edit_project(request, id):
-
+    print(request.POST.__dict__)
     if request.method == "POST":
         project = get_object_or_404(Project, pk=id)
         form = ProjectForm(request.POST or None, instance=project)
@@ -130,7 +131,10 @@ def set_project(request, id):
     request.session["project_id"] = project.id
     request.session["project_title"] = project.title
     request.session["project_slug"] = project.project_slug
-    return redirect(data)
+    if request.user.is_staff:
+        return redirect(language)
+    else:
+        return redirect(data)
 
 
 def set_text(request, id):
@@ -202,9 +206,17 @@ def add_annotation_type(request):
         return render(request, "add_project.html", context)
 
 def language(request):
-    project_language = SpacyLanguage.objects.get(project__id=request.session.get("project_id"))
+    #project_language = SpacyLanguage.objects.get(project__id=request.session.get("project_id"))
+    languages = SpacyLanguage.objects.all()
     context = {}
+    context['spacy_langs'] = languages
+    if request.method == "POST":
+        form = ProjectLanguageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
 
+    else:
+        context['form'] = ProjectLanguageForm()
     return render(request, "language.html", context)
 
 def data(request):
