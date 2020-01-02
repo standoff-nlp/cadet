@@ -23,13 +23,7 @@
     </ul>
     <ul class="nav navbar-nav text-light" id="accordionSidebar">
         <li class="nav-item" role="presentation">
-            {% if request.user.is_staff %}
-            {% if not request.session.project_title %}
-            {% endif %}
-            {% if request.session.project_title %}
-                <a class="nav-link active" {% if request.resolver_match.url_name == 'labels' %}style="background-color: #9e2387;"{% endif %}
-                href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span></a>
-            {% endif %}{% endif %}    
+            
             
             <a class="nav-link active" {% if request.resolver_match.url_name == 'projects' %}style="background-color: #9e2387;"{% endif %}  href="{% url 'projects' %}"><i class="fas fa-globe-europe"></i>
             {% if request.session.project_title %}
@@ -38,7 +32,22 @@
                 <span>Project</span>
             {% endif %}
         </a>
-        
+
+          {% if request.user.is_staff %}
+            {% if not request.session.project_title %}
+            {% endif %}
+            {% if request.session.project_title %}
+                <a class="nav-link active" {% if request.resolver_match.url_name == 'language' %}style="background-color: #9e2387;"{% endif %}
+                href="{% url 'language' %}"><i class="fas fa-star-of-life"></i><span>Language</span></a>
+            {% endif %}{% endif %}  
+
+          {% if request.user.is_staff %}
+            {% if not request.session.project_title %}
+            {% endif %}
+            {% if request.session.project_title %}
+                <a class="nav-link active" {% if request.resolver_match.url_name == 'labels' %}style="background-color: #9e2387;"{% endif %}
+                href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span></a>
+            {% endif %}{% endif %}  
         {% if not request.session.project_title %}
         {% endif %}
         {% if request.session.text_id %}

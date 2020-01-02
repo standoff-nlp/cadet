@@ -2,72 +2,23 @@ from cadet_app.models import *
 from iso639 import languages
 from lxml import etree
 from standoffconverter import Converter
+from pathlib import Path
+import spacy 
 
-
-SPACY_LANGS = [
-    "af",
-    "ar",
-    "bg",
-    "bn",
-    "ca",
-    "cs",
-    "da",
-    "de",
-    "el",
-    "en",
-    "es",
-    "et",
-    "fa",
-    "fi",
-    "fr",
-    "ga",
-    "he",
-    "hi",
-    "hr",
-    "hu",
-    "id",
-    "is",
-    "it",
-    "ja",
-    "kn",
-    "ko",
-    "lb",
-    "lt",
-    "lv",
-    "mr",
-    "nb",
-    "nl",
-    "pl",
-    "pt",
-    "ro",
-    "ru",
-    "si",
-    "sk",
-    "sl",
-    "sq",
-    "sr",
-    "sv",
-    "ta",
-    "te",
-    "th",
-    "tl",
-    "tr",
-    "tt",
-    "uk",
-    "ur",
-    "vi",
-    "xx",
-    "zh",
-]
+SPACY_LANGS = [] 
+spacy_path = Path(spacy.__file__.replace('__init__.py',''))
+spacy_langs = spacy_path / 'lang'
+langs = [x for x in spacy_langs.iterdir() if x.is_dir()]
+[SPACY_LANGS.append(str(lang).split('/')[-1]) for lang in langs if not str(lang).split('/')[-1] == '__pycache__']
 
 
 def update_spacy_langs():
     for lang in SPACY_LANGS:
         try:
             name = languages.get(alpha2=lang)
-            SpacyLanguage.objects.update_or_create(iso=lang, language=name.name)
+            SpacyLanguage.objects.update_or_create(iso=lang, language=name.name, is_core=True)
         except KeyError:
-            SpacyLanguage.objects.update_or_create(iso=lang)
+            SpacyLanguage.objects.update_or_create(iso=lang, language='Multilingual', is_core=True)
 
 
 def make_dict(**args):  # Used to create a dictionary of the current state

@@ -201,6 +201,11 @@ def add_annotation_type(request):
 
         return render(request, "add_project.html", context)
 
+def language(request):
+    project_language = SpacyLanguage.objects.get(project__id=request.session.get("project_id"))
+    context = {}
+
+    return render(request, "language.html", context)
 
 def data(request):
 
