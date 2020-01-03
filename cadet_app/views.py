@@ -210,13 +210,20 @@ def language(request):
     languages = SpacyLanguage.objects.all()
     context = {}
     context['spacy_langs'] = languages
+    instance = get_object_or_404(Project, id=request.session.get("project_id"))
     if request.method == "POST":
-        form = ProjectLanguageForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+        language = request.POST.get('language', None)
+        spacy_language = request.POST.get('spacy_language', None)
+        try:
+            spacy_language = SpacyLanguage.objects.get(id=spacy_language)
+            instance.spacy_language = spacy_language
+            instance.save()
+        except instance.spacy_language.DoesNotExist:
+            instance.spacy_language = None
+            instance.save()
 
-    else:
-        context['form'] = ProjectLanguageForm()
+
+    context['form'] = ProjectLanguageForm(instance=instance)
     return render(request, "language.html", context)
 
 def data(request):

@@ -34,7 +34,7 @@ class ProjectForm(ModelForm):
 class ProjectLanguageForm(ModelForm):
     class Meta:
         model = Project
-        exclude = ("project_slug","label_set","language")
+        exclude = ("project_slug","label_set",)
         fields = "__all__"
 
         widgets = {
