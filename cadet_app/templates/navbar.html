@@ -36,9 +36,9 @@
           {% if request.user.is_staff %}
             {% if not request.session.project_title %}
             {% endif %}
-            {% if request.session.project_title %}
+            {% if request.session.project_language %}
                 <a class="nav-link active" {% if request.resolver_match.url_name == 'language' %}style="background-color: #9e2387;"{% endif %}
-                href="{% url 'language' %}"><i class="fas fa-star-of-life"></i><span>Language</span></a>
+                href="{% url 'language' %}"><i class="fas fa-star-of-life"></i><span>Language {% if request.session.project_language %}~ {{ request.session.project_language }}{% endif %}</span></a>
             {% endif %}{% endif %}  
 
           {% if request.user.is_staff %}
@@ -46,7 +46,7 @@
             {% endif %}
             {% if request.session.project_title %}
                 <a class="nav-link active" {% if request.resolver_match.url_name == 'labels' %}style="background-color: #9e2387;"{% endif %}
-                href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span></a>
+                href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span>{% if request.session.labelset_title %}~ {{ request.session.labelset_title }}{% endif %}</a>
             {% endif %}{% endif %}  
         {% if not request.session.project_title %}
         {% endif %}

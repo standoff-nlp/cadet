@@ -34,6 +34,7 @@ urlpatterns = [
     path("edit_annotation/", views.edit_annotation_no_id, name="edit_annotation"),
     path("data/", views.data, name="data"),
     path("labels/", views.labels, name="labels"),
+    path("set_labelset/<id>", views.set_labelset, name="set_labelset"),
     path("annotate/", views.annotate, name="annotate"),
     path("annotate/<project>/", views.annotate, name="annotate"),
     path("annotate/<project>/<text>", views.annotate, name="annotate"),

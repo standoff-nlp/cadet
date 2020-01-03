@@ -38,7 +38,7 @@ class ProjectLanguageForm(ModelForm):
         fields = "__all__"
 
         widgets = {
-            "spacy_language": Select2TagWidget,
+            "spacy_language": Select2Widget,
             
         }
 
@@ -53,12 +53,11 @@ class TextForm(ModelForm):
 
     class Meta:
         model = Text
+        exclude = ("spacy_language","language",)
         fields = [
             "file",
             "title",
-            "language",
             "source",
-            "spacy_language",
             "strategic_anno",
         ]
 

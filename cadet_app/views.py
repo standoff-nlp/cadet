@@ -128,6 +128,10 @@ def edit_project(request, id):
 
 def set_project(request, id):
     project = Project.objects.get(pk=id)
+    if project.language:
+        request.session["project_language"] = project.language
+    if project.label_set:
+        request.session["labelset_title"] = project.label_set.title
     request.session["project_id"] = project.id
     request.session["project_title"] = project.title
     request.session["project_slug"] = project.project_slug
@@ -144,6 +148,14 @@ def set_text(request, id):
     request.session["text_slug"] = text.text_slug
     return redirect(annotate, request.session.get("project_slug"), text.text_slug)
 
+def set_labelset(request, id):
+    labelset = LabelSet.objects.get(pk=id)
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    project.label_set = labelset
+    project.save()
+    request.session["labelset_id"] = labelset.id
+    request.session["labelset_title"] = labelset.title
+    return redirect(data)
 
 def delete_text(request, id):
     text = Text.objects.get(pk=id)
@@ -215,12 +227,18 @@ def language(request):
         language = request.POST.get('language', None)
         spacy_language = request.POST.get('spacy_language', None)
         try:
-            spacy_language = SpacyLanguage.objects.get(id=spacy_language)
+            spacy_language = get_object_or_404(SpacyLanguage, id=spacy_language)
             instance.spacy_language = spacy_language
             instance.save()
-        except instance.spacy_language.DoesNotExist:
+            messages.info(request, "Project language updated successfully")
+            request.session["project_language"] = language
+        except ValueError:
             instance.spacy_language = None
             instance.save()
+            request.session["project_language"] = language
+
+            messages.info(request, "Project language updated successfully")
+        
 
 
     context['form'] = ProjectLanguageForm(instance=instance)
@@ -246,7 +264,7 @@ def data(request):
             context["all_texts"] = all_texts
             context["project_texts"] = project_texts
             title = request.POST["title"]
-            language = request.POST["language"]
+            language = get_object_or_404(Project, id=request.session.get("project_id")).language
             if request.FILES["file"]:
                 context["message"] = handle_uploaded_file(
                     request, language, text, title
@@ -273,10 +291,9 @@ def data(request):
 
 
 def labels(request):
-
-    anno_types = AnnotationType.objects.all()
     context = {}
-    context["anno_types"] = anno_types
+    context["anno_types"] = AnnotationType.objects.all()
+    context["labelsets"] = LabelSet.objects.all().order_by('-id')
 
     return render(request, "labels.html", context)
 

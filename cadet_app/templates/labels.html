@@ -6,15 +6,14 @@
 			<div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button">Label Set</a>
 			<div class="collapse show" id="collapse-1">
 				<div class="card-body">
-					
-					<a class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-chess-king"></i></span><span class="text-white text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">CoNLL-U</span></a>
-					<a class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-flag"></i></span><span class="text-white text">TEI P5</span></a>
+					<p class="m-0">A label set is an ordered set of label groups.  This setting determines what label groups are visible in the annotator view and their order in the table.</p>
+					<hr>
+					{% for labelset in labelsets %}
+						<a class="btn btn-primary btn-icon-split" href="{% url 'set_labelset' labelset.id %}" role="button"><span class="text-white-50 icon"><i class="fas fa-satellite-dish"></i></i></span><span class="text-white text">{{ labelset.title }}</span></a>
+					{% endfor %}
+					<br>
 					<a class="btn btn-light btn-icon-split" role="button"><span class="icon"><i class="fas fa-plus-square"></i>
 						</span><span class="text">Add new</span></a>
-						<hr>
-						<p class="m-0">A label set is an ordered set of label groups.  This setting determines what label groups are visible in the annotator view and their order in the table.</p>
-						
-						
 					</div>
 				</div>
 			</div>
@@ -47,5 +46,4 @@
 </div>
 </div>
 </div>
-
 {% endblock %}

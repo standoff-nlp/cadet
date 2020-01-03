@@ -13,12 +13,12 @@ class Command(BaseCommand):
         update_spacy_langs()
 
         a_types = ["token", "span", "sent"]
-        [AnnotationType(name=a_type).save() for a_type in a_types]
+        [AnnotationType.objects.update_or_create(name=a_type) for a_type in a_types]
 
         # TODO create setup for label groups
-        TEI = LabelSet.objects.update_or_create(title='TEI')
+        TEI = LabelSet.objects.update_or_create(title='TEI P5')
         # UD
-        UD, create = LabelSet.objects.update_or_create(title='Universal Dependencies')
+        UD, create = LabelSet.objects.update_or_create(title='Universal Dependencies V2')
         UD.groups.update_or_create(title='FORM', explain="Word form or punctuation symbol.")
         UD.groups.update_or_create(title='UPOS', explain="Universal part-of-speech tag.")
         UD.groups.update_or_create(title='XPOS', explain="Language-specific part-of-speech tag; underscore if not available.")
