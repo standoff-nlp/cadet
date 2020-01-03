@@ -11,13 +11,13 @@
         <div class="collapse show" id="collapse-1">
             <div class="card-body">
                 
-                Behind the scenes, Cadet uses a natural language processing library called spaCy.  Once you have annotated texts and training data, we will train a statisitical language model.  Until then we need a base language object with basic information about your new language and its linguistic properties.  You can import an existing base language and modify it or you can create a new one entirely from scratch.  In some cases, working from an existing language object makes sense and can save time.  If you are working in early modern English, for example, we can simply import and modify spaCy's English language data.  
+                Behind the scenes, Cadet uses a natural language processing library called spaCy.  spaCy requires a base language object with basic information about your language and its linguistic properties.  You can import an existing base language from spaCy and modify it or you can create a new one entirely from scratch.    
                 <hr>
                 <div class="form-group">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <label>Enter a unique name for your project language. Please note that if a base class already exists for your language, you will need to create a new name (Early Modern Colonial English, rather than English):</label><br>{{ form.language }}<br>
-                        <label>Cadet will create a new language object for this project that can be customized. If you would like to work from spaCy's existing language data, please select a language below. If left blank, a blank language object will be created</label>{{ form.spacy_language }}<br>
+                        <label>Enter a unique name for your project language. Please note that if a base class already exists for your language, you will need to create a new name (18th Century English, rather than English, for example):</label><br>{{ form.language }}<br>
+                        <label>Cadet will create a new language object for this project that can be customized. If you would like to import language data from an existing language class, please select from the menu below. If left blank, a blank language object will be created</label>{{ form.spacy_language }}<br>
                         
                         <button type="submit">Submit</button>
                         

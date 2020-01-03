@@ -67,3 +67,9 @@ class LabelGroupAdmin(admin.ModelAdmin):
 
 
 admin.site.register(LabelGroup, LabelGroupAdmin)
+
+class SpacyLanguageAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(SpacyLanguage, SpacyLanguageAdmin)

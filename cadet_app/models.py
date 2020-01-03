@@ -4,58 +4,21 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from colorful.fields import RGBColorField
-from django.conf import settings
-from pathlib import Path
-
-
+from cadet_app.lang_utils import create_custom_spacy_language_object
 
 
 class SpacyLanguage(models.Model):
     language = models.TextField(unique=True)
     iso = models.CharField(max_length=2, blank=True, null=True)
     is_core = models.NullBooleanField(blank=True)
-    import_from_spacy_core = models.NullBooleanField(blank=True) # Each project has a new language object, it can be a cloned version of core, but it is custom
 
-    def get_lang_dir(self):
-        path = settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + self.language
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-    stop_words = models.FilePathField(path=get_lang_dir, match ="stop_words.py",  
-              recursive = False, null=True)
-
-
-
-    def get_lookups_dir(self):
-        path = settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/' + self.language
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-    lemma_exc = models.FilePathField(path=get_lookups_dir, match ="*_lemma_exc.json",  
-              recursive = False, null=True)
-    lemma_index = models.FilePathField(path=get_lookups_dir, match ="*_lemma_index.json",  
-              recursive = False, null=True)
-    lemma_lookup = models.FilePathField(path=get_lookups_dir, match ="*_lemma_lookup.json",  
-              recursive = False, null=True)
-    lemma_rules = models.FilePathField(path=get_lookups_dir, match ="*_lemma_rules.json",  
-              recursive = False, null=True)
-
-    def update(self):
-        if self.import_from_spacy_core:
-            # TODO import data from core lookups-data and lang
-            self.import_from_spacy_core = None
-            self.save()
-
-        # TODO check if custom lang paths exist, if not create
-        custom_lang = settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + self.language
-        custom_lang = Path(custom_lang)
-
-        spacy_path = Path(spacy.__file__.replace('__init__.py',''))
-        spacy_lang = spacy_path / 'lang'
-        sym_path = spacy_lang / self.language
-        if not sym_path.exists():
-            os.symlink(custom_lang, str(spacy_lang))
-    
+  
+    def save(self, *args, **kwargs):
+        if self.is_core: # Core objects are added with manage.py setup from spacy/lang # TODO add condition in setup to ignore symlinks
+            super().save(*args, **kwargs)
+        else:
+            create_custom_spacy_language_object(self.language)
+            super().save(*args, **kwargs)
 
     def auto_suggest_lemma():
         # Method used in annotation UI, given token text, will find and suggest closest lemma in the dict
@@ -64,8 +27,6 @@ class SpacyLanguage(models.Model):
     def __str__(self):
         if self.language:
             return f"{self.iso} - {self.language}"
-        if self.iso == "xx":
-            return f"{self.iso} - Multilingual"
         else:
             return f"{self.iso}"
     
