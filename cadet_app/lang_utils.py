@@ -8,6 +8,9 @@ from pathlib import Path
 def create_custom_spacy_language_object(language):
     path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
     path.mkdir(parents=False, exist_ok=False)
+    spacy_path = Path(spacy.__file__.replace('__init__.py',''))
+    spacy_lang = spacy_path / 'lang' / language
+    spacy_lang.symlink_to(path)
     init = path / '__init__.py'
     with init.open('w', encoding="utf-8") as f: 
         f.write(
