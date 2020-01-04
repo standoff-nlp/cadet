@@ -36,7 +36,7 @@
           {% if request.user.is_staff %}
             {% if not request.session.project_title %}
             {% endif %}
-            {% if request.session.project_language %}
+            {% if request.session.project_title %}
                 <a class="nav-link active" {% if request.resolver_match.url_name == 'language' %}style="background-color: #9e2387;"{% endif %}
                 href="{% url 'language' %}"><i class="fas fa-meteor"></i><span>Language {% if request.session.project_language %}~ {{ request.session.project_language }}{% endif %}</span></a>
             {% endif %}{% endif %}  

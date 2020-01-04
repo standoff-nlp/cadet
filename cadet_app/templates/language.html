@@ -34,23 +34,7 @@
         <div class="collapse" id="collapse-4">
             <div class="card-body">
                 
-                <div class="form-group">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.file }}<br>
-                        <label>or enter URL:</label>
-                        {{ form.source }}<br>
-                        <label>Title:</label>
-                        {{ form.title }}<br>
-                        <label>Language:</label>
-                        {{ form.language }}<br>
-                        <label data-tooltip="If selected, the text will be automatically tokenized.  If a sentensizer is available for your language, sentences will also be generated.">spaCy language:</label>
-                        {{ form.spacy_language }}<br>
-                        <label data-tooltip="If selected, the sentences in the document will be sorted by word count, which allows strategic annotation.">Strategic annotation:</label>{{ form.strategic_anno }}<br>
-                        <button type="submit">Submit</button>
-                        
-                    </form>
-                </div>
+               
             {% endif %}
         </div>
     </div>

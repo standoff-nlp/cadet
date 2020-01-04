@@ -26,9 +26,9 @@ class ProjectForm(ModelForm):
         fields = "__all__"
 
         widgets = {
-            "owners": Select2Widget,
-            "editors": Select2MultipleWidget,
-            "annotators": Select2MultipleWidget,
+            #"owners": Select2Widget,
+            #"editors": Select2MultipleWidget,
+            #"annotators": Select2MultipleWidget,
         }
 
 class ProjectLanguageForm(ModelForm):
@@ -38,6 +38,7 @@ class ProjectLanguageForm(ModelForm):
         fields = "__all__"
 
         widgets = {
+            
             "spacy_language": Select2Widget,
             
         }

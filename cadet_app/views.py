@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from cadet_app.lang_utils import create_custom_spacy_language_object
+
 
 
 from cadet_app.utils import (
@@ -89,15 +91,25 @@ def projects(request):
     context["projects"] = projects
     return render(request, "projects.html", context)
 
-
+# TODO are both add and edit project needed?
 @login_required(redirect_field_name="", login_url="login/")
 def add_project(request):
 
     if request.method == "POST":
         form = ProjectForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(language)
+        form.save()
+        project = form.instance
+        request.session["project_id"] = project.id
+        request.session["project_title"] = project.title
+        request.session["project_slug"] = project.project_slug
+        request.session["project_language"] = project.language
+        request.session["text_id"] = None
+        request.session["text_title"] = None
+        request.session["text_slug"] = None
+        request.session["labelset_title"] = None
+
+
+        return redirect(language)
 
     else:
         form = ProjectForm()
@@ -222,26 +234,31 @@ def language(request):
     languages = SpacyLanguage.objects.all()
     context = {}
     context['spacy_langs'] = languages
-    instance = get_object_or_404(Project, id=request.session.get("project_id"))
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
     if request.method == "POST":
         language = request.POST.get('language', None)
-        spacy_language = request.POST.get('spacy_language', None)
-        try:
-            spacy_language = get_object_or_404(SpacyLanguage, id=spacy_language)
-            instance.spacy_language = spacy_language
-            instance.save()
-            messages.info(request, "Project language updated successfully")
-            request.session["project_language"] = language
-        except ValueError:
-            instance.spacy_language = None
-            instance.save()
-            request.session["project_language"] = language
+        if not language:
+            messages.error(request, "Please enter a language name to continue")
 
-            messages.info(request, "Project language updated successfully")
+        language_data = request.POST.get('spacy_language', None)
+        spacy_language, created = SpacyLanguage.objects.get_or_create(language=language)
+        if created and not spacy_language.is_core:
+            project.spacy_language = spacy_language
+            project.language = language
+            project.save()
+            create_custom_spacy_language_object(language)
+
+        else:
+            # Copy spaCy language data to custom_language/lang 
+            project.spacy_language = None
+            project.save()
+
         
+        messages.info(request, "Project language updated successfully")
+        request.session["project_language"] = language
+        return render(request, "language.html", context)    
 
-
-    context['form'] = ProjectLanguageForm(instance=instance)
+    context['form'] = ProjectLanguageForm(instance=project)
     return render(request, "language.html", context)
 
 def data(request):
