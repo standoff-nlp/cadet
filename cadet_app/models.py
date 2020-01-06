@@ -8,28 +8,26 @@ from colorful.fields import RGBColorField
 
 class SpacyLanguage(models.Model):
     language = models.TextField(unique=True)
+    slug = models.SlugField(max_length=140, default=None)
     iso = models.CharField(max_length=2, blank=True, null=True)
     is_core = models.NullBooleanField(blank=True)
 
   
     def save(self, *args, **kwargs):
-        def validate_language_name(language):
-
-            return valid_language_name
-        self.language = validate_language_name(self.language)
-
+        if not self.slug:
+            self.slug = slugify(self.language)
+        
         if self.is_core: # Core objects are added with manage.py setup from spacy/lang # TODO add condition in setup to ignore symlinks
             super().save(*args, **kwargs)
         else:
-            create_custom_spacy_language_object(self.language)
+            #create_custom_spacy_language_object(self.language)
             super().save(*args, **kwargs)
 
     def auto_suggest_lemma():
         # Method used in annotation UI, given token text, will find and suggest closest lemma in the dict
         pass
 
-    def validate_language_name(): #require language names that can be a directory name and file prefix
-        pass
+    
 
     def __str__(self):
         return f"{self.language}"

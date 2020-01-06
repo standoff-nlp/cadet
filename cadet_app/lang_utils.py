@@ -73,13 +73,30 @@ def clone_spacy_core(language, clone):
     core_path = Path(spacy.__file__.replace('__init__.py','')) / 'lang' / clone.iso
     assert core_path.exists()
 
-    # copy files in core to custom 
+    # copy files from core to custom 
     core_files = [x for x in core_path.glob('**/*') if x.is_file() and 'pyc' not in str(x)]
     for src in core_files:
         dest = new_path / src.name  
         copyfile(src, dest)
 
-    #TODO what edits to make in init and other files 
+    # Edit imports and variable names
+    
+    language_name = spacy.util.get_lang_class(clone.iso).__name__
+    init = new_path / '__init__.py'
+    init_text = init.read_text()
+    init_text = init_text.replace(language_name, language.title()).replace('"'+clone.iso+'"','"'+language+'"') # quotes added to avoid false matches
+    init_text = init_text.replace('from ...', 'from spacy.')
+    init_text = init_text.replace('from ..', 'from spacy.lang.')
+    init_text = init_text.replace('from .', 'from spacy.lang.' + language + '.')
+    init.write_text(init_text)
+
+    new_files = [x for x in new_path.glob('**/*') if x.is_file() and x.name != '__init__.py']
+    for file in new_files:
+        file_text = file.read_text()
+        file_text = file_text.replace('from ...', 'from spacy.')
+        file_text = file_text.replace('from ..', 'from spacy.lang.')
+        file_text = file_text.replace('from .', 'from spacy.lang.' + language + '.')
+        file.write_text(file_text)
 
     #spacy lookups ~ using pip install spacy[lookups]
     import spacy_lookups_data
@@ -96,9 +113,6 @@ def clone_spacy_core(language, clone):
 
     #copy lookups tests
         
-
-    #copy files, but change iso to new language name
-
 
 
 def clone_custom_language(language, clone):

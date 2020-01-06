@@ -19,8 +19,10 @@ def update_spacy_langs():
             name = languages.get(alpha2=lang)
             SpacyLanguage.objects.update_or_create(iso=lang, language=name.name, is_core=True)
         except KeyError:
-            SpacyLanguage.objects.update_or_create(iso=lang, language='Multilingual', is_core=True)
-
+            if lang == 'xx':
+                SpacyLanguage.objects.update_or_create(iso=lang, language='Multilingual', is_core=True)
+            else:
+                SpacyLanguage.objects.update_or_create(language=lang, is_core=False)
 
 def make_dict(**args):  # Used to create a dictionary of the current state
     return args
