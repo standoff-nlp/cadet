@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-from cadet_app.lang_utils import create_custom_spacy_language_object
+from cadet_app.lang_utils import create_custom_spacy_language_object, clone_spacy_core, clone_custom_language
 
 
 
@@ -242,15 +242,26 @@ def language(request):
 
         language_data = request.POST.get('spacy_language', None)
         spacy_language, created = SpacyLanguage.objects.get_or_create(language=language)
-        if created and not spacy_language.is_core:
+        if created and not language_data: # Create new, no clone
             project.spacy_language = spacy_language
             project.language = language
             project.save()
             create_custom_spacy_language_object(language)
 
+        if created and language_data: # Create new, clone from spacy/lang
+            project.spacy_language = spacy_language
+            project.language = language
+            project.save()
+            clone = SpacyLanguage.objects.get_or_create(language=language_data)
+            if clone.is_core:
+                clone_spacy_core(language, clone)
+            else:
+                clone_custom_language(language, clone)
+
+
         else:
-            # Copy spaCy language data to custom_language/lang 
-            project.spacy_language = None
+            # Language already exists 
+            project.spacy_language = spacy_language
             project.save()
 
         

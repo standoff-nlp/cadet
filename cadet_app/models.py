@@ -4,7 +4,6 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from colorful.fields import RGBColorField
-from cadet_app.lang_utils import create_custom_spacy_language_object
 
 
 class SpacyLanguage(models.Model):
@@ -14,6 +13,11 @@ class SpacyLanguage(models.Model):
 
   
     def save(self, *args, **kwargs):
+        def validate_language_name(language):
+
+            return valid_language_name
+        self.language = validate_language_name(self.language)
+
         if self.is_core: # Core objects are added with manage.py setup from spacy/lang # TODO add condition in setup to ignore symlinks
             super().save(*args, **kwargs)
         else:
@@ -24,11 +28,11 @@ class SpacyLanguage(models.Model):
         # Method used in annotation UI, given token text, will find and suggest closest lemma in the dict
         pass
 
+    def validate_language_name(): #require language names that can be a directory name and file prefix
+        pass
+
     def __str__(self):
-        if self.language:
-            return f"{self.iso} - {self.language}"
-        else:
-            return f"{self.iso}"
+        return f"{self.language}"
     
 
 class Project(models.Model):
@@ -48,12 +52,14 @@ class Project(models.Model):
 
     NO_REVIEW = "NR"
     SINGLE = "SR"
-    MULTI = "MR"
+    TWO = "3"
+    THREE = "4"
 
     REVIEW_CHOICES = [
         (NO_REVIEW, "No review required"),
-        (SINGLE, "Single required"),
-        (MULTI, "Multiple annotators"),
+        (SINGLE, "Editor approval"),
+        (TWO, "two annotator consensus"),
+        (THREE, "three annotator consensus"),
     ]
     review = models.CharField(max_length=2, choices=REVIEW_CHOICES, default=NO_REVIEW,)
 

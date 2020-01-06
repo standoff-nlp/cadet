@@ -1,6 +1,7 @@
 import spacy
 from django.conf import settings
 from pathlib import Path
+from shutil import copyfile
 
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
@@ -57,3 +58,48 @@ STOP_WORDS = set(
 """.split()
 )
 ''')
+
+# still needs creation of lookups path 
+
+
+def clone_spacy_core(language, clone):
+    new_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
+    new_path.mkdir(parents=False, exist_ok=False)
+
+    # Create symlink between spacy/lang and the new custom languages directory
+    lang_path = Path(spacy.__file__.replace('__init__.py','')) / 'lang' / language
+    lang_path.symlink_to(new_path)
+
+    core_path = Path(spacy.__file__.replace('__init__.py','')) / 'lang' / clone.iso
+    assert core_path.exists()
+
+    # copy files in core to custom 
+    core_files = [x for x in core_path.glob('**/*') if x.is_file() and 'pyc' not in str(x)]
+    for src in core_files:
+        dest = new_path / src.name  
+        copyfile(src, dest)
+
+    #TODO what edits to make in init and other files 
+
+    #spacy lookups ~ using pip install spacy[lookups]
+    import spacy_lookups_data
+    spacy_lookups = Path(spacy_lookups_data.__file__.replace('__init__.py','')) / 'data'
+    assert spacy_lookups.exists()
+
+    # Use the iso code to identify lookups-data files 
+    new_lookups = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/')
+    lookups_files = [x for x in spacy_lookups.glob('**/*') if x.is_file() and clone.iso+'_' in str(x)]
+    for src in lookups_files:
+        new_name = src.name.replace(clone.iso, language)
+        dest = new_lookups / new_name
+        copyfile(src, dest)
+
+    #copy lookups tests
+        
+
+    #copy files, but change iso to new language name
+
+
+
+def clone_custom_language(language, clone):
+    pass
