@@ -100,5 +100,7 @@ class Command(BaseCommand):
 
 
 
-
+        # TODO if not custom_languages git clone 
+        # change permissions on custom_languages to www-data
+        # add CUSTOM_LANGUAGES_DIRECTORY to settings
         self.stdout.write(self.style.SUCCESS("Done!"))

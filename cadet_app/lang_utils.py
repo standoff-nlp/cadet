@@ -2,11 +2,14 @@ import spacy
 from django.conf import settings
 from pathlib import Path
 from shutil import copyfile
+from django.utils.text import slugify
+
 
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
 
 def create_custom_spacy_language_object(language):
+    language = slugify(language).replace('-','_')
     path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
     path.mkdir(parents=False, exist_ok=False)
     spacy_path = Path(spacy.__file__.replace('__init__.py',''))
@@ -27,7 +30,7 @@ from spacy.util import update_exc, add_lookups
 
 
 # https://spacy.io/usage/adding-languages#language-subclass
-class {language}Defaults(Language.Defaults):
+class {language.capitalize()}Defaults(Language.Defaults):
     lex_attr_getters = dict(Language.Defaults.lex_attr_getters)
     lex_attr_getters[LANG] = lambda text: "{language}"
     lex_attr_getters[NORM] = add_lookups(
@@ -37,12 +40,12 @@ class {language}Defaults(Language.Defaults):
     stop_words = STOP_WORDS
 
 
-class {language}(Language):
+class {language.capitalize()}(Language):
     lang = "{language}"
-    Defaults = {language}Defaults
+    Defaults = {language.capitalize()}Defaults
 
 
-__all__ = ["{language}"]
+__all__ = ["{language.capitalize()}"]
 """)
 
     stop = path / 'stop_words.py'
@@ -63,6 +66,7 @@ STOP_WORDS = set(
 
 
 def clone_spacy_core(language, clone):
+    language = slugify(language).replace('-','_')
     new_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
     new_path.mkdir(parents=False, exist_ok=False)
 
@@ -84,7 +88,7 @@ def clone_spacy_core(language, clone):
     language_name = spacy.util.get_lang_class(clone.iso).__name__
     init = new_path / '__init__.py'
     init_text = init.read_text()
-    init_text = init_text.replace(language_name, language.title()).replace('"'+clone.iso+'"','"'+language+'"') # quotes added to avoid false matches
+    init_text = init_text.replace(language_name, language.capitalize()).replace('"'+clone.iso+'"','"'+language+'"') # quotes added to avoid false matches
     init_text = init_text.replace('from ...', 'from spacy.')
     init_text = init_text.replace('from ..', 'from spacy.lang.')
     init_text = init_text.replace('from .', 'from spacy.lang.' + language + '.')

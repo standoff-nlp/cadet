@@ -237,10 +237,10 @@ def language(request):
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     if request.method == "POST":
         language = request.POST.get('language', None)
-        if not language:
-            messages.error(request, "Please enter a language name to continue")
-
         language_data = request.POST.get('spacy_language', None)
+        if not language:
+            language = project.project_slug + '_' + spacy_language
+
         spacy_language, created = SpacyLanguage.objects.get_or_create(language=language)
         if created and not language_data: # Create new, no clone
             project.spacy_language = spacy_language
@@ -252,7 +252,7 @@ def language(request):
             project.spacy_language = spacy_language
             project.language = language
             project.save()
-            clone = SpacyLanguage.objects.get_or_create(language=language_data)
+            clone, created= SpacyLanguage.objects.get_or_create(id=language_data)
             if clone.is_core:
                 clone_spacy_core(language, clone)
             else:

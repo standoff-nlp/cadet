@@ -11,14 +11,15 @@
         <div class="collapse show" id="collapse-1">
             <div class="card-body">
                 
-                Behind the scenes, Cadet uses a natural language processing library called spaCy.  spaCy requires a base language object with basic information about your language and its linguistic properties.  You can import an existing base language from spaCy and modify it or you can create a new one entirely from scratch.    
+                Behind the scenes, Cadet uses a natural language processing library called spaCy.  spaCy requires a base language object with basic information about your language and its linguistic properties.  You can:
+<ul><li>Use an existing spaCy language or custom language object. Just select from the options in language data. A new language object with a unique name will be created for this project with language data from the existing language.  This will allows you to customize the language for this project without changing the base copy.  
+<li>Create a new language object entirely from scratch. Enter a unique language name and leave the language data field blank</li></ul>    
                 <hr>
                 <div class="form-group">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <label>Enter a unique name for your project language. Please note that if a base class already exists for your language, you will need to create a new name (18th Century English, rather than English, for example):</label><br>{{ form.language }}<br>
-                        <label>Cadet will create a new language object for this project that can be customized. If you would like to import language data from an existing language class, please select from the menu below. If left blank, a blank language object will be created</label>{{ form.spacy_language }}<br>
-                        
+                        <label>Language data:</label>{{ form.spacy_language }}<br>
+                        <label>Project language name:</label><br>{{ form.language }}<br>
                         <button type="submit">Submit</button>
                         
                     </form>
