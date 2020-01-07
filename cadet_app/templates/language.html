@@ -7,8 +7,8 @@
 
     {% if request.user.is_staff %}
         
-        <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" href="#collapse-1" role="button">Base Language</a>
-        <div class="collapse show" id="collapse-1">
+        <div class="shadow card"><a  href="{% url 'language' %}"><button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" role="button">Base Language</a></button>
+        <div class="collapse {% if request.path == '/language/' %}show{% endif %}" id="collapse-1">
             <div class="card-body">
                 
                 Behind the scenes, Cadet uses a natural language processing library called spaCy.  spaCy requires a base language object with basic information about your language and its linguistic properties.  You can:
@@ -32,9 +32,11 @@
     {% if request.user.is_staff %}
         
         <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Stop Words</a>
-        <div class="collapse" id="collapse-4">
+        <div class="collapse {% if request.path == '/language/stop_words' %}show{% endif %}" id="collapse-4">
             <div class="card-body">
-                
+                {% for word in stop_words %}
+                {{ word }}
+                {% endfor %}
                
             {% endif %}
         </div>

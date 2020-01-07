@@ -8,7 +8,7 @@ from django.utils.text import slugify
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
 
-def create_custom_spacy_language_object(language):
+def create_spacy_language(language):
     language = slugify(language).replace('-','_')
     path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
     path.mkdir(parents=False, exist_ok=False)
@@ -65,17 +65,20 @@ STOP_WORDS = set(
 # still needs creation of lookups path 
 
 
-def clone_spacy_core(language, clone):
+def clone_spacy_language(language, clone):
     language = slugify(language).replace('-','_')
     new_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
     new_path.mkdir(parents=False, exist_ok=False)
-
+    
     # Create symlink between spacy/lang and the new custom languages directory
     lang_path = Path(spacy.__file__.replace('__init__.py','')) / 'lang' / language
     lang_path.symlink_to(new_path)
-
-    core_path = Path(spacy.__file__.replace('__init__.py','')) / 'lang' / clone.iso
-    assert core_path.exists()
+    if clone.is_core:
+        core_path = Path(spacy.__file__.replace('__init__.py','')) / 'lang' / clone.iso
+        assert core_path.exists()
+    else:
+        core_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + clone.language)
+        assert core_path.exists()
 
     # copy files from core to custom 
     core_files = [x for x in core_path.glob('**/*') if x.is_file() and 'pyc' not in str(x)]
@@ -115,9 +118,5 @@ def clone_spacy_core(language, clone):
         dest = new_lookups / new_name
         copyfile(src, dest)
 
-    #copy lookups tests
+    # TODO copy lookups tests
         
-
-
-def clone_custom_language(language, clone):
-    pass

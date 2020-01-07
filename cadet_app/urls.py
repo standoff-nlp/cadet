@@ -16,6 +16,7 @@ urlpatterns = [
     path("edit_project/<id>", views.edit_project, name="edit_project"),
     path("set_project/<id>", views.set_project, name="set_project"),
     path("language/", views.language, name="language"),
+    path("language/stop_words", views.stop_words, name="stop_words"),
     path("set_text/<id>", views.set_text, name="set_text"),
     path("edit_text/<id>", views.edit_text, name="edit_text"),
     path("delete_text/<id>", views.delete_text, name="delete_text"),

@@ -5,8 +5,10 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-from cadet_app.lang_utils import create_custom_spacy_language_object, clone_spacy_core, clone_custom_language
-
+from cadet_app.lang_utils import create_spacy_language, clone_spacy_language
+from pathlib import Path
+from django.conf import settings
+import sys
 
 
 from cadet_app.utils import (
@@ -235,6 +237,7 @@ def language(request):
     context = {}
     context['spacy_langs'] = languages
     project = get_object_or_404(Project, id=request.session.get("project_id"))
+    context['form'] = ProjectLanguageForm(instance=project)
     if request.method == "POST":
         language = request.POST.get('language', None)
         language_data = request.POST.get('spacy_language', None)
@@ -246,18 +249,14 @@ def language(request):
             project.spacy_language = spacy_language
             project.language = language
             project.save()
-            create_custom_spacy_language_object(language)
+            create_spacy_language(language)
 
-        if created and language_data: # Create new, clone from spacy/lang
+        if created and language_data: # Create new, clone from spacy/lang or custom_languages
             project.spacy_language = spacy_language
             project.language = language
             project.save()
             clone, created= SpacyLanguage.objects.get_or_create(id=language_data)
-            if clone.is_core:
-                clone_spacy_core(language, clone)
-            else:
-                clone_custom_language(language, clone)
-
+            clone_spacy_language(language, clone)
 
         else:
             # Language already exists 
@@ -269,7 +268,21 @@ def language(request):
         request.session["project_language"] = language
         return render(request, "language.html", context)    
 
-    context['form'] = ProjectLanguageForm(instance=project)
+    return render(request, "language.html", context)
+
+def stop_words(request):
+    context = {}
+
+    #open 
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    language = project.spacy_language.slug.replace('-','_')
+    path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+    import importlib.util # TODO clean this up  https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
+    spec = importlib.util.spec_from_file_location("STOP_WORDS", str(path))
+    foo = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(foo)
+    words = foo.STOP_WORDS
+    context['stop_words'] = words
     return render(request, "language.html", context)
 
 def data(request):
