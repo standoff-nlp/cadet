@@ -1,7 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
 from cadet_app.models import *
 from cadet_app.utils import update_spacy_langs
-
+import spacy
+from django.conf import settings
+from pathlib import Path
 
 class Command(BaseCommand):
     help = "Setup script for fresh project. Adds spaCy languages and annotation types to the database"
@@ -100,7 +102,16 @@ class Command(BaseCommand):
 
 
 
-        # TODO if not custom_languages git clone 
+        # Clone custom_languages 
+        custom_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY)
+        if not custom_path.exists():
+            from git import Repo
+            git_url = "https://github.com/standoff-nlp/custom_languages.git"
+            Repo.clone_from(git_url, custom_path)
+            
         # change permissions on custom_languages to www-data
-        # add CUSTOM_LANGUAGES_DIRECTORY to settings
+        spacy_path = Path(spacy.__file__.replace('__init__.py',''))
+        print('[*] remember to run $ sudo chown -R www-data:www-data {}'.format(spacy_path))
+        print('[*] also run $ sudo chown -R www-data:www-data {}'.format(custom_path))
+        
         self.stdout.write(self.style.SUCCESS("Done!"))
