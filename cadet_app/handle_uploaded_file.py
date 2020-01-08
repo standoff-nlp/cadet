@@ -56,13 +56,13 @@ def handle_text_file(request, nlp, current_text):
     current_text.save()
 
 
-def handle_uploaded_file(request, language, text, title):
+def handle_uploaded_file(request, project_language, text, title):
     file = request.FILES["file"]
 
     try:
-        if text.spacy_language.iso:
-            lang = spacy.util.get_lang_class(text.spacy_language.iso)
-            nlp = lang()
+        
+        lang = spacy.util.get_lang_class(project_language.slug.replace('-','_'))
+        nlp = lang()
 
         if file.content_type == "text/plain":
             handle_text_file(request, nlp, text)
@@ -80,10 +80,8 @@ def handle_uploaded_file(request, language, text, title):
         return "Have a nice day!"
 
     except Exception as e:
-        print(e)
-        nlp = None
-        if file.content_type == "text/plain":
-            handle_text_file(request, nlp, text)
+        return e
+        
 
 
 def handle_url_file(request, language, text, title):

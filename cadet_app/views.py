@@ -286,9 +286,6 @@ def stop_words(request):
     return render(request, "language.html", context)
 
 def data(request):
-
-    # TODO auto-select texts already associated with current project
-
     all_texts = Text.objects.all()
     project_texts = Text.objects.filter(projects__id=request.session.get("project_id"))
     if request.method == "POST":
@@ -305,13 +302,13 @@ def data(request):
             context["all_texts"] = all_texts
             context["project_texts"] = project_texts
             title = request.POST["title"]
-            language = get_object_or_404(Project, id=request.session.get("project_id")).language
+            project_language = get_object_or_404(Project, id=request.session.get("project_id")).spacy_language
             if request.FILES["file"]:
                 context["message"] = handle_uploaded_file(
-                    request, language, text, title
+                    request, project_language, text, title
                 )
             if request.session.get("url", None):
-                context["message"] = handle_url_file(request, language, text, title)
+                context["message"] = handle_url_file(request, project_language, text, title)
 
             if request.user.is_staff:
                 return render(request, "data.html", context)

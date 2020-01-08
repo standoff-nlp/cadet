@@ -81,7 +81,7 @@ class Text(models.Model):
     projects = models.ManyToManyField(
         "Project", blank=True, related_name="text_project"
     )
-    language = models.CharField(max_length=220, blank=True, null=True)
+    language = models.CharField(max_length=220, blank=True, null=True) #TODO remove, language is set in project.spacy_language
     
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     source = models.URLField(max_length=1000, blank=True)
