@@ -1,7 +1,9 @@
 <div class="shadow card"><a  href="{% url 'stop_words' %}"> <button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-40" href="#collapse-4" role="button">Example sentences</a></button>
 <div class="collapse {% if request.path == '/language/examples' %}show{% endif %}" id="collapse-4">
 <div class="card-body">
-    Add example sentences here 
+    {% for sentence in sentences %}
+    {{ sentence }}
+    {% endfor %}
 </div>
 </div>
 </div>

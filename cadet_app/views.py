@@ -285,6 +285,21 @@ def stop_words(request):
     context['stop_words'] = words
     return render(request, "language.html", context)
 
+def examples(request):
+    context = {}
+
+    #open 
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    language = project.spacy_language.slug.replace('-','_')
+    path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'examples.py'
+    import importlib.util # TODO clean this up  https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
+    spec = importlib.util.spec_from_file_location("sentences", str(path))
+    foo = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(foo)
+    sentences = foo.sentences
+    context['sentences'] = sentences
+    return render(request, "language.html", context)
+
 def data(request):
     all_texts = Text.objects.all()
     project_texts = Text.objects.filter(projects__id=request.session.get("project_id"))

@@ -25,47 +25,62 @@
         <li class="nav-item" role="presentation">
             
             
-            <a class="nav-link active" {% if request.resolver_match.url_name == 'projects' %}style="background-color: #9e2387;"{% endif %}  href="{% url 'projects' %}"><i class="fas fa-globe-europe"></i>
+            <a  {% if request.resolver_match.url_name == 'projects' %}style="background-color: #9e2387;" class="nav-link active" {% else %}class="nav-link"{% endif %} class="nav-link active"  href="{% url 'projects' %}"><i class="fas fa-globe-europe"></i>
             {% if request.session.project_title %}
                 <span>Project ~ {{ request.session.project_title }}</span>
             {% else %}
                 <span>Project</span>
             {% endif %}
         </a>
-
+</li>
+<li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" {% if request.resolver_match.url_name == 'language' %}style="background-color: #9e2387;"{% endif %} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% if request.user.is_staff %}
             {% if not request.session.project_title %}
             {% endif %}
             {% if request.session.project_title %}
-                <a class="nav-link active" {% if request.resolver_match.url_name == 'language' %}style="background-color: #9e2387;"{% endif %}
-                href="{% url 'language' %}"><i class="fas fa-meteor"></i><span>Language {% if request.session.project_language %}~ {{ request.session.project_language }}{% endif %}</span></a>
+               <i class="fas fa-meteor"></i><span>Language {% if request.session.project_language %}~ {{ request.session.project_language }}{% endif %}</span></a>
             {% endif %}{% endif %}  
-
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'language' %}">Base Language</a>
+          <div class="dropdown-divider"></div>
+         <a class="dropdown-item" href="#">Lemmata</a>
+         <a class="dropdown-item" href="#">Tokenization</a>
+          <a class="dropdown-item" href="{% url 'stop_words' %}">Stop Words</a>
+         
+          <a class="dropdown-item" href="{% url 'examples' %}">Example Sentences</a>
+          <a class="dropdown-item" href="#">Other Language Data</a>
+        </div>
+      </li>
+      
+<li class="nav-item">
           {% if request.user.is_staff %}
             {% if not request.session.project_title %}
             {% endif %}
             {% if request.session.project_title %}
-                <a class="nav-link active" {% if request.resolver_match.url_name == 'labels' %}style="background-color: #9e2387;"{% endif %}
-                href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span>{% if request.session.labelset_title %}~ {{ request.session.labelset_title }}{% endif %}</a>
+                <a {% if request.resolver_match.url_name == 'labels' %}style="background-color: #9e2387;" class="nav-link active"{% else %}class="nav-link"{% endif %}
+                href="{% url 'labels' %}"><i class="fas fa-map-signs"></i><span>Labels</span>{% if request.session.labelset_title %} ~ {{ request.session.labelset_title }}{% endif %}</a>
             {% endif %}{% endif %}  
+        </li><li class="nav-item">
         {% if not request.session.project_title %}
         {% endif %}
         {% if request.session.text_id %}
-            <a class="nav-link active" {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Text ~ {{ request.session.text_title }}</span></a>
+            <a {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;" class="nav-link active"{% else %}class="nav-link"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Text ~ {{ request.session.text_title }}</span></a>
             {% elif request.session.project_title %}
-            <a class="nav-link active" {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Text</span></a>
+            <a {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;" class="nav-link active"{% else %}class="nav-link"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Text</span></a>
             
         {% endif %}
-        
+        </li><li class="nav-item">
             {% if request.session.project_title and request.session.text_slug %}
-                <a class="nav-link active" href="{% url 'annotate' request.session.project_slug request.session.text_slug %}" {% if request.resolver_match.url_name == 'annotate' %}style="background-color: #9e2387;"{% endif %}><i class="fas fa-laptop-code"></i><span>Annotate</span></a>
+                <a href="{% url 'annotate' request.session.project_slug request.session.text_slug %}" {% if request.resolver_match.url_name == 'annotate' %}style="background-color: #9e2387;" class="nav-link active"{% else %}class="nav-link"{% endif %}><i class="fas fa-laptop-code"></i><span>Annotate</span></a>
             {% endif %}
-            
+            </li><li class="nav-item">
             {% if request.user.is_staff %}
                 {% if not request.session.project_title %}
                 {% endif %}
                 {% if request.session.project_title %}
-                    <a class="nav-link active" {% if request.resolver_match.url_name == 'export' %}style="background-color: #9e2387;"{% endif %} href="{% url 'export' %}" style="background-color: transparent;"><i class="fas fa-file-download"></i><span>Export</span></a>{% endif %}{% endif %}
+                    <a {% if request.resolver_match.url_name == 'export' %}style="background-color: #9e2387;" class="nav-link active" {% else %} class="nav-link"{% endif %} href="{% url 'export' %}" style="background-color: transparent;"><i class="fas fa-file-download"></i><span>Export</span></a>{% endif %}{% endif %}
                 </li>
             </ul>
             <ul class="nav navbar-nav text-light" id="accordionSidebar">
