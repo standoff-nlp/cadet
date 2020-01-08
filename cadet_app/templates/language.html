@@ -12,8 +12,8 @@
             <div class="card-body">
                 
                 Behind the scenes, Cadet uses a natural language processing library called spaCy.  spaCy requires a base language object with basic information about your language and its linguistic properties.  You can:
-<ul><li>Use an existing spaCy language or custom language object. Just select from the options in language data. A new language object with a unique name will be created for this project with language data from the existing language.  This will allows you to customize the language for this project without changing the base copy.  
-<li>Create a new language object entirely from scratch. Enter a unique language name and leave the language data field blank</li></ul>    
+<ul><li>Use an existing language object from the options in the language data field. A new language object with a unique name will be created for this project with language data from the existing language.  This will allows you to customize the language for this project without changing the base copy.  
+<li>Create a new language object entirely from scratch. Enter a project language name and leave the language data field blank</li></ul>    
                 <hr>
                 <div class="form-group">
                     <form method="post" enctype="multipart/form-data">
@@ -31,7 +31,7 @@
 </div>
     {% if request.user.is_staff %}
         
-        <div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Stop Words</a>
+        <div class="shadow card"><a  href="{% url 'stop_words' %}"> <button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Stop Words</a></button>
         <div class="collapse {% if request.path == '/language/stop_words' %}show{% endif %}" id="collapse-4">
             <div class="card-body">
                 {% for word in stop_words %}
