@@ -34,7 +34,7 @@
         </a>
 </li>
 <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" {% if request.resolver_match.url_name == 'language' %}style="background-color: #9e2387;"{% endif %} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a {% if request.resolver_match.url_name == 'language' %} class="nav-link dropdown-toggle" style="background-color: #9e2387;" {% else %} class="nav-link dropdown-toggle" {% endif %} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% if request.user.is_staff %}
             {% if not request.session.project_title %}
             {% endif %}
