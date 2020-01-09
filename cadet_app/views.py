@@ -369,7 +369,7 @@ def annotate(request, project, text):
         return redirect(projects)
 
     context["annotation_types"] = AnnotationType.objects.all()
-    context["table_columns"] = Project.objects.get(id=project).label_set.groups.all()
+    context["table_columns"] = Project.objects.get(id=project).label_set.groups.all() # TODO order by sequence in label set
     context["previous_text"], context["next_text"] = get_previous_and_next_text(project, text)
     # Need default text window size 2 sents=50, user can zoom in and out within range 100
     # 100 = len(text),

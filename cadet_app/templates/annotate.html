@@ -42,7 +42,7 @@
                                 <div class="col mr-2">
                                     
                                     <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><h6> <a data-tooltip="previous text" href="{% url 'annotate' project.project_slug previous_text %}"><i class="fa fa-chevron-left"></i></a> &nbsp;{{ text.title }}&nbsp; <a data-tooltip="next text" href="{% url 'annotate' project.project_slug next_text %}"><i class="fa fa-chevron-right"></i></a></h6> <div data-tooltip="Change amount of text in view"><div class="slidecontainer"></div>
-                                    <input type="range" min="20" max="1000" value="50" class="slider" id="myRange">
+                                    <input type="range" min="20" max="1000" value="76" class="slider" id="myRange">
                                 </div></div>
                                 <br>
                                 
@@ -114,18 +114,21 @@ href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-
                 <div class="col mr-2">
                     <table class="table-responsive">
                         <tr>
-                            
+                                <th>ID</th>
+                                {% for column in table_columns %}
+                                <th>{{ column }}</th>
+                                {% endfor %}
                             
                         </tr>
                         {% for annotation in annotations %}
                             <tr class="table-token" id="{{ annotation.id }}" onclick="select_annotation_from_table(this)">
                                 <td >{{ forloop.counter }}</td>
-                                
-                                <td>{{ annotation.annotation_type }}</td>
+                                <td>{{ annotation.annotation_text }}</td>
                                 <td>
+                                    
                                     {% for label in annotation.labels.all %}
-                                    {{ label.name }}{{label.attributes.all|join:", "|default_if_none:" " }}{% endfor%}</td>
-                                    <td>{{ annotation.annotation_text }}</td>
+                                    {{ label.name }}{{label.attributes.all|join:", "|default_if_none:"---" }}{% endfor%}</td>
+                                   
                                 </tr>
                             {% endfor %}
                             
@@ -306,6 +309,8 @@ Mousetrap.bind('/', function() {
 var slider = document.getElementById("myRange");
 //var output = document.getElementById("demo");
 //output.innerHTML = slider.value;
+$('#annotation-area').height(slider.value);
+
 slider.oninput = function() {
 //output.innerHTML = this.value;
 console.log(slider.value)
