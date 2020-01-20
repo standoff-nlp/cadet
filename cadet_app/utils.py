@@ -164,6 +164,7 @@ def export_tei(text, project):
 def get_previous_and_next_text(project_id, text):
     project_texts = list(Text.objects.filter(projects__id=project_id).values_list('text_slug', flat=True))
     
+    current = 0 # Placeholder to address UnboundLocalError when project has no assigned texts
     for item in project_texts:
         if item == text:
             current = item

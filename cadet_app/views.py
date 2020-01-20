@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-from cadet_app.lang_utils import create_spacy_language, clone_spacy_language
+from cadet_app.lang_utils import create_spacy_language, clone_spacy_language, create_stop_words, create_examples
 from pathlib import Path
 from django.conf import settings
 import sys
@@ -34,6 +34,7 @@ from cadet_app.forms import (
     EditAnnotationForm,
     AnnotationTypeForm,
     TokenTestForm,
+    AddExampleSentenceForm,
 )
 from social_django.utils import psa
 
@@ -245,27 +246,28 @@ def language(request):
     if request.method == "POST":
         language = request.POST.get('language', None)
         language_data = request.POST.get('spacy_language', None)
-        if not language:
-            language = project.project_slug + '_' + spacy_language
-
-        spacy_language, created = SpacyLanguage.objects.get_or_create(language=language)
-        if created and not language_data: # Create new, no clone
-            project.spacy_language = spacy_language
-            project.language = language
-            project.save()
-            create_spacy_language(language)
-
-        if created and language_data: # Create new, clone from spacy/lang or custom_languages
-            project.spacy_language = spacy_language
-            project.language = language
-            project.save()
-            clone, created= SpacyLanguage.objects.get_or_create(id=language_data)
-            clone_spacy_language(language, clone)
-
+        if language == '':
+            print(language_data)
+            language = SpacyLanguage.objects.get(id=language_data).language
         else:
-            # Language already exists 
-            project.spacy_language = spacy_language
-            project.save()
+            spacy_language, created = SpacyLanguage.objects.get_or_create(language=language)
+            if created and not language_data: # Create new, no clone
+                project.spacy_language = spacy_language
+                project.language = language
+                project.save()
+                create_spacy_language(language)
+
+            if created and language_data: # Create new, clone from spacy/lang or custom_languages
+                project.spacy_language = spacy_language
+                project.language = language
+                project.save()
+                clone, created= SpacyLanguage.objects.get_or_create(id=language_data)
+                clone_spacy_language(language, clone)
+
+            else:
+                # Language already exists 
+                project.spacy_language = spacy_language
+                project.save()
 
         
         messages.info(request, "Project language updated successfully")
@@ -280,7 +282,13 @@ def stop_words(request):
     #open 
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
-    path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+    try:
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+        assert path.exists()
+    except AssertionError:
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+        create_stop_words(path) 
+
     import importlib.util # TODO clean this up  https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
     spec = importlib.util.spec_from_file_location("STOP_WORDS", str(path))
     foo = importlib.util.module_from_spec(spec)
@@ -291,9 +299,12 @@ def stop_words(request):
 
 def examples(request):
     context = {}
-    
-    context['sentences'] = get_sentences(request)
-    
+    if request.method == "POST":
+        new_sentence = request.POST.get('sentences', None)
+        messages.info(request, "Example sentences has been updated")
+    sentences = get_sentences(request)
+    context['add_example_form'] = AddExampleSentenceForm(initial={'sentences': sentences})
+
     return render(request, "language.html", context)
 
 def lemmata(request):

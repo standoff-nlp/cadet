@@ -7,6 +7,23 @@ from cadet_app.utils import blank_examples
 
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
+def create_stop_words(path):
+    with path.open('w', encoding="utf-8") as f:
+        f.write(
+f'''
+# coding: utf8
+from __future__ import unicode_literals
+
+
+STOP_WORDS = set(
+    """
+""".split()
+)
+''')
+
+def create_examples(path):
+    with examples.open('w', encoding="utf-8") as f: 
+        f.write(blank_examples)
 
 def create_spacy_language(language):
     language = slugify(language).replace('-','_')
@@ -49,23 +66,9 @@ class {language.capitalize()}(Language):
 __all__ = ["{language.capitalize()}"]
 """)
 
-    stop = path / 'stop_words.py'
-    with stop.open('w', encoding="utf-8") as f:
-        f.write(
-f'''
-# coding: utf8
-from __future__ import unicode_literals
-
-
-STOP_WORDS = set(
-    """
-""".split()
-)
-''')
-    examples = path / 'examples.py'
-    #path.touch()
-    with examples.open('w', encoding="utf-8") as f: 
-        f.write(blank_examples)
+    create_stop_words(path)
+    create_examples(path)
+   
 # still needs creation of lookups path 
 
 

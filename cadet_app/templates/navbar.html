@@ -45,12 +45,15 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'language' %}">Base Language</a>
           <div class="dropdown-divider"></div>
-         <a class="dropdown-item" href="#">Lemmata</a>
-         <a class="dropdown-item" href="#">Tokenization</a>
-          <a class="dropdown-item" href="{% url 'stop_words' %}">Stop Words</a>
+         <a class="dropdown-item" href="{% url 'stop_words' %}">Stop Words</a>
+         <a class="dropdown-item" href="{% url 'examples' %}">Example Sentences</a>
+         <a class="dropdown-item" href="{% url 'tokenization' %}">Tokenization</a>
+         <a class="dropdown-item" href="{% url 'lemmata' %}">Lemmata</a>
          
-          <a class="dropdown-item" href="{% url 'examples' %}">Example Sentences</a>
-          <a class="dropdown-item" href="#">Other Language Data</a>
+          
+         
+          
+          
         </div>
       </li>
       

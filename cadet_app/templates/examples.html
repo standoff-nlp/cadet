@@ -5,5 +5,12 @@
     {{ sentence }}<br>
     {% endfor %}
 </div>
+{% if add_example_form %}
+<form method="post">
+		{% csrf_token %}
+		{{ add_example_form }}
+		<button type="submit">Submit</button>
+	</form>
+{% endif %}
 </div>
 </div>

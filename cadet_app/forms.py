@@ -23,6 +23,9 @@ class TokenTestForm(forms.Form):
     #text = forms.CharField(max_length=30)
     text = forms.CharField(widget=forms.Textarea)
 
+class AddExampleSentenceForm(forms.Form):
+    sentences = forms.CharField(widget=forms.Textarea)
+
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
