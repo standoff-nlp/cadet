@@ -22,6 +22,7 @@ from cadet_app.utils import (
     export_tei,
     get_previous_and_next_text,
     put_spans_around_tokens,
+    blank_examples,
 )
 from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
@@ -290,7 +291,14 @@ def stop_words(request):
 
 def examples(request):
     context = {}
-    context['sentences'] = get_sentences(request)
+    try:
+        context['sentences'] = get_sentences(request)
+    except FileNotFoundError:
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'examples.py'
+        path.touch()
+        with init.open('w', encoding="utf-8") as f: 
+            f.write(blank_examples)
+
     return render(request, "language.html", context)
 
 def lemmata(request):
@@ -300,12 +308,8 @@ def lemmata(request):
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
     path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/' + language) / language + '_lemma_lookup.json'
-    import importlib.util # TODO clean this up  https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
-    spec = importlib.util.spec_from_file_location("sentences", str(path))
-    foo = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(foo)
-    sentences = foo.sentences
-    context['sentences'] = sentences
+   
+    context['sentences'] = get_sentences(request)
     return render(request, "language.html", context)
 
 def tokenization(request):

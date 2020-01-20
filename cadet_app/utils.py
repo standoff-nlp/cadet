@@ -14,6 +14,13 @@ spacy_langs = spacy_path / 'lang'
 langs = [x for x in spacy_langs.iterdir() if x.is_dir()]
 [SPACY_LANGS.append(str(lang).split('/')[-1]) for lang in langs if not str(lang).split('/')[-1] == '__pycache__']
 
+blank_examples="""
+# coding: utf8
+from __future__ import unicode_literals
+
+sentences = []
+"""
+
 def put_spans_around_tokens(doc):
     # from https://spacy.io/usage/spacy-101 TY Matt and Ines!
     """Here, we're building a custom "syntax highlighter" for
