@@ -9,7 +9,8 @@ from cadet_app.lang_utils import create_spacy_language, clone_spacy_language, cr
 from pathlib import Path
 from django.conf import settings
 import sys
-
+import json
+import gzip
 
 from cadet_app.utils import (
     make_dict,
@@ -313,8 +314,17 @@ def lemmata(request):
     #open 
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
-    path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/' + language) / language + '_lemma_lookup.json'
-   
+    try:
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/') 
+        filename = language + '_lemma_lookup.json.gz'
+        path = path / filename
+        print(str(path))
+        assert path.exists()
+        with gzip.open(str(path), 'rb') as f: 
+            context['lemmata'] = json.load(f)
+    except AssertionError:
+        print('fish eat other fish')# TODO add create lemmata json file 
+
     context['sentences'] = get_sentences(request)
     return render(request, "language.html", context)
 
