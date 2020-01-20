@@ -291,14 +291,9 @@ def stop_words(request):
 
 def examples(request):
     context = {}
-    try:
-        context['sentences'] = get_sentences(request)
-    except FileNotFoundError:
-        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'examples.py'
-        #path.touch()
-        with path.open('w', encoding="utf-8") as f: 
-            f.write(blank_examples)
-
+    
+    context['sentences'] = get_sentences(request)
+    
     return render(request, "language.html", context)
 
 def lemmata(request):

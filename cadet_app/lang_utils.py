@@ -3,7 +3,7 @@ from django.conf import settings
 from pathlib import Path
 from shutil import copyfile
 from django.utils.text import slugify
-
+from cadet_app.utils import blank_examples
 
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
@@ -15,6 +15,12 @@ def create_spacy_language(language):
     spacy_path = Path(spacy.__file__.replace('__init__.py',''))
     spacy_lang = spacy_path / 'lang' / language
     spacy_lang.symlink_to(path)
+    
+    examples = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'examples.py'
+    #path.touch()
+    with examples.open('w', encoding="utf-8") as f: 
+        f.write(blank_examples)
+
     init = path / '__init__.py'
     with init.open('w', encoding="utf-8") as f: 
         f.write(
