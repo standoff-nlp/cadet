@@ -16,11 +16,6 @@ def create_spacy_language(language):
     spacy_lang = spacy_path / 'lang' / language
     spacy_lang.symlink_to(path)
     
-    examples = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'examples.py'
-    #path.touch()
-    with examples.open('w', encoding="utf-8") as f: 
-        f.write(blank_examples)
-
     init = path / '__init__.py'
     with init.open('w', encoding="utf-8") as f: 
         f.write(
@@ -67,7 +62,10 @@ STOP_WORDS = set(
 """.split()
 )
 ''')
-
+    examples = path / 'examples.py'
+    #path.touch()
+    with examples.open('w', encoding="utf-8") as f: 
+        f.write(blank_examples)
 # still needs creation of lookups path 
 
 
