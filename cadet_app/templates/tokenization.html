@@ -1,0 +1,28 @@
+<style>
+
+.token {
+    border-bottom: 2px solid #0528A4;
+	border-radius: 10px;
+}
+</style>
+
+<div class="shadow card"><a  href="{% url 'tokenization' %}"> <button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Tokenization</a></button>
+<div class="collapse {% if request.path == '/language/tokenization' %}show{% endif %}" id="collapse-4">
+<div class="card-body">
+	Explaination of spaCy tokenizer
+	Paste example text, show current tokenizer result, add rules, exceptions, normalization
+	{% if tokenization_form %}
+	<form method="post">
+		{% csrf_token %}
+		{{ tokenization_form }}
+		<button type="submit">Submit</button>
+	</form>
+	{% else %}
+	<a href="{% url 'tokenization' %}">Reset</a>
+	{% endif %}
+	
+	{{ doc|safe }} <br>
+	
+</div>
+</div>
+</div>

@@ -15,11 +15,13 @@ from cadet_app.utils import (
     make_dict,
     update_state,
     get_state,
+    get_sentences,
     matcher,
     update_spacy_langs,
     add_annotations,
     export_tei,
     get_previous_and_next_text,
+    put_spans_around_tokens,
 )
 from cadet_app.handle_uploaded_file import handle_uploaded_file, handle_url_file
 from cadet_app.models import *
@@ -30,6 +32,7 @@ from cadet_app.forms import (
     AnnotationForm,
     EditAnnotationForm,
     AnnotationTypeForm,
+    TokenTestForm,
 )
 from social_django.utils import psa
 
@@ -287,17 +290,44 @@ def stop_words(request):
 
 def examples(request):
     context = {}
+    context['sentences'] = get_sentences(request)
+    return render(request, "language.html", context)
+
+def lemmata(request):
+    context = {}
 
     #open 
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
-    path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'examples.py'
+    path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/' + language) / language + '_lemma_lookup.json'
     import importlib.util # TODO clean this up  https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
     spec = importlib.util.spec_from_file_location("sentences", str(path))
     foo = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(foo)
     sentences = foo.sentences
     context['sentences'] = sentences
+    return render(request, "language.html", context)
+
+def tokenization(request):
+    context = {}
+
+    #open 
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    language = project.spacy_language.slug.replace('-','_')
+    exceptions = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'tokenizer_exceptions.py'
+    lang = spacy.util.get_lang_class(language)
+    nlp = lang()
+
+    if request.method == "POST":
+        tokenize_this = request.POST.get('text', None)
+        doc = nlp(tokenize_this)
+        doc = put_spans_around_tokens(doc)
+        context['doc'] = doc
+    else:
+        sentences = get_sentences(request)
+        sentences = ''.join([sent + '\n' for sent in sentences]) 
+        form = TokenTestForm(initial={'text': sentences})
+        context['tokenization_form'] = form
     return render(request, "language.html", context)
 
 def data(request):

@@ -1,16 +1,52 @@
 from cadet_app.models import *
-
+from django.shortcuts import render, get_object_or_404, redirect
 from iso639 import languages
 from lxml import etree
 from standoffconverter import Converter
 from pathlib import Path
 import spacy 
+from django.conf import settings
+
 
 SPACY_LANGS = [] 
 spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 spacy_langs = spacy_path / 'lang'
 langs = [x for x in spacy_langs.iterdir() if x.is_dir()]
 [SPACY_LANGS.append(str(lang).split('/')[-1]) for lang in langs if not str(lang).split('/')[-1] == '__pycache__']
+
+def put_spans_around_tokens(doc):
+    # from https://spacy.io/usage/spacy-101 TY Matt and Ines!
+    """Here, we're building a custom "syntax highlighter" for
+    part-of-speech tags and dependencies. We put each token in a
+    span element, with the appropriate classes computed. All whitespace is
+    preserved, outside of the spans. (Of course, HTML will only display
+    multiple whitespace if enabled – but the point is, no information is lost
+    and you can calculate what you need, e.g. <br />, <p> etc.)
+    """
+    output = []
+    html = '<span class="token">{word}</span>{space}'
+    for token in doc:
+        if token.is_space:
+            output.append(token.text)
+        else:
+            classes = "pos-{} dep-{}".format(token.pos_, token.dep_)
+            output.append(html.format(classes=classes, word=token.text, space=token.whitespace_))
+    string = "".join(output)
+    string = string.replace("\n", "")
+    string = string.replace("\t", "    ")
+    return "<pre>{}</pre>".format(string)
+
+def get_sentences(request):
+    """A helper function that retrieves the example sentences from a spaCy language object"""
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    language = project.spacy_language.slug.replace('-','_')
+    path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'examples.py'
+    import importlib.util # TODO clean this up  https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
+    spec = importlib.util.spec_from_file_location("sentences", str(path))
+    foo = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(foo)
+    sentences = foo.sentences
+    return sentences
 
 
 def update_spacy_langs():

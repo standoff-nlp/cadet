@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import (
     ModelForm,
     FileField,
@@ -18,6 +19,9 @@ from cadet_app.models import (
 from django_select2.forms import Select2Widget, Select2TagWidget, Select2MultipleWidget
 from colorful.widgets import ColorFieldWidget
 
+class TokenTestForm(forms.Form):
+    #text = forms.CharField(max_length=30)
+    text = forms.CharField(widget=forms.Textarea)
 
 class ProjectForm(ModelForm):
     class Meta:
