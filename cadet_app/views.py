@@ -295,8 +295,8 @@ def examples(request):
         context['sentences'] = get_sentences(request)
     except FileNotFoundError:
         path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'examples.py'
-        path.touch()
-        with init.open('w', encoding="utf-8") as f: 
+        #path.touch()
+        with path.open('w', encoding="utf-8") as f: 
             f.write(blank_examples)
 
     return render(request, "language.html", context)
