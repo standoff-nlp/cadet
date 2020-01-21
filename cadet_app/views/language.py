@@ -112,7 +112,7 @@ def examples(request):
     context = {}
     if request.method == "POST":
         new_sentence = request.POST.get('sentences', None)
-        messages.info(request, "Example sentences has been updated")
+        messages.success(request, "Example sentences have been updated")
     sentences = get_sentences(request)
     context['add_example_form'] = AddExampleSentenceForm(initial={'sentences': sentences})
 

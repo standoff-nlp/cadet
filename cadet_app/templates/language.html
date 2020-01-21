@@ -56,6 +56,9 @@ $("#myAlert").append("<div class='alert alert-success alert-dismissable' id='myA
 }
 $("#myAlert").css("display", "");
 }
+$(document).ready( function () {
+        $('#stop_words_table').DataTable();
+    } );
 </script>
 {{ form.media.js }}
 {% endblock%}

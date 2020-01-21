@@ -41,6 +41,7 @@ from social_django.utils import psa
 
 import spacy
 from .text import data
+from .project import projects
 
 
 def labels(request):

@@ -1,10 +1,30 @@
 <div class="shadow card"><a  href="{% url 'stop_words' %}"> <button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Stop Words</a></button>
 <div class="collapse {% if request.path == '/language/stop_words' %}show{% endif %}" id="collapse-4">
 <div class="card-body">
-    # Add methods for identifying stop words, evaluating
-    {% for word in stop_words %}
-        {{ word }}
-    {% endfor %}
+	<table id="stop_words_table" class="display">
+		  <thead>
+        <tr>
+            <th>Word</th>
+        </tr>
+    </thead>
+    <tbody>
+    	 {% for word in stop_words %}
+        <tr>
+            <td>{{ word }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+  
+      
 </div>
 </div>
 </div>
+
+{% block extrajs %}
+<script>
+	$(document).ready( function () {
+	    $('#stop_words_table').DataTable();
+	} );
+</script>
+{% endblock %}

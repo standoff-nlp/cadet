@@ -40,6 +40,8 @@ from cadet_app.forms import (
 from social_django.utils import psa
 
 import spacy
+from .project import projects
+
 def annotate(request, project, text):
     try:
         project = request.session.get("project_id")
