@@ -10,11 +10,12 @@
         <div class="shadow card"><a  href="{% url 'language' %}"><button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" role="button">Base Language</a></button>
         <div class="collapse {% if request.path == '/language/' %}show{% endif %}" id="collapse-1">
         <div class="card-body">
-            
+            {% if not request.session.project_language %}
             Behind the scenes, Cadet uses a natural language processing library called spaCy.  spaCy requires a base language object with basic information about your language and its linguistic properties.  You can:
             <ul><li>Use an existing language object from the options in the language data field. A new language object with a unique name will be created for this project with language data from the existing language.  This will allows you to customize the language for this project without changing the base copy.
                 <li>Create a new language object entirely from scratch. Enter a project language name and leave the language data field blank</li></ul>
                 <hr>
+                
                 <div class="form-group">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -24,6 +25,9 @@
                         
                     </form>
                 </div>
+                {% else %}
+                This project's language is: {{ request.session.project_language }} <br>
+                {% endif %}
             {% endif %}
         </div>
     </div>

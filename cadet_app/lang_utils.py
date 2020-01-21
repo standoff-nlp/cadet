@@ -8,6 +8,7 @@ from cadet_app.utils import blank_examples
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
 def create_stop_words(path):
+    path = path / 'stop_words.py'
     with path.open('w', encoding="utf-8") as f:
         f.write(
 f'''
@@ -22,6 +23,7 @@ STOP_WORDS = set(
 ''')
 
 def create_examples(path):
+    examples = path / 'examples.py'
     with examples.open('w', encoding="utf-8") as f: 
         f.write(blank_examples)
 

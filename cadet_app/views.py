@@ -41,7 +41,6 @@ from social_django.utils import psa
 
 import spacy
 
-
 @login_required(redirect_field_name="", login_url="login/")
 def index(request):
 
@@ -88,7 +87,6 @@ def register_by_access_token(request, backend):
 def site_logout(request):
     logout(request)
     return redirect(site_login)
-
 
 @login_required(login_url="login")
 def projects(request):
@@ -159,7 +157,6 @@ def set_project(request, id):
         return redirect(language)
     else:
         return redirect(data)
-
 
 def set_text(request, id):
     text = Text.objects.get(pk=id)
@@ -247,9 +244,15 @@ def language(request):
     if request.method == "POST":
         language = request.POST.get('language', None)
         language_data = request.POST.get('spacy_language', None)
-        if language == '':
-            print(language_data)
+        
+        # neither field has an entry
+        if language == '' and not language_data:
+            language = slugify(project.title).replace('-','_')
+
+        # language, but no language data 
+        if language == '' and language_data:
             language = SpacyLanguage.objects.get(id=language_data).language
+
         else:
             spacy_language, created = SpacyLanguage.objects.get_or_create(language=language)
             if created and not language_data: # Create new, no clone
@@ -287,7 +290,7 @@ def stop_words(request):
         path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
         assert path.exists()
     except AssertionError:
-        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
         create_stop_words(path) 
 
     import importlib.util # TODO clean this up  https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
