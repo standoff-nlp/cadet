@@ -26,7 +26,7 @@
                     </form>
                 </div>
                 {% else %}
-                This project's language is: {{ request.session.project_language }} <br>
+                This project's language is: <em>{{ request.session.project_language }}</em> <br>
                 {% endif %}
             {% endif %}
         </div>

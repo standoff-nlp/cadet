@@ -1,16 +1,35 @@
-<style>
 
-.token {
-    border: 3px solid rgba(5,40,164,0.33);
-border-radius: 40px 40px 40px 40px;
-}
-</style>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>This mini application helps assess your project's tokenizer.  By default, spaCy will split your text on the white spaces between words and then accounts for user-defined exceptions. The demo app uses the sample sentences, but you are welcome to repace it and add text that may reveal necessary exceptions, prefixes, suffixes and infixes. When you find errors in tokenization, you can then add your language-specific rules and exceptions to correct them [#TODO add this] </p>
+          <img style="width: 100%" src="https://spacy.io/tokenization-57e618bd79d933c4ccd308b5739062d6.svg">
+        </div>
+        <div class="modal-footer">
+          <a target="_blank" href="https://spacy.io/usage/spacy-101#annotations-token">For more information, see the spaCy documentation.</a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+
 
 <div class="shadow card"><a  href="{% url 'tokenization' %}"> <button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-4" href="#collapse-4" role="button">Tokenization</a></button>
 <div class="collapse {% if request.path == '/language/tokenization' %}show{% endif %}" id="collapse-4">
 <div class="card-body">
-	Explaination of spaCy tokenizer
-	Paste example text, show current tokenizer result, add rules, exceptions, normalization
+	
+		<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">tokenizer demonstrator</button>
+
+
 	{% if tokenization_form %}
 	<form method="post">
 		{% csrf_token %}
