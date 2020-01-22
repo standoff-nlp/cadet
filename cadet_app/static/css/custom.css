@@ -68,7 +68,6 @@
 }
 
 .active-token {
-    outline: 2px solid #7575a3;
     outline-offset: 0px;
     background-color: #e7e4f3;
     padding: 2px;

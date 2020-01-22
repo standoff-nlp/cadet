@@ -12,7 +12,7 @@
         }
         {% for annotation_type in annotation_types %}
             .{{ annotation_type }}:hover {
-            border-bottom: 1px dotted {{ annotation_type.color }};
+            border: 3px solid {{ annotation_type.color }};
             outline-offset: -1px;
             color: black;
             }
