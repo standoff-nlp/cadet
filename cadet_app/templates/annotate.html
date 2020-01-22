@@ -17,6 +17,14 @@
             color: black;
             }
         {% endfor %}
+        {% for annotation_type in annotation_types %}
+            .{{ annotation_type }} {
+            border-left: 3px solid rgba(5,40,164,0.15);
+            border-right: 3px solid rgba(5,40,164,0.15);
+            border-radius: 40px;
+            }
+        {% endfor %}
+
         .btn:focus, .btn:active {
         outline: none !important;
         box-shadow: none !important;
