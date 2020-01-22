@@ -120,26 +120,16 @@ href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-
         <div class="card-body">
             <div class="row align-items-center no-gutters">
                 <div class="col mr-2">
-                    <table class="table-responsive">
+                    <table class="table-responsive myTable">
+                        <thead>
                         <tr>
-                                <th>ID</th>
                                 {% for column in table_columns %}
                                 <th>{{ column }}</th>
                                 {% endfor %}
                             
                         </tr>
-                        {% for annotation in annotations %}
-                            <tr class="table-token" id="{{ annotation.id }}" onclick="select_annotation_from_table(this)">
-                                <td >{{ forloop.counter }}</td>
-                                <td>{{ annotation.annotation_text }}</td>
-                                <td>
-                                    
-                                    {% for label in annotation.labels.all %}
-                                    {{ label.name }}{{label.attributes.all|join:", "|default_if_none:"---" }}{% endfor%}</td>
-                                   
-                                </tr>
-                            {% endfor %}
-                            
+                        </thead>
+                        
                         </table>
                     </div>
                     
@@ -324,6 +314,16 @@ slider.oninput = function() {
 console.log(slider.value)
 $('#annotation-area').height(slider.value);
 }
+
+$(document).ready(function() {
+    $('.myTable').DataTable( {
+        // ... 
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'annotation_json' %}",       
+    } );
+    // ...
+} );
 </script>
 {% endblock%}
 {% endblock %}

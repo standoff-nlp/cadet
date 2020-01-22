@@ -41,6 +41,8 @@ from social_django.utils import psa
 
 import spacy
 from .project import projects
+from django_datatables_view.base_datatable_view import BaseDatatableView
+from django.utils.html import escape, format_html, mark_safe
 
 def annotate(request, project, text):
     try:
@@ -60,9 +62,7 @@ def annotate(request, project, text):
     context["annotation_types"] = AnnotationType.objects.all()
     context["table_columns"] = Project.objects.get(id=project).label_set.groups.all() # TODO order by sequence in label set
     context["previous_text"], context["next_text"] = get_previous_and_next_text(project, text)
-    # Need default text window size 2 sents=50, user can zoom in and out within range 100
-    # 100 = len(text),
-    # split the text into parts, forward and back links for parts
+    
     # need to mark existing annotation in the text html
     text = Text.objects.get(text_slug=text)
     context["annotations"] = Annotation.objects.filter(
@@ -146,3 +146,39 @@ def edit_annotation(request, id):
 
 def edit_annotation_no_id(request):
     pass
+
+
+class AnnotationJson(BaseDatatableView):
+    # the model you're going to show
+    model = Annotation
+
+    def get_columns(self):
+        project = Project.objects.get(id=self.request.session.get("project_id"))
+        return [label_group['title'] for label_group in project.label_set.groups.all().values('title')]
+    
+    columns = get_columns
+    order_columms = columns
+    # set max limit of records returned
+    # this is used to protect your site if someone tries to attack your site and make it return huge amount of data
+    max_display_length = 500
+
+    def get_initial_queryset(self):
+        project = Project.objects.get(id=self.request.session.get("project_id"))
+        text = Text.objects.get(id=self.request.session.get("text_id"))
+        
+        return self.model.objects.filter(project=project, text=text)
+
+
+    def render_column(self, row, column):
+        
+        return super(AnnotationJson, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        # use parameters passed in GET request to filter queryset
+        
+        # here is a simple example
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            q = Q(name__icontains=search) | Q(description_icontains=search)
+            qs = qs.filter(q)
+        return qs
