@@ -14,7 +14,7 @@ def create_model(language, model_path):
     for name in pipeline:
         component = nlp.create_pipe(name)   # 3. Create the pipeline components
         nlp.add_pipe(component)             # 4. Add the component to the pipeline
-    nlp.to_disk(new_model_path)
+    nlp.to_disk(model_path)
 
 def clone_model(language, new_model_path, clone_model_data_path):
     pipeline = ["tagger", "parser", "ner","sentencizer","entity_linker"]
@@ -92,7 +92,7 @@ __all__ = ["{language.capitalize()}"]
     create_examples(path)
 
     model_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/models/' + language)
-    model_path.mkdir(parents=False, exist_ok=False)
+    model_path.mkdir(parents=True, exist_ok=False)
     create_model(language, model_path)
 # still needs creation of lookups path 
 
@@ -152,7 +152,7 @@ def clone_spacy_language(language, clone, model=None):
 
     #Create or clone a spaCy model using the language object 
     model_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/models/' + language)
-    model_path.mkdir(parents=False, exist_ok=False)
+    model_path.mkdir(parents=True, exist_ok=False)
     if model:
         clone_model(language, model_path, spacy.load(model).path)
     if not model:

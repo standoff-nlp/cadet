@@ -44,6 +44,7 @@ import spacy
 def language(request):
     # TODO get list of spaCy core models from Path(settings.CUSTOM_LANGUAGES_DIRECTORY) / 'core_models'
     # create select field to choose core model to import for inital defauls on pipelines
+    # figure out how to assert compatibility of model versions with current spaCy version, compatibility.json
 
     #project_language = SpacyLanguage.objects.get(project__id=request.session.get("project_id"))
     languages = SpacyLanguage.objects.all()
