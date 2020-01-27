@@ -7,6 +7,26 @@ from cadet_app.utils import blank_examples
 
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
+def create_model(language, model_path):
+    pipeline = ["tagger", "parser", "ner","sentencizer","entity_linker"]
+    cls = spacy.util.get_lang_class(language)   # 1. Get Language instance, e.g. English()
+    nlp = cls()                             # 2. Initialize it
+    for name in pipeline:
+        component = nlp.create_pipe(name)   # 3. Create the pipeline components
+        nlp.add_pipe(component)             # 4. Add the component to the pipeline
+    nlp.to_disk(new_model_path)
+
+def clone_model(language, new_model_path, clone_model_data_path):
+    pipeline = ["tagger", "parser", "ner","sentencizer","entity_linker"]
+
+    cls = spacy.util.get_lang_class(language)   # 1. Get Language instance, e.g. English()
+    nlp = cls()                             # 2. Initialize it
+    for name in pipeline:
+        component = nlp.create_pipe(name)   # 3. Create the pipeline components
+        nlp.add_pipe(component)             # 4. Add the component to the pipeline
+    nlp.from_disk(clone_model_data_path)          # 5. Load in the binary data
+    nlp.to_disk(new_model_path)
+
 def create_stop_words(path):
     path = path / 'stop_words.py'
     with path.open('w', encoding="utf-8") as f:
@@ -70,11 +90,14 @@ __all__ = ["{language.capitalize()}"]
 
     create_stop_words(path)
     create_examples(path)
-   
+
+    model_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/models/' + language)
+    model_path.mkdir(parents=False, exist_ok=False)
+    create_model(language, model_path)
 # still needs creation of lookups path 
 
 
-def clone_spacy_language(language, clone):
+def clone_spacy_language(language, clone, model=None):
     language = slugify(language).replace('-','_')
     new_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
     new_path.mkdir(parents=False, exist_ok=False)
@@ -126,6 +149,14 @@ def clone_spacy_language(language, clone):
         new_name = src.name.replace(clone.iso, language)
         dest = new_lookups / new_name
         copyfile(src, dest)
+
+    #Create or clone a spaCy model using the language object 
+    model_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/models/' + language)
+    model_path.mkdir(parents=False, exist_ok=False)
+    if model:
+        clone_model(language, model_path, spacy.load(model).path)
+    if not model:
+        create_model(language, model_path)
 
     # TODO copy lookups tests
         

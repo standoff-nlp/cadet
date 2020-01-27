@@ -108,10 +108,18 @@ class Command(BaseCommand):
             from git import Repo
             git_url = "https://github.com/standoff-nlp/custom_languages.git"
             Repo.clone_from(git_url, custom_path)
-            
+
+        # Clone spaCy models 
+        models_path = custom_path / 'core_models'
+        if not models_path.exists():
+            from git import Repo
+            git_url = "https://github.com/explosion/spacy-models.git"
+            Repo.clone_from(git_url, models_path)
+
         # change permissions on custom_languages to www-data
         spacy_path = Path(spacy.__file__.replace('__init__.py',''))
         print('[*] remember to run $ sudo chown -R www-data:www-data {}'.format(spacy_path))
         print('[*] also run $ sudo chown -R www-data:www-data {}'.format(custom_path))
+        print('[*] also run $ sudo chown -R www-data:www-data {}'.format(models_path))
         
         self.stdout.write(self.style.SUCCESS("Done!"))

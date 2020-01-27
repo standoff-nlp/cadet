@@ -164,6 +164,10 @@ class AnnotationType(models.Model):
 
 
 class Annotation(models.Model):
+    """An annotation is the core entity for the annotation applications.  An annotation has a type, and can be 
+    a token, a span, a sentence or other type.  It contains a relation to a project and text, which provide a 
+    unique locator.  There is a m2m link to Label, which provides all labels associated with the token. 
+    """
     def get_token_id():
         try:
             return AnnotationType.objects.get(name="token").pk

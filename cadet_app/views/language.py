@@ -42,6 +42,9 @@ from social_django.utils import psa
 import spacy
 
 def language(request):
+    # TODO get list of spaCy core models from Path(settings.CUSTOM_LANGUAGES_DIRECTORY) / 'core_models'
+    # create select field to choose core model to import for inital defauls on pipelines
+
     #project_language = SpacyLanguage.objects.get(project__id=request.session.get("project_id"))
     languages = SpacyLanguage.objects.all()
     context = {}

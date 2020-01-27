@@ -170,8 +170,15 @@ class AnnotationJson(BaseDatatableView):
 
 
     def render_column(self, row, column):
+        for column in columns:
+            print(column)
+        #for label in row.labels.all():
+        #    if label == "FORM":
+        #        return format_html(row.annotation_text)
+
+            #return format_html(row)
         
-        return super(AnnotationJson, self).render_column(row, column)
+        #return super(AnnotationJson, self).render_column(row, column)
 
     def filter_queryset(self, qs):
         # use parameters passed in GET request to filter queryset
