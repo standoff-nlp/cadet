@@ -28,7 +28,9 @@ def clone_model(language, new_model_path, clone_model_data_path):
     nlp.to_disk(new_model_path)
 
 def create_stop_words(path):
+    path.mkdir(parents=True, exist_ok=False)
     path = path / 'stop_words.py'
+
     with path.open('w', encoding="utf-8") as f:
         f.write(
 f'''
@@ -100,7 +102,7 @@ __all__ = ["{language.capitalize()}"]
 def clone_spacy_language(language, clone, model=None):
     language = slugify(language).replace('-','_')
     new_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
-    new_path.mkdir(parents=False, exist_ok=False)
+    new_path.mkdir(parents=True, exist_ok=False)
     
     # Create symlink between spacy/lang and the new custom languages directory
     lang_path = Path(spacy.__file__.replace('__init__.py','')) / 'lang' / language

@@ -1,10 +1,23 @@
 import os
+import spacy
+from pathlib import Path
+from django.conf import settings
+import json
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from colorful.fields import RGBColorField
 
+def get_compatible_models():
+    spacy_version = spacy.__version__
+    compatibility = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/core_models/compatibility.json')
+    with open(str(compatibility)) as file:
+        data = json.load(file)
+        compatible_models = data['spacy'][spacy_version].keys()
+        compatible_models = [(model,model) for model in compatible_models] # choices requires a tuple
+        compatible_models.append(('None','None'))
+    return compatible_models    
 
 class SpacyLanguage(models.Model):
     language = models.TextField(unique=True)
@@ -42,6 +55,8 @@ class Project(models.Model):
     spacy_language = models.ForeignKey(
         SpacyLanguage, on_delete=models.CASCADE, blank=True, null=True
     )
+    core_model = models.CharField(max_length=220,choices=get_compatible_models(), default="None")
+
     description = models.TextField(blank=True, null=True)
     language = models.CharField(max_length=220, blank=True, null=True)
     label_set = models.ForeignKey(

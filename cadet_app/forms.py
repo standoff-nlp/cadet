@@ -1,4 +1,9 @@
+import spacy
+import json
 from django import forms
+from django.conf import settings
+from pathlib import Path
+
 from django.forms import (
     ModelForm,
     FileField,
@@ -6,6 +11,7 @@ from django.forms import (
     ModelMultipleChoiceField,
     Textarea,
     CheckboxInput,
+    ChoiceField,
 )
 from cadet_app.models import (
     Project,
@@ -19,6 +25,7 @@ from cadet_app.models import (
 from django_select2.forms import Select2Widget, Select2TagWidget, Select2MultipleWidget
 from colorful.widgets import ColorFieldWidget
 
+
 class TokenTestForm(forms.Form):
     #text = forms.CharField(max_length=30)
     text = forms.CharField(widget=forms.Textarea)
@@ -29,7 +36,7 @@ class AddExampleSentenceForm(forms.Form):
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        exclude = ("project_slug","spacy_language","label_set","language")
+        exclude = ("project_slug","spacy_language","label_set","language","core_model")
         fields = "__all__"
 
         widgets = {
@@ -39,6 +46,8 @@ class ProjectForm(ModelForm):
         }
 
 class ProjectLanguageForm(ModelForm):
+    
+
     class Meta:
         model = Project
         exclude = ("project_slug","label_set",)
@@ -47,6 +56,7 @@ class ProjectLanguageForm(ModelForm):
         widgets = {
             
             "spacy_language": Select2Widget,
+            "core_model": Select2Widget,
             
         }
 

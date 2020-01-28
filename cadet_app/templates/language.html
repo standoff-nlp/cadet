@@ -24,8 +24,10 @@
                 <div class="form-group">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <label>Language data:</label>{{ form.spacy_language }}<br><br>
+                        <label>Import Language data:</label>{{ form.spacy_language }}<br><br>
+                        <label>Import Core Model:</label><br>{{ form.core_model }}<br><br>
                         <label>Project language name:</label><br>{{ form.language }}<br><br>
+                        
                         <button class="btn btn-primary" type="submit">Submit</button>
                         
                     </form>

@@ -8,6 +8,8 @@ from django.core.paginator import Paginator
 from cadet_app.lang_utils import create_spacy_language, clone_spacy_language, create_stop_words, create_examples
 from pathlib import Path
 from django.conf import settings
+from spacy.cli.download import *
+
 import sys
 import json
 import gzip
@@ -51,11 +53,14 @@ def language(request):
     context = {}
     context['spacy_langs'] = languages
     project = get_object_or_404(Project, id=request.session.get("project_id"))
-    context['form'] = ProjectLanguageForm(instance=project)
+    context['form'] = ProjectLanguageForm(instance=project, initial={'core_model': 'None'})
     if request.method == "POST":
         language = request.POST.get('language', None)
         language_data = request.POST.get('spacy_language', None)
-        
+        core_model = request.POST.get('core_model', None)
+        if core_model != "None":
+            download(core_model)
+
         # neither field has an entry
         if language == '' and not language_data:
             language = slugify(project.title).replace('-','_')
