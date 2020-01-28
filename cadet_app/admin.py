@@ -49,7 +49,7 @@ admin.site.register(AnnotationType, AnnotationTypeAdmin)
 
 
 class LabelAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name']
 
 
 admin.site.register(Label, LabelAdmin)
