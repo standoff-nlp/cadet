@@ -4,6 +4,7 @@ from pathlib import Path
 from shutil import copyfile
 from django.utils.text import slugify
 from cadet_app.utils import blank_examples
+from spacy.cli.download import *
 
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
@@ -16,15 +17,32 @@ def create_model(language, model_path):
         nlp.add_pipe(component)             # 4. Add the component to the pipeline
     nlp.to_disk(model_path)
 
-def clone_model(language, new_model_path, clone_model_data_path):
-    pipeline = ["tagger", "parser", "ner","sentencizer","entity_linker"]
+def clone_model(language, new_model_path, model):
+    
+    cls = spacy.util.get_lang_class(language)  # Is this necessary? from_disk loads all the meta.  
+    nlp = cls()
+    
+    # get the current pipelines and data from the core model
+    model = spacy.load(model) 
+    for name in model.pipe_names:
+        component = nlp.create_pipe(name)
+        nlp.add_pipe(component)
+    nlp = nlp.from_disk(str(model.path))
+    nlp.to_disk(str(new_model_path))
+    #TODO update meta.json at new_model_path. Change lang from core to cadet lang class  
 
-    cls = spacy.util.get_lang_class(language)   # 1. Get Language instance, e.g. English()
-    nlp = cls()                             # 2. Initialize it
-    for name in pipeline:
+    # works to this point ^ not down there v
+
+def add_stuff_below_to_clone_model(): #TODO get rid of this when finished
+    # add Cadet's standard pipelines to the model as needed
+    full_pipeline = ["tagger", "parser", "ner","sentencizer","entity_linker"]
+    needed = set(full_pipeline).difference(set(model.pipe_names)) 
+    for name in needed:
         component = nlp.create_pipe(name)   # 3. Create the pipeline components
         nlp.add_pipe(component)             # 4. Add the component to the pipeline
-    nlp.from_disk(str(clone_model_data_path))          # 5. Load in the binary data
+
+    if "entity_linker" in needed:
+        entity_linker = EntityLinker(nlp.vocab)
     nlp.to_disk(str(new_model_path))
 
 def create_stop_words(path):
@@ -156,7 +174,11 @@ def clone_spacy_language(language, clone, model=None):
     model_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/models/' + language)
     model_path.mkdir(parents=True, exist_ok=False)
     if model:
-        clone_model(language, model_path, spacy.load(model).path)
+        try:
+            spacy.load(model)
+        except:
+            download(model)
+        clone_model(language, model_path, model)
     if not model:
         create_model(language, model_path)
 

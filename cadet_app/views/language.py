@@ -58,8 +58,7 @@ def language(request):
         language = request.POST.get('language', None)
         language_data = request.POST.get('spacy_language', None)
         core_model = request.POST.get('core_model', None)
-        if core_model != "None":
-            download(core_model)
+        
 
         # neither field has an entry
         if language == '' and not language_data:
@@ -76,6 +75,14 @@ def language(request):
                 project.language = language
                 project.save()
                 create_spacy_language(language)
+
+            if created and language_data and core_model != "None":
+                project.spacy_language = spacy_language
+                project.language = language
+                project.core_model = core_model
+                project.save()
+                clone, created= SpacyLanguage.objects.get_or_create(id=language_data)
+                clone_spacy_language(language, clone, core_model)
 
             if created and language_data: # Create new, clone from spacy/lang or custom_languages
                 project.spacy_language = spacy_language
