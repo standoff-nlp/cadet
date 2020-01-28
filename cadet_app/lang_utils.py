@@ -24,8 +24,8 @@ def clone_model(language, new_model_path, clone_model_data_path):
     for name in pipeline:
         component = nlp.create_pipe(name)   # 3. Create the pipeline components
         nlp.add_pipe(component)             # 4. Add the component to the pipeline
-    nlp.from_disk(clone_model_data_path)          # 5. Load in the binary data
-    nlp.to_disk(new_model_path)
+    nlp.from_disk(str(clone_model_data_path))          # 5. Load in the binary data
+    nlp.to_disk(str(new_model_path))
 
 def create_stop_words(path):
     path.mkdir(parents=True, exist_ok=False)

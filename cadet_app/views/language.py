@@ -53,7 +53,7 @@ def language(request):
     context = {}
     context['spacy_langs'] = languages
     project = get_object_or_404(Project, id=request.session.get("project_id"))
-    context['form'] = ProjectLanguageForm(instance=project, initial={'core_model': 'None'})
+    context['form'] = ProjectLanguageForm(instance=project)
     if request.method == "POST":
         language = request.POST.get('language', None)
         language_data = request.POST.get('spacy_language', None)
