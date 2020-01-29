@@ -66,11 +66,21 @@
             <a {% if request.resolver_match.url_name == 'data' %}style="background-color: #9e2387;" class="nav-link active"{% else %}class="nav-link"{% endif %} href="{% url 'data' %}"><i class="fas fa-database"></i><span>Text</span></a>
             
         {% endif %}
-    </li><li class="nav-item">
+    </li>
+
+    <li class="nav-item dropdown">
     {% if request.session.project_title and request.session.text_slug %}
-        <a href="{% url 'annotate' request.session.project_slug request.session.text_slug %}" {% if request.resolver_match.url_name == 'annotate' %}style="background-color: #9e2387;" class="nav-link active"{% else %}class="nav-link"{% endif %}><i class="fas fa-laptop-code"></i><span>Annotate</span></a>
+        <a {% if request.resolver_match.url_name == 'annotate' %}style="background-color: #9e2387;" class="nav-link dropdown-toggle active"{% else %}class="nav-link dropdown-toggle"{% endif %} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-laptop-code"></i><span>Annotate</span></a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'annotate' request.session.project_slug request.session.text_slug %}">Text and Table Format</a>
+            <a class="dropdown-item" href="{% url 'strategic' request.session.project_slug request.session.text_slug %}">Strategic Annotation</a>
+            <div class="dropdown-divider"></div>
+        </div>
     {% endif %}
-</li><li class="nav-item">
+</li>
+
+
+<li class="nav-item">
 {% if request.user.is_staff %}
     {% if not request.session.project_title %}
     {% endif %}

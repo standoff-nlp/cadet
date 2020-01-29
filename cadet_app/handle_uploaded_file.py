@@ -25,7 +25,7 @@ def handle_text_file(request, nlp, current_text):
                     annotation_type=AnnotationType.objects.get(name="sent"),
                     annotation_text=sent.text,
                     start_char=sent.start_char,
-                    end_char=sent.start_char + len(sent.text)
+                    end_char=sent.start_char + len(sent.text),
                     text=current_text,
                 )
                 new_sent.save()
