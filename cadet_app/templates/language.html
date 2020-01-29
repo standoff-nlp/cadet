@@ -66,6 +66,16 @@ $("#myAlert").css("display", "");
 $(document).ready( function () {
         $('#stop_words_table').DataTable();
     } );
+$(document).ready(function() {
+    $('#lemmata_table').DataTable( {
+        // ... 
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'lemma_json' %}",       
+    } );
+    // ...
+} );
+
 </script>
 {{ form.media.js }}
 {% endblock%}

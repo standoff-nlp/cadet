@@ -10,6 +10,8 @@ from django.contrib.postgres.fields import ArrayField
 from colorful.fields import RGBColorField
 
 def get_compatible_models():
+    """This function uses the current spacy version to return a list of current core spacy models. It is not a model
+    and may be moved to utils"""
     spacy_version = spacy.__version__
     compatibility = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/core_models/compatibility.json')
     with open(str(compatibility)) as file:
@@ -18,6 +20,14 @@ def get_compatible_models():
         compatible_models = [(model,model) for model in compatible_models] # choices requires a tuple
         compatible_models.append(('None','None'))
     return compatible_models    
+
+class Lemma(models.Model):
+    spacy_language = models.ForeignKey(
+        "SpacyLanguage", on_delete=models.CASCADE, blank=True, null=True
+    )
+    word = models.CharField(max_length=200, blank=True, null=True)
+    lemma =  models.CharField(max_length=200, blank=True, null=True)
+    auto_generated = models.BooleanField(default=None, null=True)
 
 class SpacyLanguage(models.Model):
     language = models.TextField(unique=True)

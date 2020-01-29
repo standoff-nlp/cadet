@@ -8,6 +8,20 @@ from spacy.cli.download import *
 
 #spacy_path = Path(spacy.__file__.replace('__init__.py',''))
 #spacy_lang = spacy_path / 'lang'
+def load_lemmata():
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    language = project.spacy_language.slug.replace('-','_')
+    try:
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/') 
+        filename = language + '_lemma_lookup.json.gz'
+        path = path / filename
+        print(str(path))
+        assert path.exists()
+        with gzip.open(str(path), 'rb') as f: 
+            return json.load(f)
+    except AssertionError:
+        print('fish eat other fish')# TODO add create lemmata json file 
+
 def create_model(language, model_path):
     pipeline = ["tagger", "parser", "ner","sentencizer","entity_linker"]
     cls = spacy.util.get_lang_class(language)   # 1. Get Language instance, e.g. English()

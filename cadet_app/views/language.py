@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+
 from cadet_app.lang_utils import create_spacy_language, clone_spacy_language, create_stop_words, create_examples
 from pathlib import Path
 from django.conf import settings
@@ -40,7 +42,8 @@ from cadet_app.forms import (
     AddExampleSentenceForm,
 )
 from social_django.utils import psa
-
+from django_datatables_view.base_datatable_view import BaseDatatableView
+from django.utils.html import escape, format_html, mark_safe
 import spacy
 
 def language(request):
@@ -175,3 +178,20 @@ def tokenization(request):
         form = TokenTestForm(initial={'text': sentences})
         context['tokenization_form'] = form
     return render(request, "language.html", context)
+
+def lemma_json(request):
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    language = project.spacy_language.slug.replace('-','_')
+    try:
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/') 
+        filename = language + '_lemma_lookup.json.gz'
+        path = path / filename
+        print(str(path))
+        assert path.exists()
+        with gzip.open(str(path), 'rb') as f: 
+         
+            return JsonResponse(
+               json.load(f),
+            )
+    except AssertionError:
+        print('fish eat other fish')# TODO add create lemmata json file 

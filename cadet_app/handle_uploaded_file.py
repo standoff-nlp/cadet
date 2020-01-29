@@ -30,6 +30,7 @@ def handle_text_file(request, nlp, current_text):
                 )
                 new_sent.save()
 
+
         if nlp.has_pipe("ner"): # named entitites
             for ent in doc.ents:
                 pass # TODO add this 
@@ -46,11 +47,16 @@ def handle_text_file(request, nlp, current_text):
                     annotation_text=token.text,
                     text=current_text,
                     start_char=start_char,
-                    end_char=end_char
+                    end_char=end_char,
+                    label=label,
                 )
             
         for token in doc:
             start_char = token.idx
+            # TODO update/create lemmata 
+                #load_lemmata()
+                #if lemma not in lemmata, add
+                #save back to json
 
             new = Annotation(
                 author=request.user,
@@ -71,7 +77,8 @@ def handle_text_file(request, nlp, current_text):
 
 def handle_uploaded_file(request, project_language, text, title):
     file = request.FILES["file"]
-    # TODO check if model directory exists for the language, if so, load the model
+    
+    # check if model directory exists for the language, if so, load the model, else use language object
     model_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/models/' + project_language)
     if model_path.exists():
         nlp = spacy.load(str(model_path))
@@ -79,6 +86,7 @@ def handle_uploaded_file(request, project_language, text, title):
     else:
         lang = spacy.util.get_lang_class(project_language.slug.replace('-','_'))
         nlp = lang()
+
 
     if file.content_type == "text/plain":
         handle_text_file(request, nlp, text)

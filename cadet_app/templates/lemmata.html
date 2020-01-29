@@ -1,3 +1,18 @@
-<div class="shadow card"><a class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true"  href="{% url 'lemmata' %}" role="button">Lemmata</a>
+<div class="shadow card"><a  href="{% url 'lemmata' %}"> <button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-5" href="#collapse-5" role="button">Lemmata</a></button>
 <div class="collapse {% if request.path == '/language/lemmata' %}show{% endif %}" id="collapse-5">
-{{ lemmata }}
+<div class="card-body">
+	<table id="lemmata_table" class="display">
+
+		  <thead>
+        <tr>
+            <th>Word</th>
+            <th>Lemma</th>
+        </tr>
+    </thead>
+
+</table>
+  
+      
+</div>
+</div>
+</div>
