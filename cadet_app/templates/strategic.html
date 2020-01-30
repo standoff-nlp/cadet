@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     {% for span, count in sorted_spans.items %}
-    <h3>{{count }} :: {{ span }}</h3>
+    [*] <h3>{{ span|safe }} :: {{ count }}</h3>
     {% endfor %}
 
 {% endblock %}

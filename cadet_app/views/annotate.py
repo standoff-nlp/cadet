@@ -75,7 +75,7 @@ def annotate(request, project, text):
     # adjust text to fit within viewframe
     context["text"] = text
 
-    if text.strategic_anno is True:
+    if text.strategic_anno is True: # TODO What was this supposed to accomplish?  
         messages.info(request, "Strategic annotations is set to True")
 
     if text.strategic_anno is False or None:
@@ -84,7 +84,9 @@ def annotate(request, project, text):
     # Django paginator, so split the text into segments https://docs.djangoproject.com/en/3.0/topics/pagination/
     # TODO
     
-    context["text_html"] = text.standoff
+    #context["text_html"] = text.standoff # Moving from standoff in db to dynamic so generation
+    a_project = Project.objects.get(id=request.session.get("project_id"))
+    context["text_html"] = add_annotations(text, a_project)
 
 
     if request.method == "POST":
