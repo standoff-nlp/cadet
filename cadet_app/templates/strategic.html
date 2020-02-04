@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
-    {% for span, count in sorted_spans.items %}
-    [*] <h3>{{ span|safe }} :: {{ count }}</h3>
-    {% endfor %}
-
-{% endblock %}

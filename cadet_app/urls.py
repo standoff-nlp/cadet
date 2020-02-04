@@ -61,7 +61,7 @@ urlpatterns += [
     path("edit_annotation/<id>", views.edit_annotation, name="edit_annotation"),
     path("edit_annotation/", views.edit_annotation_no_id, name="edit_annotation"),
     path('datatable/annotation/', login_required(views.AnnotationJson.as_view()), name='annotation_json'),
-    path("strategic/<project>/<text>", views.strategic, name="strategic"),
+    path("seeds/<project>/<text>", views.seeds, name="seeds"),
 
 ]
 # export

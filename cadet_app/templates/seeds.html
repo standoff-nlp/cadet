@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% for word, spans in seed_spans.items %}
+    <h3>{{ word.0 }} :: {{ word.1 }} :: {{ spans|safe }}</h3>
+    {% endfor %}
+
+{% endblock %}

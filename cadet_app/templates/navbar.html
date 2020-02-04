@@ -72,8 +72,8 @@
     {% if request.session.project_title and request.session.text_slug %}
         <a {% if request.resolver_match.url_name == 'annotate' %}style="background-color: #9e2387;" class="nav-link dropdown-toggle active"{% else %}class="nav-link dropdown-toggle"{% endif %} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-laptop-code"></i><span>Annotate</span></a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'seeds' request.session.project_slug request.session.text_slug %}">Seed Words</a>
             <a class="dropdown-item" href="{% url 'annotate' request.session.project_slug request.session.text_slug %}">Text and Table Format</a>
-            <a class="dropdown-item" href="{% url 'strategic' request.session.project_slug request.session.text_slug %}">Strategic Annotation</a>
             <div class="dropdown-divider"></div>
         </div>
     {% endif %}

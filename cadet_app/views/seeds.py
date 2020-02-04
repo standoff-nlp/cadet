@@ -7,6 +7,7 @@ from django.db.models import Q
 import spacy
 from lxml import etree
 from standoffconverter import Converter
+from cadet_app.utils import matcher
 
 
 def add_annotations_to_span(span, text, project):
@@ -98,15 +99,56 @@ def make_scored_spans(request, sequence_length):
 
     return scored_spans # Dict with string key and score int value
     
+def make_sorted_spans_for_seeds(request, no_seeds):
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    texts = Text.objects.filter(projects=project)
+
+    project_language = project.spacy_language.slug.replace('-','_')
+    model_path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/models/' + project_language )
+    if model_path.exists():
+        try:
+            nlp = spacy.load(str(model_path))
+        except:
+            lang = spacy.util.get_lang_class(project_language)
+            nlp = lang()
+
+    else:
+        lang = spacy.util.get_lang_class(project_language)
+        nlp = lang()
+    
+    #Calculate word frequences within the entire corpus of project texts
+    corpus = "".join([text.text for text in texts])
+    corpus_doc = nlp(corpus)
+    corpus_words = [token.text for token in corpus_doc]
+    exceptions = ['\n']
+    word_freq = Counter(word for word in corpus_words if word not in exceptions)
+    seeds = word_freq.most_common(no_seeds)
+    seed_spans = {}
+    
+    for word in seeds:
+        seed_spans[word] = []
+        for text in texts:
+            matches = matcher(text.text, word[0], word[0]) # returns a list of tuples, start_char, end_char, label
+        
+            for match in matches:
+                # check if annotation exists, else create, get id
+                anotation, created = Annotation.objects.get_or_create(project=project, text=text, annotation_text=text.text[match[0]:match[1]], start_char=match[0], end_char=match[1], author_id=request.user.id)
+                span = f'...' + text.text[match[0] - 50 :match[0]-1] + f'<a id="{anotation.id}" class="token" onclick="select_annotation(this)">'  + text.text[match[0]:match[1]] +'</a>' + text.text[match[1]+1:match[1]+50] + '...' #TODO use spaCy spans?
+                seed_spans[word].append(span.replace('\n',''))
+    return seed_spans
+        
+    # bulk-update controls 
+
 
 def seeds(request, project, text):
     context = {}
-    if not request.session.get("scored_spans"):
-        scored_spans = make_scored_spans(request, 10) #TODO, if needed, add slider to change span length
+    no_seeds = 10 #TODO add slider to adjust in UI
+    if not request.session.get("seed_spans"):
+        seed_spans = make_sorted_spans_for_seeds(request, no_seeds)
     else:
-        scored_spans = request.session.get("scored_spans") 
-    sorted_spans  = {k: v for k, v in sorted(scored_spans.items(), key=lambda item: item[1], reverse=True)}
+        seed_spans = request.session.get("seed_spans") 
     #context['sorted_spans'] = [span.text for span in sorted_scored_spans.keys()]
-    context['sorted_spans'] = sorted_spans
+    print(seed_spans)
+    context['seed_spans'] = seed_spans
 
-    return render(request, "strategic.html", context)
+    return render(request, "seeds.html", context)
