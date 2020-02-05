@@ -25,8 +25,14 @@ class Lemma(models.Model):
     spacy_language = models.ForeignKey(
         "SpacyLanguage", on_delete=models.CASCADE, blank=True, null=True
     )
+    project = models.ForeignKey(
+        "Project", on_delete=models.CASCADE, blank=True, null=True
+    )
+
     word = models.CharField(max_length=200, blank=True, null=True)
     lemma =  models.CharField(max_length=200, blank=True, null=True)
+    lemma1 =  models.CharField(max_length=200, blank=True, null=True) # English has as many as two, may be need for m2m
+    lemma2 =  models.CharField(max_length=200, blank=True, null=True) # English has as many as two, may be need for m2m
     auto_generated = models.BooleanField(default=None, null=True)
 
 class SpacyLanguage(models.Model):

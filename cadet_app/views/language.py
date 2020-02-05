@@ -189,9 +189,78 @@ def lemma_json(request):
         print(str(path))
         assert path.exists()
         with gzip.open(str(path), 'rb') as f: 
-         
+            data= {}
+            data['data'] = []
+            lemmata = dict(json.load(f))
+            for lemma in lemmata:
+                data['data'].append({"Word":f"{lemma}", "Lemma": f"{lemmata[lemma]}"})
+
             return JsonResponse(
-               json.load(f),
+               data,
             )
     except AssertionError:
         print('fish eat other fish')# TODO add create lemmata json file 
+
+class LemmaJson(BaseDatatableView):
+    # the model you're going to show
+    model = Lemma
+
+    
+    columns = ['word','lemma']
+    order_columms = ['word','lemma']
+    # set max limit of records returned
+    # this is used to protect your site if someone tries to attack your site and make it return huge amount of data
+    max_display_length = 500
+
+    def get_initial_queryset(self):
+        project = get_object_or_404(Project, id=self.request.session.get("project_id"))
+        language = project.spacy_language.slug.replace('-','_')
+        
+        # Check if lemmata for this project and language exist, if not create them from the json
+        lemmata = Lemma.objects.filter(project=project)
+        if not lemmata:
+            path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/') 
+            filename = language + '_lemma_lookup.json.gz'
+            path = path / filename
+            if path.exists():
+                with gzip.open(str(path), 'rb') as f: 
+                    data = json.load(f)
+                    for word in data:
+                        Lemma.objects.update_or_create(
+                            spacy_language=project.spacy_language,
+                            project=project,
+                            word=word,
+                            lemma=data[word],
+                            auto_generated=True,
+                            )
+
+            else:
+                filename = language + '_lemma_lookup.json'
+                path = path / filename
+                if path.exists():
+                    messages.info(self.request, '[*] need to add handling for uncompressed json lemmata!')
+
+        
+        return self.model.objects.filter(spacy_language=project.spacy_language, project=project)
+
+
+    def render_column(self, row, column):
+        
+        #print(row, column)
+        #for label in row.labels.all():
+        #    if label == "FORM":
+        #        return format_html(row.annotation_text)
+
+            #return format_html(row)
+        
+        return super(LemmaJson, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        # use parameters passed in GET request to filter queryset
+        
+        # here is a simple example
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            q = Q(word__icontains=search) | Q(lemma_icontains=search)
+            qs = qs.filter(q)
+        return qs

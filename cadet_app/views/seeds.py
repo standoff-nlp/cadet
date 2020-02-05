@@ -138,6 +138,8 @@ def make_sorted_spans_for_seeds(request, no_seeds):
     return seed_spans
         
     # bulk-update controls 
+    # click through spans in context press a = duplicate
+       # A = duplicate all
 
 
 def seeds(request, project, text):
