@@ -98,7 +98,7 @@ class AnnotationForm(ModelForm):
 
         for label_group in project_obj.label_set.groups.all():
             self.fields[label_group.title + "_label"] = ModelChoiceField(
-                queryset=label_group.labels.all(), widget=Select2TagWidget,
+                queryset=label_group.labels.all(), widget=Select2Widget,
             )
             # TODO add check if the labels have attributes, don't add field unless they do
             self.fields[label_group.title + "_attrib"] = ModelMultipleChoiceField(
@@ -106,7 +106,7 @@ class AnnotationForm(ModelForm):
                 widget=Select2MultipleWidget,
             )
             self.fields["annotation_type"] = ModelChoiceField(
-                queryset=AnnotationType.objects.all(), widget=Select2TagWidget,
+                queryset=AnnotationType.objects.all(), widget=Select2Widget,
             )
         # self.fields['location'].widget = RelatedFieldWidgetWrapper(self.fields['location'].widget, rel, self.admin_site)
 

@@ -99,7 +99,7 @@ def make_scored_spans(request, sequence_length):
 
     return scored_spans # Dict with string key and score int value
     
-def make_sorted_spans_for_seeds(request, no_seeds):
+def make_sorted_spans_for_seeds(request):
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     texts = Text.objects.filter(projects=project)
 
@@ -122,7 +122,7 @@ def make_sorted_spans_for_seeds(request, no_seeds):
     corpus_words = [token.text for token in corpus_doc]
     exceptions = ['\n']
     word_freq = Counter(word for word in corpus_words if word not in exceptions)
-    seeds = word_freq.most_common(no_seeds)
+    seeds = word_freq.most_common()
     seed_spans = {}
     
     for word in seeds:
@@ -144,9 +144,9 @@ def make_sorted_spans_for_seeds(request, no_seeds):
 
 def seeds(request, project, text):
     context = {}
-    no_seeds = 10 #TODO add slider to adjust in UI
+
     if not request.session.get("seed_spans"):
-        seed_spans = make_sorted_spans_for_seeds(request, no_seeds)
+        seed_spans = make_sorted_spans_for_seeds(request)
     else:
         seed_spans = request.session.get("seed_spans") 
     #context['sorted_spans'] = [span.text for span in sorted_scored_spans.keys()]

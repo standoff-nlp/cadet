@@ -40,16 +40,19 @@ def handle_text_file(request, nlp, current_text):
                 start_char = token.idx
                 end_char = start_char + len(token.text)
                 pos = token.pos_
-                label, created = Label.object.get_or_create(name=pos)
-                Annotation.objects.update_or_create(
+                label, created = Label.objects.get_or_create(name=pos)
+                annotation, created = Annotation.objects.update_or_create(
+                    author_id=request.user.id,
                     project=project,
                     annotation_type=AnnotationType.objects.get(name="token"),
                     annotation_text=token.text,
                     text=current_text,
                     start_char=start_char,
                     end_char=end_char,
-                    label=label,
+                    
                 )
+                annotation.labels.add(label)
+                annotation.save()
             
         for token in doc:
             start_char = token.idx

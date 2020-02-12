@@ -10,10 +10,10 @@
             <table class="table table-bordered table-hover">
                 <thead class="bill-header cs">
                     <tr>
-                        <th id="trs-hd" class="col-lg-2">Term</th>
-                        <th id="trs-hd" class="col-lg-2">Frequency</th>
+                        <th id="trs-hd" class="col-lg-3">Term</th>
+                        <th id="trs-hd" class="col-lg-3">Frequency</th>
                         <th id="trs-hd" class="col-lg-3">Has annotations</th>
-                        <th id="trs-hd" class="col-lg-2">Annotate</th>
+                        <th id="trs-hd" class="col-lg-3">Annotate</th>
                         
                     </tr>
                 </thead>
@@ -28,12 +28,13 @@
     
                             
                             <tr>
-                                <td><a href="#" class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-book"></i></span><span class="text-white text" data-tooltip="Head of the current word, which is either a value of ID or zero (0).">{{ word.0 }}</span></a></td>
+                                <td><a href="#" class="btn btn-primary" role="button"><span class="text-white text" data-tooltip="Annotate">{{ word.0 }}</span></a></td>
                                 
                                 <td>{{ word.1 }}</td>
                             
-                                <td><a href="#" class="btn btn-success" role="button"  style="margin-left: 5px;"><i class="fas fa-edit" style="font-size: 15px;"></i></a>
-                                <a href="#" class="btn btn-danger" style="margin-left: 5px;"><i class="fa fa-trash" style="font-size: 15px;"></i></a></td>
+                                <td><a href="#" class="btn btn-success" role="button"  style="margin-left: 5px;"><i class="fas fa-edit" style="font-size: 15px;"></i></a></td>
+
+                                <td><a href="#" class="btn btn-danger" style="margin-left: 5px;"><i class="fa fa-trash" style="font-size: 15px;"></i></a></td>
                             </tr>
                             
                         </div>

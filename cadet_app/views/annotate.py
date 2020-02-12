@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
+from django.db.models import Q
 from django.core.paginator import Paginator
 from cadet_app.lang_utils import create_spacy_language, clone_spacy_language, create_stop_words, create_examples
 from pathlib import Path
@@ -60,7 +61,9 @@ def annotate(request, project, text):
         return redirect(projects)
 
     context["annotation_types"] = AnnotationType.objects.all()
-    context["table_columns"] = Project.objects.get(id=project).label_set.groups.all() # TODO order by sequence in label set
+    skip = ['created_at','updated_at']
+    context["table_columns"] = [field.name for field in Annotation._meta.fields if field.name not in skip] #TODO, consolidate the two skips   
+    #context["table_columns"] = Project.objects.get(id=project).label_set.groups.all() # TODO order by sequence in label set
     context["previous_text"], context["next_text"] = get_previous_and_next_text(project, text)
     
     # need to mark existing annotation in the text html
@@ -154,12 +157,25 @@ class AnnotationJson(BaseDatatableView):
     # the model you're going to show
     model = Annotation
 
-    def get_columns(self):
-        project = Project.objects.get(id=self.request.session.get("project_id"))
-        return [label_group['title'] for label_group in project.label_set.groups.all().values('title')]
+    def get_columns(self): 
+        # https://stackoverflow.com/questions/36943048/how-to-define-dynamic-number-of-columns-in-django-datatables-view
+        skip = ['created_at','updated_at']
+        fields = [field.name for field in Annotation._meta.fields if field.name not in skip]    
+
+        columns = fields 
+        order_columms = columns 
+
+        return self.columns
+
+    def get_order_columns(self): 
+        # https://stackoverflow.com/questions/36943048/how-to-define-dynamic-number-of-columns-in-django-datatables-view
+        skip = ['created_at','updated_at']
+        fields = [field.name for field in Annotation._meta.fields if field.name not in skip]    
+
+        order_columms = fields 
+
+        return self.order_columns
     
-    columns = get_columns
-    order_columms = columns
     # set max limit of records returned
     # this is used to protect your site if someone tries to attack your site and make it return huge amount of data
     max_display_length = 500
@@ -173,10 +189,10 @@ class AnnotationJson(BaseDatatableView):
 
     def render_column(self, row, column):
         
-        print(row, column)
         #for label in row.labels.all():
-        #    if label == "FORM":
-        #        return format_html(row.annotation_text)
+        
+        if column == 'id':
+            return format_html(f"<h4>{row.id}</h4>")
 
             #return format_html(row)
         
@@ -188,6 +204,6 @@ class AnnotationJson(BaseDatatableView):
         # here is a simple example
         search = self.request.GET.get('search[value]', None)
         if search:
-            q = Q(name__icontains=search) | Q(description_icontains=search)
+            q = Q(annotation_text__icontains=search) #| Q(description_icontains=search)
             qs = qs.filter(q)
         return qs
