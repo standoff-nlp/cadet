@@ -61,7 +61,7 @@ def annotate(request, project, text):
         return redirect(projects)
 
     context["annotation_types"] = AnnotationType.objects.all()
-    skip = ['created_at','updated_at']
+    skip = ['created_at','updated_at','project','text','author','auto_generated','approved']
     context["table_columns"] = [field.name for field in Annotation._meta.fields if field.name not in skip] #TODO, consolidate the two skips   
     #context["table_columns"] = Project.objects.get(id=project).label_set.groups.all() # TODO order by sequence in label set
     context["previous_text"], context["next_text"] = get_previous_and_next_text(project, text)
@@ -159,7 +159,7 @@ class AnnotationJson(BaseDatatableView):
 
     def get_columns(self): 
         # https://stackoverflow.com/questions/36943048/how-to-define-dynamic-number-of-columns-in-django-datatables-view
-        skip = ['created_at','updated_at']
+        skip = ['created_at','updated_at','project','text','author','auto_generated','approved']
         columns = [field.name for field in Annotation._meta.fields if field.name not in skip]    
 
         self.columns = columns 
@@ -167,7 +167,7 @@ class AnnotationJson(BaseDatatableView):
 
     def get_order_columns(self): 
         # https://stackoverflow.com/questions/36943048/how-to-define-dynamic-number-of-columns-in-django-datatables-view
-        skip = ['created_at','updated_at']
+        skip = ['created_at','updated_at','project','text','author','auto_generated','approved']
         order_columns = [field.name for field in Annotation._meta.fields if field.name not in skip]    
 
         self.order_columns = order_columns
@@ -192,6 +192,11 @@ class AnnotationJson(BaseDatatableView):
         if column == 'id':
             return format_html(f"<h4>{row.id}</h4>")
 
+        if column == 'annotation_text':
+            if len(row.annotation_text) > 80:
+                return format_html(f'<p data-tooltip="{row.annotation_text}">{row.annotation_text[:80]}...</p>')
+            else:
+                return format_html(f'<p>{row.annotation_text}</p>')
             #return format_html(row)
         
         return super(AnnotationJson, self).render_column(row, column)

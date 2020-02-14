@@ -130,7 +130,7 @@
 
     </a><a class="custom-btn light-btn"
 href="#" role="button" data-tooltip="Show annotations on hover"><i class="fa fa-toggle-on"></i></a>
-<button id="text" onclick="set_annotation_type(event)" class="custom-btn light-btn" href="#" role="button" data-tooltip="Highlight sections of text to add annotations">Text</button>{% for annotation_type in annotation_types %}
+{% for annotation_type in annotation_types %}
     <button id="{{ annotation_type }}" onclick="set_annotation_type(event)" class="custom-btn light-btn" href="#" role="button" data-tooltip="Select and edit {{ annotation_type }} annotations">{{ annotation_type }}</button>
 {% endfor %}
 </div>
