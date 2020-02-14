@@ -160,21 +160,19 @@ class AnnotationJson(BaseDatatableView):
     def get_columns(self): 
         # https://stackoverflow.com/questions/36943048/how-to-define-dynamic-number-of-columns-in-django-datatables-view
         skip = ['created_at','updated_at']
-        fields = [field.name for field in Annotation._meta.fields if field.name not in skip]    
+        columns = [field.name for field in Annotation._meta.fields if field.name not in skip]    
 
-        columns = fields 
-        order_columms = columns 
-
-        return self.columns
+        self.columns = columns 
+        return columns
 
     def get_order_columns(self): 
         # https://stackoverflow.com/questions/36943048/how-to-define-dynamic-number-of-columns-in-django-datatables-view
         skip = ['created_at','updated_at']
-        fields = [field.name for field in Annotation._meta.fields if field.name not in skip]    
+        order_columns = [field.name for field in Annotation._meta.fields if field.name not in skip]    
 
-        order_columms = fields 
+        self.order_columns = order_columns
+        return order_columns
 
-        return self.order_columns
     
     # set max limit of records returned
     # this is used to protect your site if someone tries to attack your site and make it return huge amount of data
