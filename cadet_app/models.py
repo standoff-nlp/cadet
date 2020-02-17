@@ -13,7 +13,7 @@ def get_compatible_models():
     """This function uses the current spacy version to return a list of current core spacy models. It is not a model
     and may be moved to utils"""
     spacy_version = spacy.__version__
-    compatibility = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/core_models/compatibility.json')
+    compatibility = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/spacy-models/compatibility.json')
     with open(str(compatibility)) as file:
         data = json.load(file)
         compatible_models = data['spacy'][spacy_version].keys()
