@@ -38,6 +38,9 @@ from cadet_app.forms import (
     TokenTestForm,
     AddExampleSentenceForm,
 )
+
+from cadet_app.views.text import data 
+
 from social_django.utils import psa
 
 import spacy

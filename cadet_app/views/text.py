@@ -40,7 +40,7 @@ from cadet_app.forms import (
 from social_django.utils import psa
 
 import spacy
-from .annotate import annotate
+from cadet_app.views import annotate
 
 def set_text(request, id):
     text = Text.objects.get(pk=id)

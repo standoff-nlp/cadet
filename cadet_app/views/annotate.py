@@ -41,7 +41,7 @@ from cadet_app.forms import (
 from social_django.utils import psa
 
 import spacy
-from .project import projects
+from cadet_app.views.project import projects
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.html import escape, format_html, mark_safe
 

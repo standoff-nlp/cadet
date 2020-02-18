@@ -40,7 +40,7 @@ from cadet_app.forms import (
 from social_django.utils import psa
 
 import spacy
-from .annotate import annotate
+from cadet_app.views.annotate import annotate
 
 @login_required(redirect_field_name="", login_url="login/")
 def index(request):
