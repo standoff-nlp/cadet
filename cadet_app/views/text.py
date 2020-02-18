@@ -40,14 +40,14 @@ from cadet_app.forms import (
 from social_django.utils import psa
 
 import spacy
-from cadet_app.views import annotate
 
 def set_text(request, id):
     text = Text.objects.get(pk=id)
     request.session["text_id"] = text.id
     request.session["text_title"] = text.title
     request.session["text_slug"] = text.text_slug
-    return redirect(annotate, request.session.get("project_slug"), text.text_slug)
+    return redirect(data)
+    #return redirect(a, request.session.get("project_slug"), text.text_slug)
 
 def delete_text(request, id):
     text = Text.objects.get(pk=id)

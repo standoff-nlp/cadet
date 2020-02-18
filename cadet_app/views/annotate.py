@@ -6,7 +6,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.db.models import Q
 from django.core.paginator import Paginator
-from cadet_app.lang_utils import create_spacy_language, clone_spacy_language, create_stop_words, create_examples
+from cadet_app.lang_utils import (
+    create_spacy_language,
+    clone_spacy_language,
+    create_stop_words,
+    create_examples,
+)
 from pathlib import Path
 from django.conf import settings
 import sys
@@ -45,6 +50,7 @@ from cadet_app.views.project import projects
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.html import escape, format_html, mark_safe
 
+
 def annotate(request, project, text):
     try:
         project = request.session.get("project_id")
@@ -61,11 +67,23 @@ def annotate(request, project, text):
         return redirect(projects)
 
     context["annotation_types"] = AnnotationType.objects.all()
-    skip = ['created_at','updated_at','project','text','author','auto_generated','approved']
-    context["table_columns"] = [field.name for field in Annotation._meta.fields if field.name not in skip] #TODO, consolidate the two skips   
-    #context["table_columns"] = Project.objects.get(id=project).label_set.groups.all() # TODO order by sequence in label set
-    context["previous_text"], context["next_text"] = get_previous_and_next_text(project, text)
-    
+    skip = [
+        "created_at",
+        "updated_at",
+        "project",
+        "text",
+        "author",
+        "auto_generated",
+        "approved",
+    ]
+    context["table_columns"] = [
+        field.name for field in Annotation._meta.fields if field.name not in skip
+    ]  # TODO, consolidate the two skips
+    # context["table_columns"] = Project.objects.get(id=project).label_set.groups.all() # TODO order by sequence in label set
+    context["previous_text"], context["next_text"] = get_previous_and_next_text(
+        project, text
+    )
+
     # need to mark existing annotation in the text html
     text = Text.objects.get(text_slug=text)
     context["annotations"] = Annotation.objects.filter(
@@ -78,7 +96,7 @@ def annotate(request, project, text):
     # adjust text to fit within viewframe
     context["text"] = text
 
-    if text.strategic_anno is True: # TODO What was this supposed to accomplish?  
+    if text.strategic_anno is True:  # TODO What was this supposed to accomplish?
         messages.info(request, "Strategic annotations is set to True")
 
     if text.strategic_anno is False or None:
@@ -86,15 +104,14 @@ def annotate(request, project, text):
 
     # Django paginator, so split the text into segments https://docs.djangoproject.com/en/3.0/topics/pagination/
     # TODO
-    
-    #context["text_html"] = text.standoff # Moving from standoff in db to dynamic so generation
+
+    # context["text_html"] = text.standoff # Moving from standoff in db to dynamic so generation
     a_project = Project.objects.get(id=request.session.get("project_id"))
     context["text_html"] = add_annotations(text, a_project)
 
-
     if request.method == "POST":
         # context["text_html"] = add_annotations(text, project)
-        
+
         modal_form = AnnotationForm(request.POST, project=project)
 
         if modal_form.is_valid():
@@ -120,13 +137,17 @@ def annotate(request, project, text):
         context["modal_form"] = modal_form
         return render(request, "annotate.html", context)
 
+
 def add_annotation_form(request, id):
     pass
+
 
 def edit_annotation(request, id):
     if request.method == "POST":
         project = Project.objects.get(id=request.session.get("project_id"))
-        form = EditAnnotationForm(request.POST, request.FILES, project=project.id, user=request.user)
+        form = EditAnnotationForm(
+            request.POST, request.FILES, project=project.id, user=request.user
+        )
         if form.is_valid():
             form.save()
             instance = get_object_or_404(Annotation, id=id)
@@ -149,6 +170,7 @@ def edit_annotation(request, id):
 
         return render(request, "edit_annotation_form.html", context)
 
+
 def edit_annotation_no_id(request):
     pass
 
@@ -157,23 +179,42 @@ class AnnotationJson(BaseDatatableView):
     # the model you're going to show
     model = Annotation
 
-    def get_columns(self): 
+    def get_columns(self):
         # https://stackoverflow.com/questions/36943048/how-to-define-dynamic-number-of-columns-in-django-datatables-view
-        skip = ['created_at','updated_at','project','text','author','auto_generated','approved']
-        columns = [field.name for field in Annotation._meta.fields if field.name not in skip]    
+        skip = [
+            "created_at",
+            "updated_at",
+            "project",
+            "text",
+            "author",
+            "auto_generated",
+            "approved",
+        ]
+        columns = [
+            field.name for field in Annotation._meta.fields if field.name not in skip
+        ]
 
-        self.columns = columns 
+        self.columns = columns
         return columns
 
-    def get_order_columns(self): 
+    def get_order_columns(self):
         # https://stackoverflow.com/questions/36943048/how-to-define-dynamic-number-of-columns-in-django-datatables-view
-        skip = ['created_at','updated_at','project','text','author','auto_generated','approved']
-        order_columns = [field.name for field in Annotation._meta.fields if field.name not in skip]    
+        skip = [
+            "created_at",
+            "updated_at",
+            "project",
+            "text",
+            "author",
+            "auto_generated",
+            "approved",
+        ]
+        order_columns = [
+            field.name for field in Annotation._meta.fields if field.name not in skip
+        ]
 
         self.order_columns = order_columns
         return order_columns
 
-    
     # set max limit of records returned
     # this is used to protect your site if someone tries to attack your site and make it return huge amount of data
     max_display_length = 500
@@ -181,32 +222,35 @@ class AnnotationJson(BaseDatatableView):
     def get_initial_queryset(self):
         project = Project.objects.get(id=self.request.session.get("project_id"))
         text = Text.objects.get(id=self.request.session.get("text_id"))
-        
+
         return self.model.objects.filter(project=project, text=text)
 
-
     def render_column(self, row, column):
-        
-        #for label in row.labels.all():
-        
-        if column == 'id':
+
+        # for label in row.labels.all():
+
+        if column == "id":
             return format_html(f"<h4>{row.id}</h4>")
 
-        if column == 'annotation_text':
+        if column == "annotation_text":
             if len(row.annotation_text) > 80:
-                return format_html(f'<p data-tooltip="{row.annotation_text}">{row.annotation_text[:80]}...</p>')
+                return format_html(
+                    f'<p data-tooltip="{row.annotation_text}">{row.annotation_text[:80]}...</p>'
+                )
             else:
-                return format_html(f'<p>{row.annotation_text}</p>')
-            #return format_html(row)
-        
+                return format_html(f"<p>{row.annotation_text}</p>")
+            # return format_html(row)
+
         return super(AnnotationJson, self).render_column(row, column)
 
     def filter_queryset(self, qs):
         # use parameters passed in GET request to filter queryset
-        
+
         # here is a simple example
-        search = self.request.GET.get('search[value]', None)
+        search = self.request.GET.get("search[value]", None)
         if search:
-            q = Q(annotation_text__icontains=search) #| Q(description_icontains=search)
+            q = Q(
+                annotation_text__icontains=search
+            )  # | Q(description_icontains=search)
             qs = qs.filter(q)
         return qs
