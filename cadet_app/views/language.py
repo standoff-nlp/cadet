@@ -62,6 +62,7 @@ def language(request):
         language_data = request.POST.get('spacy_language', None)
         core_model = request.POST.get('core_model', None)
         
+        print(language, language_data, core_model)
 
         # neither field has an entry
         if language == '' and not language_data:
@@ -214,7 +215,10 @@ class LemmaJson(BaseDatatableView):
 
     def get_initial_queryset(self):
         project = get_object_or_404(Project, id=self.request.session.get("project_id"))
-        language = project.spacy_language.slug.replace('-','_')
+        try:
+            language = project.spacy_language.slug.replace('-','_')
+        except AttributeError: # Until language is created, language is none
+            language = 'english'
         
         # Check if lemmata for this project and language exist, if not create them from the json
         lemmata = Lemma.objects.filter(project=project)
