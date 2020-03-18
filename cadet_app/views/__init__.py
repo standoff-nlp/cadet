@@ -6,3 +6,4 @@ from .text import *
 from .annotate import *
 from .export import *
 from .seeds import *
+from .inception import *

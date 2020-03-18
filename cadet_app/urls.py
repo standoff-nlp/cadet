@@ -68,3 +68,12 @@ urlpatterns += [
 urlpatterns += [
     path("export/", views.export, name="export"),
 ]
+
+# external recommender INCEpTION
+urlpatterns += [
+    path("inception/<project>/<pipeline>/predict", views.inception_predict, name="inception_predict"),
+    path("inception/<project>/<pipeline>/train", views.inception_train, name="incpetion_train"),
+]
+    
+
+
