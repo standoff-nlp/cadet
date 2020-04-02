@@ -11,7 +11,7 @@
 {% endblock %}
 {% block content %}
     {% if request.user.is_staff %}
-        
+
         <div class="shadow card"><a  href="{% url 'language' %}"><button class="btn btn-link text-left card-header font-weight-bold" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-1" role="button">Base Language</a></button>
         <div class="collapse {% if request.path == '/language/' %}show{% endif %}" id="collapse-1">
         <div class="card-body">
@@ -20,16 +20,16 @@
             <ul><li>Use an existing language object from the options in the language data field. A new language object with a unique name will be created for this project with language data from the existing language.  This will allows you to customize the language for this project without changing the base copy.
                 <li>Create a new language object entirely from scratch. Enter a project language name and leave the language data field blank</li></ul>
                 <hr>
-                
+
                 <div class="form-group">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <label>Import Language data:</label>{{ form.spacy_language }}<br><br>
                         <label>Import Core Model:</label><br>{{ form.core_model }}<br><br>
                         <label>Project language name:</label><br>{{ form.language }}<br><br>
-                        
+
                         <button class="btn btn-primary" type="submit">Submit</button>
-                        
+
                     </form>
                 </div>
                 {% else %}
@@ -39,7 +39,29 @@
         </div>
     </div>
 </div>
+
 <!-- STOP WORDS -->
+<div class="modal fade" id="DescModal" role="dialog">
+   <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 class="modal-title">Update Value</h3>
+
+           </div>
+           <div class="modal-body">
+                <h5 class="text-center"></h5>
+
+           </div>
+           <div class="modal-footer">
+               <button type="button" class="btn btn-default " data-dismiss="modal">Apply!</button>
+               <button type="button" class="btn btn-primary">Close</button>
+           </div>
+       </div>
+       <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
 {% include 'stop_words.html' %}
 
 <!-- EXAMPLE TEXTS -->
@@ -66,12 +88,41 @@ $("#myAlert").css("display", "");
 $(document).ready( function () {
         $('#stop_words_table').DataTable();
     } );
+
+// https://datatables.net/forums/discussion/43213/on-row-select-open-responsive-modal
+$('#stop_words_table').on('click', 'tr', function () {
+            var name = $('td', this).text();
+            var link = "<a href='link'>" + name + "</a>";
+            console.log(link)
+            $('#DescModal').modal("show");
+            //$('.text-center').text(link)
+            $(".text-center").append(
+        // Creating Form Div and Adding <h2> and <p> Paragraph Tag in it.
+        $("<form/>", {
+        action: '#',
+        method: '#'
+        }).append(
+        // Create <form> Tag and Appending in HTML Div form1.
+        $("<input/>", {
+        type: 'text',
+        id: 'vname',
+        name: 'name',
+        placeholder: name
+        }), // Creating Input Element With Attribute.
+        $("<br/>"), $("<input/>", {
+        type: 'submit',
+        id: 'submit',
+        value: 'Submit'
+        })))
+        });
+
+
 $(document).ready(function() {
     $('#lemmata_table').DataTable( {
-        // ... 
+        // ...
         "processing": true,
         "serverSide": true,
-        "ajax": "{% url 'lemma_json' %}",       
+        "ajax": "{% url 'lemma_json' %}",
     } );
     // ...
 } );
