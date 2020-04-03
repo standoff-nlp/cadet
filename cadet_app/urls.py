@@ -8,7 +8,7 @@ from django.urls import include
 import cadet_app.views as views
 from django.contrib.auth.decorators import login_required
 
-# base 
+# base
 urlpatterns = [
     path("", views.index, name="index"),
     path("login/", views.site_login, name="login"),
@@ -25,12 +25,13 @@ urlpatterns += [
 urlpatterns += [
     path("language/", views.language, name="language"),
     path("language/stop_words", views.stop_words, name="stop_words"),
+    path("language/stop_words/update", views.update_stop_words, name="update_stop_words"),
     path("language/examples", views.examples, name="examples"),
     path("language/tokenization", views.tokenization, name="tokenization"),
     path("language/lemmata", views.lemmata, name="lemmata"),
     path("language/lemma_json", login_required(views.LemmaJson.as_view()), name='lemma_json'),
 ]
-# labels 
+# labels
 urlpatterns += [
     path("labels/", views.labels, name="labels"),
     path("set_labelset/<id>", views.set_labelset, name="set_labelset"),
@@ -74,6 +75,3 @@ urlpatterns += [
     path("inception/<project>/<pipeline>/predict", views.inception_predict, name="inception_predict"),
     path("inception/<project>/<pipeline>/train", views.inception_train, name="incpetion_train"),
 ]
-    
-
-

@@ -41,27 +41,6 @@
 </div>
 
 <!-- STOP WORDS -->
-<div class="modal fade" id="DescModal" role="dialog">
-   <div class="modal-dialog">
-       <div class="modal-content">
-           <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h3 class="modal-title">Update Value</h3>
-
-           </div>
-           <div class="modal-body">
-                <h5 class="text-center"></h5>
-
-           </div>
-           <div class="modal-footer">
-               <button type="button" class="btn btn-default " data-dismiss="modal">Apply!</button>
-               <button type="button" class="btn btn-primary">Close</button>
-           </div>
-       </div>
-       <!-- /.modal-content -->
-   </div>
-   <!-- /.modal-dialog -->
-</div>
 {% include 'stop_words.html' %}
 
 <!-- EXAMPLE TEXTS -->
@@ -96,26 +75,41 @@ $('#stop_words_table').on('click', 'tr', function () {
             console.log(link)
             $('#DescModal').modal("show");
             //$('.text-center').text(link)
-            $(".text-center").append(
-        // Creating Form Div and Adding <h2> and <p> Paragraph Tag in it.
+            $( ".modal-content" ).empty();
+            $(".modal-content").append(
+
+
         $("<form/>", {
-        action: '#',
-        method: '#'
+        action: 'stop_words/update',
+        method: 'get'
         }).append(
         // Create <form> Tag and Appending in HTML Div form1.
+        $("<div/>", {
+        class: 'modal-header',
+        }),
         $("<input/>", {
         type: 'text',
-        id: 'vname',
-        name: 'name',
+        id: 'new',
+        name: 'new',
         placeholder: name
+        }),
+        $("<input/>", {
+        type: 'hidden',
+        id: 'old',
+        name: 'old',
+        value: name
         }), // Creating Input Element With Attribute.
-        $("<br/>"), $("<input/>", {
+        $("<input/>", {
         type: 'submit',
         id: 'submit',
-        value: 'Submit'
-        })))
+        value: 'Update',
+        class: "btn btn-primary",
+      }),
+      $("<div/>", {
+      class: 'modal-footer',
+      }),
+    ))
         });
-
 
 $(document).ready(function() {
     $('#lemmata_table').DataTable( {

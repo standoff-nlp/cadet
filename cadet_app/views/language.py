@@ -61,14 +61,14 @@ def language(request):
         language = request.POST.get('language', None)
         language_data = request.POST.get('spacy_language', None)
         core_model = request.POST.get('core_model', None)
-        
+
         print(language, language_data, core_model)
 
         # neither field has an entry
         if language == '' and not language_data:
             language = slugify(project.title).replace('-','_')
 
-        # language, but no language data 
+        # language, but no language data
         if language == '' and language_data:
             language = SpacyLanguage.objects.get(id=language_data).language
 
@@ -96,21 +96,21 @@ def language(request):
                 clone_spacy_language(language, clone)
 
             else:
-                # Language already exists 
+                # Language already exists
                 project.spacy_language = spacy_language
                 project.save()
 
-        
+
         messages.info(request, "Project language updated successfully")
         request.session["project_language"] = language
-        return render(request, "language.html", context)    
+        return render(request, "language.html", context)
 
     return render(request, "language.html", context)
 
 def stop_words(request):
     context = {}
 
-    #open 
+    #open
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
     try:
@@ -118,7 +118,7 @@ def stop_words(request):
         assert path.exists()
     except AssertionError:
         path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language)
-        create_stop_words(path) 
+        create_stop_words(path)
 
     import importlib.util # TODO clean this up  https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
     spec = importlib.util.spec_from_file_location("STOP_WORDS", str(path))
@@ -127,6 +127,20 @@ def stop_words(request):
     words = foo.STOP_WORDS
     context['stop_words'] = words
     return render(request, "language.html", context)
+
+def update_stop_words(request):
+    if request.method == "GET":
+        project = get_object_or_404(Project, id=request.session.get("project_id"))
+        language = project.spacy_language.slug.replace('-','_')
+        old = request.GET.get('old','')
+        new = request.GET.get('new','')
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+        script = path.read_text()
+        script = script.replace(old, new)
+        path.write_text(script)
+        messages.success(request, "Stop word updated successfully")
+        # Next update the stop words, coming from the db or file?
+        return redirect(stop_words)
 
 def examples(request):
     context = {}
@@ -141,19 +155,19 @@ def examples(request):
 def lemmata(request):
     context = {}
 
-    #open 
+    #open
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
     try:
-        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/') 
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/')
         filename = language + '_lemma_lookup.json.gz'
         path = path / filename
         print(str(path))
         assert path.exists()
-        with gzip.open(str(path), 'rb') as f: 
+        with gzip.open(str(path), 'rb') as f:
             context['lemmata'] = json.load(f)
     except AssertionError:
-        print('fish eat other fish')# TODO add create lemmata json file 
+        print('fish eat other fish')# TODO add create lemmata json file
 
     context['sentences'] = get_sentences(request)
     return render(request, "language.html", context)
@@ -161,7 +175,7 @@ def lemmata(request):
 def tokenization(request):
     context = {}
 
-    #open 
+    #open
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
     exceptions = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'tokenizer_exceptions.py'
@@ -175,7 +189,7 @@ def tokenization(request):
         context['doc'] = doc
     else:
         sentences = get_sentences(request)
-        sentences = ''.join([sent + '\n' for sent in sentences]) 
+        sentences = ''.join([sent + '\n' for sent in sentences])
         form = TokenTestForm(initial={'text': sentences})
         context['tokenization_form'] = form
     return render(request, "language.html", context)
@@ -184,12 +198,12 @@ def lemma_json(request):
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
     try:
-        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/') 
+        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/')
         filename = language + '_lemma_lookup.json.gz'
         path = path / filename
         print(str(path))
         assert path.exists()
-        with gzip.open(str(path), 'rb') as f: 
+        with gzip.open(str(path), 'rb') as f:
             data= {}
             data['data'] = []
             lemmata = dict(json.load(f))
@@ -200,13 +214,13 @@ def lemma_json(request):
                data,
             )
     except AssertionError:
-        print('fish eat other fish')# TODO add create lemmata json file 
+        print('fish eat other fish')# TODO add create lemmata json file
 
 class LemmaJson(BaseDatatableView):
     # the model you're going to show
     model = Lemma
 
-    
+
     columns = ['word','lemma']
     order_columms = ['word','lemma']
     # set max limit of records returned
@@ -219,15 +233,15 @@ class LemmaJson(BaseDatatableView):
             language = project.spacy_language.slug.replace('-','_')
         except AttributeError: # Until language is created, language is none
             language = 'english'
-        
+
         # Check if lemmata for this project and language exist, if not create them from the json
         lemmata = Lemma.objects.filter(project=project)
         if not lemmata:
-            path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/') 
+            path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lookups-data/')
             filename = language + '_lemma_lookup.json.gz'
             path = path / filename
             if path.exists():
-                with gzip.open(str(path), 'rb') as f: 
+                with gzip.open(str(path), 'rb') as f:
                     data = json.load(f)
                     for word in data:
                         Lemma.objects.update_or_create(
@@ -244,24 +258,24 @@ class LemmaJson(BaseDatatableView):
                 if path.exists():
                     messages.info(self.request, '[*] need to add handling for uncompressed json lemmata!')
 
-        
+
         return self.model.objects.filter(spacy_language=project.spacy_language, project=project)
 
 
     def render_column(self, row, column):
-        
+
         #print(row, column)
         #for label in row.labels.all():
         #    if label == "FORM":
         #        return format_html(row.annotation_text)
 
             #return format_html(row)
-        
+
         return super(LemmaJson, self).render_column(row, column)
 
     def filter_queryset(self, qs):
         # use parameters passed in GET request to filter queryset
-        
+
         # here is a simple example
         search = self.request.GET.get('search[value]', None)
         if search:
