@@ -6,7 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-
+import re
 from cadet_app.lang_utils import create_spacy_language, clone_spacy_language, create_stop_words, create_examples
 from pathlib import Path
 from django.conf import settings
@@ -128,17 +128,28 @@ def stop_words(request):
     context['stop_words'] = words
     return render(request, "language.html", context)
 
+def exact_match(word:str, text:str):
+     import re
+     regex = rf"\b{word}\b"
+     matches = re.finditer(regex, text, re.MULTILINE)
+     for matchNum, match in enumerate(matches, start=1):
+         return match.start(), match.end()
+
+#TODO add_stop_words
+#TODO delete_stop_words
 def update_stop_words(request):
     if request.method == "GET":
         project = get_object_or_404(Project, id=request.session.get("project_id"))
         language = project.spacy_language.slug.replace('-','_')
-        old = request.GET.get('old','')
-        new = request.GET.get('new','')
-        path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
-        script = path.read_text()
-        script = script.replace(old, new)
-        path.write_text(script)
-        messages.success(request, "Stop word updated successfully")
+        old = request.GET.get('old', None)
+        new = request.GET.get('new', None)
+        if new:
+            path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+            script = path.read_text()
+            start, end = exact_match(old,script)
+            new_script = script[:start] + new + script[end:]
+            path.write_text(new_script)
+            messages.success(request, "Stop word updated successfully")
         # Next update the stop words, coming from the db or file?
         return redirect(stop_words)
 

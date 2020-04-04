@@ -71,45 +71,41 @@ $(document).ready( function () {
 // https://datatables.net/forums/discussion/43213/on-row-select-open-responsive-modal
 $('#stop_words_table').on('click', 'tr', function () {
             var name = $('td', this).text();
-            var link = "<a href='link'>" + name + "</a>";
-            console.log(link)
             $('#DescModal').modal("show");
             //$('.text-center').text(link)
-            $( ".modal-content" ).empty();
+            $(".modal-content").empty();
             $(".modal-content").append(
-
-
-        $("<form/>", {
-        action: 'stop_words/update',
-        method: 'get'
-        }).append(
-        // Create <form> Tag and Appending in HTML Div form1.
-        $("<div/>", {
-        class: 'modal-header',
-        }),
-        $("<input/>", {
-        type: 'text',
-        id: 'new',
-        name: 'new',
-        placeholder: name
-        }),
-        $("<input/>", {
-        type: 'hidden',
-        id: 'old',
-        name: 'old',
-        value: name
-        }), // Creating Input Element With Attribute.
-        $("<input/>", {
-        type: 'submit',
-        id: 'submit',
-        value: 'Update',
-        class: "btn btn-primary",
-      }),
-      $("<div/>", {
-      class: 'modal-footer',
-      }),
-    ))
-        });
+              $("<form/>", {
+              action: 'stop_words/update',
+              method: 'get'
+              }).append(
+              // Create <form> Tag and Appending in HTML Div form1.
+              $("<div/>", {
+              class: 'modal-header',
+              }),
+              $("<input/>", {
+              type: 'text',
+              id: 'new',
+              name: 'new',
+              placeholder: name
+              }),
+              $("<input/>", {
+              type: 'hidden',
+              id: 'old',
+              name: 'old',
+              value: name
+              }), // Creating Input Element With Attribute.
+              $("<input/>", {
+              type: 'submit',
+              id: 'submit',
+              value: 'Update',
+              class: "btn btn-primary",
+            }),
+            $("<div/>", {
+            class: 'modal-footer',
+            }),
+          ))
+              });
 
 $(document).ready(function() {
     $('#lemmata_table').DataTable( {
