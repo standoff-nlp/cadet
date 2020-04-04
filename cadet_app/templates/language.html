@@ -87,7 +87,7 @@ $('#stop_words_table').on('click', 'tr', function () {
               type: 'text',
               id: 'new',
               name: 'new',
-              placeholder: name
+              value: name
               }),
               $("<input/>", {
               type: 'hidden',
@@ -101,6 +101,18 @@ $('#stop_words_table').on('click', 'tr', function () {
               value: 'Update',
               class: "btn btn-primary",
             }),
+            $("<input/>", {
+            type: 'submit',
+            id: 'delete',
+            name: 'Delete',
+            class: "btn btn-danger",
+            value: 'X'
+            }).click(function() {
+              // TODO handle with Django, currently throws ReverseError when name undefined
+            window.location.href = '/language/stop_words/delete/' + name;
+            return false;
+            }),
+
             $("<div/>", {
             class: 'modal-footer',
             }),

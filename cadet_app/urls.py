@@ -26,6 +26,7 @@ urlpatterns += [
     path("language/", views.language, name="language"),
     path("language/stop_words", views.stop_words, name="stop_words"),
     path("language/stop_words/update", views.update_stop_words, name="update_stop_words"),
+    path("language/stop_words/delete/<word>", views.delete_stop_words, name="delete_stop_words"),
     path("language/examples", views.examples, name="examples"),
     path("language/tokenization", views.tokenization, name="tokenization"),
     path("language/lemmata", views.lemmata, name="lemmata"),

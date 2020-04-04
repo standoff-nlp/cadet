@@ -128,15 +128,46 @@ def stop_words(request):
     context['stop_words'] = words
     return render(request, "language.html", context)
 
-def exact_match(word:str, text:str):
-     import re
-     regex = rf"\b{word}\b"
-     matches = re.finditer(regex, text, re.MULTILINE)
-     for matchNum, match in enumerate(matches, start=1):
-         return match.start(), match.end()
+def exact_match(word:str, text:str) -> tuple:
+    """This helper function is used to find an exact match, and only an exact match in
+    a set"""
+    import re
+    regex = rf"\b{word}\b"
+    matches = re.finditer(regex, text, re.MULTILINE)
+    for matchNum, match in enumerate(matches, start=1):
+        #TODO assert only one match
+        return match.start(), match.end()
 
 #TODO add_stop_words
-#TODO delete_stop_words
+def add_stop_words(request):
+    if request.method == "GET":
+        project = get_object_or_404(Project, id=request.session.get("project_id"))
+        language = project.spacy_language.slug.replace('-','_')
+        new = request.GET.get('new', None)
+        if new:
+            path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+            script = path.read_text()
+            start = script.find('"""') + 4
+            if start:
+                new_script = script[:start] + ' ' +new + ' ' + script[start:]
+                path.write_text(new_script)
+                messages.success(request, "Stop word added successfully")
+        # Next update the stop words, coming from the db or file?
+        return redirect(stop_words)
+
+def delete_stop_words(request, word):
+    if word == '':
+        return redirect(stop_words)
+    project = get_object_or_404(Project, id=request.session.get("project_id"))
+    language = project.spacy_language.slug.replace('-','_')
+    path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
+    script = path.read_text()
+    start, end = exact_match(word,script)
+    new_script = script[:start] + script[end:]
+    path.write_text(new_script)
+    messages.success(request, "Stop word deleted successfully")
+    return redirect(stop_words)
+
 def update_stop_words(request):
     if request.method == "GET":
         project = get_object_or_404(Project, id=request.session.get("project_id"))
