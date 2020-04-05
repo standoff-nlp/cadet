@@ -38,3 +38,120 @@
 	      </div>
 	    </div>
 	  </div>
+
+<script>
+		$(document).ready( function () {
+		        $('#stop_words_table').DataTable({
+		        dom: 'Bfrtip',
+		        buttons: [
+		            {
+		                text: 'Add new',
+		                className: 'btn btn-success',
+		                action: function ( e, dt, node, config ) {
+		                  $('#AddStopModal').modal("show");
+		                  $(".modal-content").empty();
+		                  $(".modal-content").append(
+		                    $("<form/>", {
+		                    action: 'stop_words/add',
+		                    method: 'get'
+		                    }).append(
+		                    // Create <form> Tag and Appending in HTML Div form1.
+		                    $("<div/>", {
+		                    class: 'modal-header',
+		                  }),
+		                    $("<div/>", {
+		                    class: 'modal-body',
+		                  }).append(
+		                    $("<input/>", {
+		                    type: 'text',
+		                    id: 'new',
+		                    name: 'new',
+		                    value: name
+		                    }),
+		                    // Creating Input Element With Attribute.
+		                    $("<br>"),
+		                    $("<input/>", {
+		                    type: 'submit',
+		                    id: 'submit',
+		                    value: 'Add',
+		                    class: "btn btn-success",
+		                  })),
+
+
+		                  $("<div/>", {
+		                  class: 'modal-footer',
+		                  }).append(
+		                  $("<h4>", {
+		                    value: 'X'
+
+		                  })),
+		                ))
+
+		                }
+		            }
+		        ]
+		    });
+
+
+		    } );
+
+		// https://datatables.net/forums/discussion/43213/on-row-select-open-responsive-modal
+		$('#stop_words_table').on('click', 'tr', function () {
+		            var name = $('td', this).text();
+		            $('#EditStopModal').modal("show");
+		            //$('.text-center').text(link)
+		            $(".modal-content").empty();
+		            $(".modal-content").append(
+		              $("<form/>", {
+		              action: 'stop_words/update',
+		              method: 'get'
+		              }).append(
+		              // Create <form> Tag and Appending in HTML Div form1.
+		              $("<div/>", {
+		              class: 'modal-header',
+		            }),
+
+		              $("<div/>", {
+		              class: 'modal-body',
+		            }).append(
+		              $("<input/>", {
+		              type: 'text',
+		              id: 'new',
+		              name: 'new',
+		              value: name
+		              }),
+		              $("<input/>", {
+		              type: 'hidden',
+		              id: 'old',
+		              name: 'old',
+		              value: name
+		              }), // Creating Input Element With Attribute.
+		              $("<br>"),
+		              $("<input/>", {
+		              type: 'submit',
+		              id: 'submit',
+		              value: 'Update',
+		              class: "btn btn-primary",
+		            }),
+		            $("<input/>", {
+		            type: 'submit',
+		            id: 'delete',
+		            name: 'Delete',
+		            class: "btn btn-danger",
+		            value: 'Delete'
+		            }).click(function() {
+		              // TODO handle with Django, currently throws ReverseError when name undefined
+		            window.location.href = '/language/stop_words/delete/' + name;
+		            return false;
+		          })),
+
+		            $("<div/>", {
+		            class: 'modal-footer',
+		            }).append(
+		            $("<h4>", {
+		              value: 'X'
+
+		            })),
+		          ))
+		              });
+</script>

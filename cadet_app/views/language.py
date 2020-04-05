@@ -301,8 +301,17 @@ class LemmaJson(BaseDatatableView):
 
         return self.model.objects.filter(spacy_language=project.spacy_language, project=project)
 
-
     def render_column(self, row, column):
+            # We want to render user as a custom column
+            if column == 'word':
+                # escape HTML for security reasons
+                return format_html(f'<button type="button" class="btn btn-block btn-outline-light text-dark">{row.word}</button>')
+            if column == 'lemma':
+                # escape HTML for security reasons
+                return format_html(f'<div class="btn-group btn-block"><button type="button" class="btn btn-outline-light text-dark">{row.lemma}</button><button type="button" class="btn btn-outline-light text-dark"><i class="fas fa-trash"></i></button></div>')
+            else:
+                return super(LemmaJson, self).render_column(row, column)
+#    def render_column(self, row, column):
 
         #print(row, column)
         #for label in row.labels.all():
@@ -311,7 +320,7 @@ class LemmaJson(BaseDatatableView):
 
             #return format_html(row)
 
-        return super(LemmaJson, self).render_column(row, column)
+#        return super(LemmaJson, self).render_column(row, column)
 
     def filter_queryset(self, qs):
         # use parameters passed in GET request to filter queryset

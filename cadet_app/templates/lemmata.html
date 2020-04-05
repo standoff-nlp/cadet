@@ -11,8 +11,19 @@
     </thead>
 
 </table>
-  
-      
+
+
 </div>
 </div>
 </div>
+<script>
+$(document).ready(function() {
+    $('#lemmata_table').DataTable( {
+        // ...
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'lemma_json' %}",
+    } );
+    // ...
+} );
+</script>
