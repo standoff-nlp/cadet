@@ -70,8 +70,47 @@ $(document).ready( function () {
         buttons: [
             {
                 text: 'Add new',
+                className: 'btn btn-success',
                 action: function ( e, dt, node, config ) {
-                  location.href = "stop_words/add";
+                  $('#AddStopModal').modal("show");
+                  $(".modal-content").empty();
+                  $(".modal-content").append(
+                    $("<form/>", {
+                    action: 'stop_words/add',
+                    method: 'get'
+                    }).append(
+                    // Create <form> Tag and Appending in HTML Div form1.
+                    $("<div/>", {
+                    class: 'modal-header',
+                  }),
+                    $("<div/>", {
+                    class: 'modal-body',
+                  }).append(
+                    $("<input/>", {
+                    type: 'text',
+                    id: 'new',
+                    name: 'new',
+                    value: name
+                    }),
+                    // Creating Input Element With Attribute.
+                    $("<br>"),
+                    $("<input/>", {
+                    type: 'submit',
+                    id: 'submit',
+                    value: 'Add',
+                    class: "btn btn-success",
+                  })),
+
+
+                  $("<div/>", {
+                  class: 'modal-footer',
+                  }).append(
+                  $("<h4>", {
+                    value: 'X'
+
+                  })),
+                ))
+
                 }
             }
         ]
@@ -83,7 +122,7 @@ $(document).ready( function () {
 // https://datatables.net/forums/discussion/43213/on-row-select-open-responsive-modal
 $('#stop_words_table').on('click', 'tr', function () {
             var name = $('td', this).text();
-            $('#DescModal').modal("show");
+            $('#EditStopModal').modal("show");
             //$('.text-center').text(link)
             $(".modal-content").empty();
             $(".modal-content").append(

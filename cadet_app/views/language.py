@@ -156,8 +156,6 @@ def add_stop_words(request):
         return redirect(stop_words)
 
 def delete_stop_words(request, word):
-    if word == '':
-        return redirect(stop_words)
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
     path = Path(settings.CUSTOM_LANGUAGES_DIRECTORY + '/lang/' + language) / 'stop_words.py'
