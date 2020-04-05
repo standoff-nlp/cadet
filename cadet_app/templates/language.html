@@ -65,7 +65,19 @@ $("#myAlert").append("<div class='alert alert-success alert-dismissable' id='myA
 $("#myAlert").css("display", "");
 }
 $(document).ready( function () {
-        $('#stop_words_table').DataTable();
+        $('#stop_words_table').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                text: 'Add new',
+                action: function ( e, dt, node, config ) {
+                  location.href = "stop_words/add";
+                }
+            }
+        ]
+    });
+
+
     } );
 
 // https://datatables.net/forums/discussion/43213/on-row-select-open-responsive-modal
@@ -82,7 +94,8 @@ $('#stop_words_table').on('click', 'tr', function () {
               // Create <form> Tag and Appending in HTML Div form1.
               $("<div/>", {
               class: 'modal-header',
-              }),
+            }),
+
               $("<div/>", {
               class: 'modal-body',
             }).append(
@@ -119,7 +132,11 @@ $('#stop_words_table').on('click', 'tr', function () {
 
             $("<div/>", {
             class: 'modal-footer',
-            }),
+            }).append(
+            $("<h4>", {
+              value: 'X'
+
+            })),
           ))
               });
 
