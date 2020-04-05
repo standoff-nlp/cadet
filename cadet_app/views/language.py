@@ -196,7 +196,7 @@ def examples(request):
 
 def lemmata(request):
     context = {}
-
+    
     #open
     project = get_object_or_404(Project, id=request.session.get("project_id"))
     language = project.spacy_language.slug.replace('-','_')
@@ -307,7 +307,7 @@ class LemmaJson(BaseDatatableView):
             # We want to render user as a custom column
             if column == 'word':
                 # escape HTML for security reasons
-                return format_html(f'<p contenteditable="true" onkeydown="edit_word(this);">{row.word}</p>')
+                return format_html(f"""<p contenteditable="true" onkeydown="edit_word(this, '{row.word}');">{row.word}</p>""")
             if column == 'lemma':
                 # escape HTML for security reasons
                 return format_html(f"""<div class="btn-group btn-block"><button type="button" onclick="$('#EditLemmataModal').modal("show");" class="btn btn-outline-light text-dark">{row.lemma}</button><button type="button" class="btn btn-outline-light text-dark"><i class="fas fa-trash"></i></button></div>""")

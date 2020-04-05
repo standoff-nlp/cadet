@@ -26,11 +26,12 @@
   </div>
 
 <script>
-function edit_word(word){
-	var key = event.keyCode;
+function edit_word(word, old){
 	if (event.keyCode === 13) {
 				event.preventDefault();
-        alert(word.textContent);
+        var word = word.textContent;
+				//alert(word);
+				window.location.href = '/language/lemmata/edit/' + old +'/' +word;
     }
 
 
