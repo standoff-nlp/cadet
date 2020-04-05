@@ -6,6 +6,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.db.models import Q
+
 import re
 from cadet_app.lang_utils import create_spacy_language, clone_spacy_language, create_stop_words, create_examples
 from pathlib import Path
@@ -305,10 +307,10 @@ class LemmaJson(BaseDatatableView):
             # We want to render user as a custom column
             if column == 'word':
                 # escape HTML for security reasons
-                return format_html(f'<button type="button" class="btn btn-block btn-outline-light text-dark">{row.word}</button>')
+                return format_html(f'<p contenteditable="true" onkeydown="edit_word(this);">{row.word}</p>')
             if column == 'lemma':
                 # escape HTML for security reasons
-                return format_html(f'<div class="btn-group btn-block"><button type="button" class="btn btn-outline-light text-dark">{row.lemma}</button><button type="button" class="btn btn-outline-light text-dark"><i class="fas fa-trash"></i></button></div>')
+                return format_html(f"""<div class="btn-group btn-block"><button type="button" onclick="$('#EditLemmataModal').modal("show");" class="btn btn-outline-light text-dark">{row.lemma}</button><button type="button" class="btn btn-outline-light text-dark"><i class="fas fa-trash"></i></button></div>""")
             else:
                 return super(LemmaJson, self).render_column(row, column)
 #    def render_column(self, row, column):
@@ -328,6 +330,6 @@ class LemmaJson(BaseDatatableView):
         # here is a simple example
         search = self.request.GET.get('search[value]', None)
         if search:
-            q = Q(word__icontains=search) | Q(lemma_icontains=search)
+            q = Q(word__icontains=search) | Q(lemma__icontains=search)
             qs = qs.filter(q)
         return qs

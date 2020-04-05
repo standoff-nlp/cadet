@@ -16,7 +16,25 @@
 </div>
 </div>
 </div>
+
+<!-- Edit Modal -->
+  <div class="modal fade" id="EditLemmataModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+
 <script>
+function edit_word(word){
+	var key = event.keyCode;
+	if (event.keyCode === 13) {
+				event.preventDefault();
+        alert(word.textContent);
+    }
+
+
+}
 $(document).ready(function() {
     $('#lemmata_table').DataTable( {
         // ...
