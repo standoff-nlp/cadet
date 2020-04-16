@@ -26,16 +26,26 @@
   </div>
 
 <script>
-function edit_word(word, old){
+function edit_word(word, old, id){
 	if (event.keyCode === 13) {
-				event.preventDefault();
+        event.preventDefault();
         var word = word.textContent;
-				//alert(word);
-				window.location.href = '/language/lemmata/edit/' + old +'/' +word;
+        console.log(id)
+        //alert(word);
+        $.ajax({
+        url : '/language/lemmata/edit/' + old +'/' +word, // the endpoint
+        type : "GET", // http method   
+        });
+
+        //window.location.href = '/language/lemmata/edit/' + old +'/' +word;
+        $('#lemmata_table').DataTable().ajax.reload(nulll, false);
     }
 
 
 }
+
+
+/*
 $(document).ready(function() {
     $('#lemmata_table').DataTable( {
         // ...
@@ -44,5 +54,17 @@ $(document).ready(function() {
         "ajax": "{% url 'lemma_json' %}",
     } );
     // ...
+} );
+*/ 
+
+var table = $('#lemmata_table').DataTable({
+        // ...
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'lemma_json' %}",
+    });
+ 
+$('#lemmata_table tbody').on( 'onmouseover', 'tr', function () {
+    console.log( table.row( this ).data() );
 } );
 </script>

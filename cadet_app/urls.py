@@ -31,6 +31,7 @@ urlpatterns += [
     path("language/examples", views.examples, name="examples"),
     path("language/tokenization", views.tokenization, name="tokenization"),
     path("language/lemmata", views.lemmata, name="lemmata"),
+    path("language/lemmata/edit/<old>/<new>", views.edit_lemmata_word, name="edit_lemmata_word"),
     path("language/lemma_json", login_required(views.LemmaJson.as_view()), name='lemma_json'),
 ]
 # labels

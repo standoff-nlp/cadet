@@ -214,6 +214,13 @@ def lemmata(request):
     context['sentences'] = get_sentences(request)
     return render(request, "language.html", context)
 
+def edit_lemmata_word(request, old, new):
+    success = messages.success(request, f'Updated {old} to {new}') 
+    print(old,new)
+    return HttpResponse(
+            json.dumps(success),
+        )
+
 def tokenization(request):
     context = {}
 
@@ -307,7 +314,8 @@ class LemmaJson(BaseDatatableView):
             # We want to render user as a custom column
             if column == 'word':
                 # escape HTML for security reasons
-                return format_html(f"""<p contenteditable="true" onkeydown="edit_word(this, '{row.word}');">{row.word}</p>""")
+                return format_html(f"""<p contenteditable="true" onkeydown="edit_word(this, '{row.word}', '{row.id}');">{row.word}</p>""")
+                
             if column == 'lemma':
                 # escape HTML for security reasons
                 return format_html(f"""<div class="btn-group btn-block"><button type="button" onclick="$('#EditLemmataModal').modal("show");" class="btn btn-outline-light text-dark">{row.lemma}</button><button type="button" class="btn btn-outline-light text-dark"><i class="fas fa-trash"></i></button></div>""")
